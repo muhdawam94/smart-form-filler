@@ -1,0 +1,61 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Environment & Secrets
+.env
+.env.local
+.env.production
+*.env
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Data files
+data/
+submissions.json
+scheduler_state.json
+scheduler_config.json
+seen_jobs.json
+
+# CV and personal files
+*.pdf
+*.doc
+*.docx
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Playwright
+playwright-report/
+test-results/
+
+# Node
+node_modules/
+.next/
+
+# Deployment configs (keep templates only)
+railway.toml
+render.yaml
