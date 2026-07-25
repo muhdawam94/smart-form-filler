@@ -21,8 +21,10 @@ build/
 *.sqlite3
 
 # Data files
-data/
-submissions.json
+data/*.db
+data/*.sqlite
+data/submissions.json
+data/__pycache__/
 scheduler_state.json
 scheduler_config.json
 seen_jobs.json
