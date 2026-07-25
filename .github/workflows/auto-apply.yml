@@ -71,13 +71,20 @@ jobs:
           AUTHORIZED_TO_WORK: ${{ secrets.AUTHORIZED_TO_WORK }}
           REQUIRES_SPONSORSHIP: ${{ secrets.REQUIRES_SPONSORSHIP }}
         run: |
-          python -c "
+          python << 'PYEOF'
+          import os
           from scheduler import DailyScheduler
           scheduler = DailyScheduler()
           status = scheduler.can_apply()
-          print(f'can_apply={status[\"can_apply\"]}')
-          print(f'remaining={status[\"remaining_today\"]}')
-          "
+          can = str(status['can_apply']).lower()
+          remaining = str(status['remaining_today'])
+          print('can_apply=' + can)
+          print('remaining=' + remaining)
+          output_file = os.environ['GITHUB_OUTPUT']
+          with open(output_file, 'a') as f:
+              f.write('can_apply=' + can + '\n')
+              f.write('remaining=' + remaining + '\n')
+          PYEOF
       
       - name: Run auto-apply
         if: steps.check-limit.outputs.can_apply == 'true'
