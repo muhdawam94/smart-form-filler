@@ -108,22 +108,26 @@ class DailyScheduler:
         active_start = self.config["active_hours"]["start"]
         active_end = self.config["active_hours"]["end"]
         
-        # Konversi ke WIB
-        active_start_wib = (active_start + self.config["timezone_offset"]) % 24
-        active_end_wib = (active_end + self.config["timezone_offset"]) % 24
-        
-        if active_start_wib <= wib_hour < active_end_wib:
-            pass  # Dalam jam aktif
+        # Skip time check if 24/7 mode (start=0, end=24)
+        if active_start == 0 and active_end == 24:
+            pass  # 24/7 mode - always active
         else:
-            result["can_apply"] = False
-            result["reason"] = f"Saat ini jam {wib_hour}:00 WIB, di luar jam aktif ({active_start_wib}:00-{active_end_wib}:00 WIB)"
-            # Hitung kapan bisa apply lagi
-            if wib_hour < active_start_wib:
-                hours_until = active_start_wib - wib_hour
+            # Konversi ke WIB
+            active_start_wib = (active_start + self.config["timezone_offset"]) % 24
+            active_end_wib = (active_end + self.config["timezone_offset"]) % 24
+            
+            if active_start_wib <= wib_hour < active_end_wib:
+                pass  # Dalam jam aktif
             else:
-                hours_until = 24 - wib_hour + active_start_wib
-            result["next_available_time"] = (now + timedelta(hours=hours_until)).isoformat()
-            return result
+                result["can_apply"] = False
+                result["reason"] = f"Saat ini jam {wib_hour}:00 WIB, di luar jam aktif ({active_start_wib}:00-{active_end_wib}:00 WIB)"
+                # Hitung kapan bisa apply lagi
+                if wib_hour < active_start_wib:
+                    hours_until = active_start_wib - wib_hour
+                else:
+                    hours_until = 24 - wib_hour + active_start_wib
+                result["next_available_time"] = (now + timedelta(hours=hours_until)).isoformat()
+                return result
         
         # Cek kuota harian
         if self.state["applications_today"] >= self.config["max_applications_per_day"]:
