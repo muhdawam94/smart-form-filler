@@ -2,39 +2,47 @@
 
 ## Setup (Sudah Selesai!)
 
-API Key sudah terkonfigurasi. Tinggal install dependencies:
+Semua dependencies sudah terinstall. Jalankan test untuk verifikasi:
 
 ```bash
-pip install playwright groq python-dotenv fake-useragent
-playwright install chromium
+python test_bot.py
 ```
 
 ## Usage
 
-### 1. Test Platform Detection
+### 1. Add Jobs ke Database
 ```bash
-python main.py detect "https://boards.greenhouse.io/company/jobs/123"
+# Scrape dari Greenhouse
+python job_scraper.py greenhouse airbnb
+
+# Scrape dari Lever
+python job_scraper.py lever polygon
+
+# Import dari file
+python job_scraper.py import urls.txt
+
+# Tambah manual
+python job_scraper.py add "https://apply.greenhouse.io/company/jobs/123"
 ```
 
-### 2. Fill Single Application (Test Dulu!)
+### 2. List Pending Jobs
+```bash
+python job_scraper.py list
+```
+
+### 3. Test Fill (Dry Run)
 ```bash
 python main.py fill "https://boards.greenhouse.io/company/jobs/123" --dry-run
 ```
 
-### 3. Fill with CV Upload
+### 4. Fill dari Database
 ```bash
-python main.py fill "https://apply.lever.co/company123" --cv cv.pdf
+python main.py fill-db --limit 10
 ```
 
-### 4. Fill from URL List
+### 5. Run 24/7 Bot
 ```bash
-# Buat file urls.txt (satu URL per baris)
-python main.py fill-file urls.txt --limit 5
-```
-
-### 5. Fill from Job Bot Database
-```bash
-python main.py fill-db --db path/to/your/jobs.db --limit 10
+python scheduler_runner.py
 ```
 
 ### 6. Check Statistics
@@ -45,7 +53,7 @@ python main.py stats
 ## How It Works
 
 ```
-URL Input
+Job Database
     ↓
 Platform Detection (Greenhouse/Lever/Workday/etc)
     ↓
@@ -56,6 +64,8 @@ Smart Fill (auto-fill all fields)
 Custom Questions (AI-generated answers)
     ↓
 Submit (or --dry-run untuk test)
+    ↓
+Telegram Notification
 ```
 
 ## Supported Platforms
@@ -76,6 +86,7 @@ Submit (or --dry-run untuk test)
 2. **Pastikan CV.pdf ada** di folder project untuk upload
 3. **Cek stats** untuk monitor success rate
 4. **Kalau CAPTCHA muncul**, bot akan skip dan lanjut ke next URL
+5. **Telegram notifikasi** otomatis dikirim setiap kali berhasil apply
 
 ## Troubleshooting
 

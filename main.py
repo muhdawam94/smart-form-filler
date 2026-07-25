@@ -7,10 +7,16 @@ import os
 import sys
 import json
 import argparse
+import requests
 from datetime import datetime
 
 from config import get_config, FormFillerConfig
 from core import SmartFormFiller, PlatformDetector
+
+# Import database functions
+sys.path.insert(0, os.path.dirname(__file__))
+from data.init_db import get_connection, init_database
+from job_scraper import get_pending_jobs, mark_job_applied
 
 
 async def fill_single_url(url: str, cv_path: str = None, dry_run: bool = False, 
@@ -89,36 +95,24 @@ async def fill_from_file(file_path: str, cv_path: str = None, dry_run: bool = Fa
     return results
 
 
-async def batch_fill_from_jobs_db(db_path: str, cv_path: str = None,
+async def batch_fill_from_jobs_db(db_path: str = None, cv_path: str = None,
                                    dry_run: bool = False, headless: bool = False,
                                    limit: int = 10):
-    """Fill applications dari database jobs (integrate dengan Dawam-Job-Bot)"""
-    import sqlite3
+    """Fill applications dari database jobs"""
+    # Initialize database if needed
+    db_file = db_path or os.path.join(os.path.dirname(__file__), "data", "jobs.db")
+    if not os.path.exists(db_file):
+        init_database()
     
-    if not os.path.exists(db_path):
-        print(f"[ERROR] Database not found: {db_path}")
-        return
-    
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-    
-    # Get jobs that haven't been applied to
-    cursor.execute("""
-        SELECT id, title, company, url, platform 
-        FROM jobs 
-        WHERE applied = 0 AND url IS NOT NULL
-        ORDER BY score DESC
-        LIMIT ?
-    """, (limit,))
-    
-    jobs = cursor.fetchall()
-    conn.close()
+    jobs = get_pending_jobs(limit)
     
     print(f"[INFO] Found {len(jobs)} unapplied jobs in database")
     
     if not jobs:
         print("[INFO] No jobs to apply to")
-        return
+        print("[TIP] Add jobs with: python job_scraper.py greenhouse <company>")
+        print("[TIP] Or import from file: python job_scraper.py import urls.txt")
+        return []
     
     config = get_config()
     config.headless = headless
@@ -127,12 +121,17 @@ async def batch_fill_from_jobs_db(db_path: str, cv_path: str = None,
     
     if not await filler.init_browser():
         print("[ERROR] Failed to initialize browser")
-        return
+        return []
     
     results = []
     try:
-        for job_id, title, company, url, platform in jobs:
-            print(f"\n[{title}] at {company}")
+        for i, job in enumerate(jobs, 1):
+            job_id = job["id"]
+            title = job.get("title", "N/A")
+            company = job.get("company", "N/A")
+            url = job["url"]
+            
+            print(f"\n[{i}/{len(jobs)}] {title} at {company}")
             print(f"  URL: {url}")
             
             result = await filler.fill_application(url, cv_path, dry_run)
@@ -142,26 +141,100 @@ async def batch_fill_from_jobs_db(db_path: str, cv_path: str = None,
             results.append(result)
             
             # Update database
-            if not dry_run and result["status"] == "submitted":
-                _mark_applied(db_path, job_id)
+            success = result["status"] == "submitted"
+            mark_job_applied(job_id, success)
             
-            await asyncio.sleep(3)
+            # Send Telegram notification for each submission
+            if not dry_run and success:
+                _send_telegram_notification(title, company, url)
+            
+            # Pause between applications
+            if i < len(jobs):
+                print("[PAUSE] Waiting 5-10 seconds before next application...")
+                await asyncio.sleep(5)
     
     finally:
         await filler.close_browser()
+    
+    # Summary
+    print(f"\n{'='*60}")
+    print(f"SUMMARY: {len(results)} applications processed")
+    print(f"{'='*60}")
+    
+    stats = filler.get_stats()
+    print(f"  Submitted: {stats['submitted']}")
+    print(f"  Failed: {stats['failed']}")
+    print(f"  Blocked: {stats['blocked']}")
+    print(f"  Success Rate: {stats['success_rate']:.1f}%")
+    
+    # Send daily summary
+    _send_telegram_summary(stats)
+    
+    # Save results
+    output_file = f"results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+    with open(output_file, 'w') as f:
+        json.dump(results, f, indent=2, ensure_ascii=False)
+    print(f"\n[SAVED] Results saved to {output_file}")
     
     return results
 
 
 def _mark_applied(db_path: str, job_id: int):
     """Mark job as applied in database"""
-    import sqlite3
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-    cursor.execute("UPDATE jobs SET applied = 1, applied_at = ? WHERE id = ?", 
-                   (datetime.now().isoformat(), job_id))
-    conn.commit()
-    conn.close()
+    # Use the new job_scraper function
+    from job_scraper import mark_job_applied as _mark
+    _mark(job_id, True)
+
+
+def _send_telegram_notification(title: str, company: str, url: str):
+    """Kirim notifikasi Telegram saat berhasil apply"""
+    token = os.getenv("TELEGRAM_TOKEN")
+    chat_id = os.getenv("TELEGRAM_CHAT_ID")
+    
+    if not token or not chat_id:
+        return
+    
+    msg = f"""*New Application Submitted!*
+
+Job: {title}
+Company: {company}
+URL: {url}
+Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"""
+    
+    try:
+        requests.post(
+            f"https://api.telegram.org/bot{token}/sendMessage",
+            json={"chat_id": chat_id, "text": msg, "parse_mode": "Markdown"},
+            timeout=10,
+        )
+    except:
+        pass
+
+
+def _send_telegram_summary(stats: dict):
+    """Kirim ringkasan via Telegram"""
+    token = os.getenv("TELEGRAM_TOKEN")
+    chat_id = os.getenv("TELEGRAM_CHAT_ID")
+    
+    if not token or not chat_id:
+        return
+    
+    msg = f"""*Auto-Apply Summary*
+
+Total: {stats['total']}
+Submitted: {stats['submitted']}
+Failed: {stats['failed']}
+Blocked: {stats['blocked']}
+Success Rate: {stats['success_rate']:.1f}%"""
+    
+    try:
+        requests.post(
+            f"https://api.telegram.org/bot{token}/sendMessage",
+            json={"chat_id": chat_id, "text": msg, "parse_mode": "Markdown"},
+            timeout=10,
+        )
+    except:
+        pass
 
 
 def detect_platform(url: str):
@@ -222,7 +295,7 @@ def main():
     
     # From database
     db_parser = subparsers.add_parser("fill-db", help="Fill from jobs database")
-    db_parser.add_argument("--db", default="data/jobs.db", help="Database path")
+    db_parser.add_argument("--db", default=None, help="Database path (optional)")
     db_parser.add_argument("--cv", help="CV file path")
     db_parser.add_argument("--dry-run", action="store_true", help="Don't submit")
     db_parser.add_argument("--headless", action="store_true", help="Run headless")

@@ -100,9 +100,18 @@ class SmartFormFiller:
         
         try:
             # Navigate to page
-            await self.page.goto(url, wait_until="networkidle", 
+            await self.page.goto(url, wait_until="domcontentloaded", 
                                timeout=self.config.timeout)
             await self._random_delay()
+            
+            # Wait for page to be ready
+            await self.page.wait_for_timeout(2000)
+            
+            # Try to find and click Apply button to load the form
+            await self._click_apply_button()
+            
+            # Check for iframes (many career pages embed forms in iframes)
+            await self._handle_iframes()
             
             # Detect platform
             page_source = await self.page.content()
@@ -165,6 +174,60 @@ class SmartFormFiller:
         
         self._log_submission(result)
         return result
+    
+    async def _click_apply_button(self):
+        """Click Apply button jika ada untuk membuka form"""
+        try:
+            apply_selectors = [
+                "a:has-text('Apply')",
+                "button:has-text('Apply')",
+                "[data-testid='apply']",
+                ".apply-btn",
+                "#apply-btn",
+                "a[href*='apply']",
+            ]
+            
+            for selector in apply_selectors:
+                try:
+                    btn = await self.page.query_selector(selector)
+                    if btn:
+                        is_visible = await btn.is_visible()
+                        if is_visible:
+                            print(f"[APPLY] Found apply button, clicking...")
+                            await btn.click()
+                            await self.page.wait_for_timeout(3000)
+                            return
+                except:
+                    continue
+        except Exception as e:
+            print(f"[APPLY] Error clicking apply: {e}")
+    
+    async def _handle_iframes(self):
+        """Check dan handle jika form ada di dalam iframe"""
+        try:
+            iframes = await self.page.query_selector_all("iframe")
+            
+            for iframe in iframes:
+                src = await iframe.get_attribute("src") or ""
+                name = await iframe.get_attribute("name") or ""
+                
+                # Check if it's a form-related iframe
+                form_indicators = ["apply", "form", "application", "greenhouse", "lever", "ashby"]
+                if any(ind in src.lower() or ind in name.lower() for ind in form_indicators):
+                    print(f"[IFRAME] Found form iframe: {src or name}")
+                    
+                    # Try to switch to iframe
+                    frame = await iframe.content_frame()
+                    if frame:
+                        # Check for form fields in iframe
+                        inputs = await frame.query_selector_all("input, textarea, select")
+                        if inputs:
+                            print(f"[IFRAME] Found {len(inputs)} fields in iframe")
+                            # Update self.page to use the frame
+                            self.page = frame
+                            return
+        except Exception as e:
+            print(f"[IFRAME] Error handling iframes: {e}")
     
     async def _analyze_fields(self, page_source: str, url: str) -> List[Dict]:
         """Analisis semua fields di form"""
