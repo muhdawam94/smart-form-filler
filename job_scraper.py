@@ -130,11 +130,9 @@ async def scrape_web3jobsradar(query: str = "", remote: bool = True, limit: int 
     """Scrape jobs dari web3jobsradar.com - GRATIS, no auth needed"""
     import requests
     
-    params = {"limit": limit, "sort": "recent"}
+    params = {"limit": limit}
     if query:
         params["q"] = query
-    if remote:
-        params["remote"] = "remote"
     
     url = "https://web3jobsradar.com/api/jobs"
     print(f"[SCRAPE] Web3JobsRadar: query={query or 'all'}, remote={remote}")
@@ -146,7 +144,11 @@ async def scrape_web3jobsradar(query: str = "", remote: bool = True, limit: int 
         
         jobs = []
         for job in data.get("jobs", []):
-            apply_url = job.get("apply_url") or job.get("url") or ""
+            # Filter remote jika diminta
+            if remote and job.get("remote") != "remote":
+                continue
+            
+            apply_url = job.get("applyUrl") or job.get("url") or ""
             if not apply_url:
                 continue
             jobs.append({
@@ -155,7 +157,7 @@ async def scrape_web3jobsradar(query: str = "", remote: bool = True, limit: int 
                 "url": apply_url,
                 "platform": detect_platform_from_url(apply_url),
                 "location": job.get("location", "Remote"),
-                "description": job.get("description", "")[:500] if job.get("description") else "",
+                "description": ", ".join(job.get("tags", [])) if isinstance(job.get("tags"), list) else str(job.get("tags", "")),
             })
         
         print(f"  [OK] Found {len(jobs)} jobs")
@@ -569,7 +571,6 @@ def main():
         all_saved += save_jobs_to_db(jobs, source="web3_greenhouse")
         
         # 3. Web3.career (jika ada token)
-        import os
         if os.getenv("WEB3_CAREER_TOKEN"):
             jobs = asyncio.run(scrape_web3career(tag="marketing", remote=True, limit=50))
             all_saved += save_jobs_to_db(jobs, source="web3career")

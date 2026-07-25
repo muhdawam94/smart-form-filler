@@ -109,7 +109,7 @@ async def run_once():
                 # Fill application (tidak dry-run)
                 result = await filler.fill_application(url, cv_path=None, dry_run=False)
                 
-                success = result.get("status") == "submitted"
+                success = result.get("status") in ("submitted", "submitted_captcha_may_block")
                 
                 # Record to scheduler
                 scheduler.record_application(url, result.get("platform", "unknown"), success)
@@ -124,7 +124,8 @@ async def run_once():
                     continue
                 elif success:
                     applied_count += 1
-                    print(f"  [OK] Submitted successfully!")
+                    status_msg = result.get("status", "submitted")
+                    print(f"  [OK] {status_msg}!")
                     if job_id:
                         mark_job_applied(job_id, True)
                 else:

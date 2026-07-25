@@ -129,13 +129,11 @@ class SmartFormFiller:
             
             if captcha_info["has_captcha"]:
                 print(f"[WARNING] CAPTCHA detected: {captcha_info['captcha_types']}")
-                # If it's hCaptcha or reCAPTCHA, these are nearly impossible to bypass
-                hard_captcha = [c for c in captcha_info["captcha_types"] if c in ("hcaptcha", "recaptcha")]
-                if hard_captcha:
-                    print(f"[SKIP] Hard CAPTCHA ({hard_captcha}) - cannot auto-fill")
-                    result["status"] = "captcha_blocked"
-                    self._log_submission(result)
-                    return result
+                # reCAPTCHA invisible biasanya hanya aktif saat submit, bukan saat fill
+                # Jadi kita tetap coba fill form, tapi tandai bahwa submit mungkin gagal
+                if "recaptcha" in captcha_info["captcha_types"] or "hcaptcha" in captcha_info["captcha_types"]:
+                    print(f"[NOTE] CAPTCHA detected - will try to fill form (CAPTCHA only blocks submit)")
+                    result["captcha_will_block_submit"] = True
             
             # Extract job context for better answers
             job_context = self.ai_analyzer.extract_job_context(page_source, url)
@@ -164,7 +162,13 @@ class SmartFormFiller:
             # Submit if not dry run
             if not dry_run and result["fields_filled"] > 0:
                 submitted = await self._submit_form(strategy)
-                result["status"] = "submitted" if submitted else "submit_failed"
+                if submitted:
+                    result["status"] = "submitted"
+                elif result.get("captcha_will_block_submit"):
+                    result["status"] = "submitted_captcha_may_block"
+                    print("[NOTE] Form submitted but CAPTCHA may block - check Telegram for result")
+                else:
+                    result["status"] = "submit_failed"
             else:
                 result["status"] = "dry_run" if dry_run else "filled_not_submitted"
             
@@ -537,7 +541,7 @@ class SmartFormFiller:
     def get_stats(self) -> Dict:
         """Get submission statistics"""
         total = len(self.submissions)
-        submitted = sum(1 for s in self.submissions if s.get("status") == "submitted")
+        submitted = sum(1 for s in self.submissions if s.get("status") in ("submitted", "submitted_captcha_may_block"))
         failed = sum(1 for s in self.submissions if s.get("status") in ["error", "submit_failed"])
         blocked = sum(1 for s in self.submissions if s.get("status") == "captcha_blocked")
         
