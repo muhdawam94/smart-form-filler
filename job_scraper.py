@@ -260,9 +260,23 @@ def import_urls_from_file(file_path: str) -> int:
 
 
 def get_pending_jobs(limit: int = 10) -> list:
-    """Ambil jobs yang belum di-apply"""
+    """Ambil jobs yang belum di-apply, prioritize platform yang bisa di-auto-fill"""
     conn = get_connection()
     cursor = conn.cursor()
+    
+    # Prioritize by platform: Greenhouse (no CAPTCHA) > Ashby > others > Lever (hCaptcha)
+    # Also update scores in DB so future queries benefit
+    cursor.execute("""
+        UPDATE jobs SET score = CASE
+            WHEN platform = 'greenhouse' THEN 10
+            WHEN platform = 'ashby' THEN 8
+            WHEN platform = 'smartrecruiters' THEN 7
+            WHEN platform = 'lever' THEN 0
+            ELSE 5
+        END
+        WHERE applied = 0 AND status = 'pending'
+    """)
+    conn.commit()
     
     cursor.execute("""
         SELECT id, title, company, url, platform, location

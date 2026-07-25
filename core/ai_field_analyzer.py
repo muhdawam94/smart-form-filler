@@ -189,18 +189,7 @@ Return as plain text summary:"""
                 result = response.choices[0].message.content.strip()
                 
                 if is_json:
-                    # Try to extract JSON from response
-                    try:
-                        return json.loads(result)
-                    except json.JSONDecodeError:
-                        # Try to find JSON in response
-                        json_match = re.search(r'\[[\s\S]*?\]', result)
-                        if json_match:
-                            return json.loads(json_match.group())
-                        json_match = re.search(r'\{[\s\S]*?\}', result)
-                        if json_match:
-                            return json.loads(json_match.group())
-                        return []
+                    return self._extract_json(result)
                 return result
             
             # Fallback to OpenAI
@@ -214,10 +203,7 @@ Return as plain text summary:"""
                 result = response.choices[0].message.content.strip()
                 
                 if is_json:
-                    try:
-                        return json.loads(result)
-                    except json.JSONDecodeError:
-                        return []
+                    return self._extract_json(result)
                 return result
             
             # No AI available - use basic heuristics
@@ -232,3 +218,48 @@ Return as plain text summary:"""
         if is_json:
             return []
         return "Please fill manually"
+    
+    def _extract_json(self, text: str) -> Any:
+        """Robust JSON extraction from AI response - handles markdown fences, partial JSON, etc."""
+        if not text:
+            return []
+        
+        # Try direct parse first
+        try:
+            return json.loads(text)
+        except json.JSONDecodeError:
+            pass
+        
+        # Strip markdown code fences
+        cleaned = re.sub(r'```(?:json)?\s*', '', text)
+        cleaned = re.sub(r'```\s*$', '', cleaned.strip())
+        
+        try:
+            return json.loads(cleaned)
+        except json.JSONDecodeError:
+            pass
+        
+        # Try to find array [...]
+        match = re.search(r'(\[[\s\S]*\])', cleaned)
+        if match:
+            try:
+                return json.loads(match.group(1))
+            except json.JSONDecodeError:
+                # Try fixing common issues: trailing commas, single quotes
+                fixed = re.sub(r',\s*]', ']', match.group(1))
+                fixed = fixed.replace("'", '"')
+                try:
+                    return json.loads(fixed)
+                except json.JSONDecodeError:
+                    pass
+        
+        # Try to find object {...}
+        match = re.search(r'(\{[\s\S]*\})', cleaned)
+        if match:
+            try:
+                return json.loads(match.group(1))
+            except json.JSONDecodeError:
+                pass
+        
+        print(f"[AI] Could not parse JSON from response: {text[:200]}")
+        return []

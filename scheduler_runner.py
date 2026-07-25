@@ -98,16 +98,21 @@ async def run_once():
                 # Record to database
                 _save_application_result(job_id, result)
                 
-                # Mark job as applied
-                if job_id:
-                    mark_job_applied(job_id, success)
-                
-                if success:
+                if result.get("status") == "captcha_blocked":
+                    print(f"  [CAPTCHA] Blocked by CAPTCHA - skipping")
+                    if job_id:
+                        mark_job_applied(job_id, False)
+                    continue
+                elif success:
                     applied_count += 1
                     print(f"  [OK] Submitted successfully!")
+                    if job_id:
+                        mark_job_applied(job_id, True)
                 else:
                     failed_count += 1
                     print(f"  [FAIL] Status: {result.get('status')}")
+                    if job_id:
+                        mark_job_applied(job_id, False)
                 
             except Exception as e:
                 failed_count += 1
@@ -119,7 +124,7 @@ async def run_once():
             if i < len(jobs):
                 delay = scheduler.get_next_delay()
                 print(f"  [WAIT] {delay//60} minutes before next application...")
-                await asyncio.sleep(min(delay, 30))  # Max 30s for testing, remove for production
+                await asyncio.sleep(delay)
     
     finally:
         await filler.close_browser()

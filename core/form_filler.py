@@ -129,7 +129,13 @@ class SmartFormFiller:
             
             if captcha_info["has_captcha"]:
                 print(f"[WARNING] CAPTCHA detected: {captcha_info['captcha_types']}")
-                print(f"[NOTE] Will try to fill non-CAPTCHA fields")
+                # If it's hCaptcha or reCAPTCHA, these are nearly impossible to bypass
+                hard_captcha = [c for c in captcha_info["captcha_types"] if c in ("hcaptcha", "recaptcha")]
+                if hard_captcha:
+                    print(f"[SKIP] Hard CAPTCHA ({hard_captcha}) - cannot auto-fill")
+                    result["status"] = "captcha_blocked"
+                    self._log_submission(result)
+                    return result
             
             # Extract job context for better answers
             job_context = self.ai_analyzer.extract_job_context(page_source, url)
@@ -207,13 +213,21 @@ class SmartFormFiller:
         try:
             iframes = await self.page.query_selector_all("iframe")
             
+            # Iframe indicators that are CAPTCHA-related - SKIP these
+            captcha_indicators = ["hcaptcha", "recaptcha", "captcha", "turnstile", "challenge"]
+            
             for iframe in iframes:
-                src = await iframe.get_attribute("src") or ""
-                name = await iframe.get_attribute("name") or ""
+                src = (await iframe.get_attribute("src") or "").lower()
+                name = (await iframe.get_attribute("name") or "").lower()
+                
+                # Skip CAPTCHA iframes entirely
+                if any(ind in src or ind in name for ind in captcha_indicators):
+                    print(f"[IFRAME] Skipping CAPTCHA iframe: {src or name}")
+                    continue
                 
                 # Check if it's a form-related iframe
                 form_indicators = ["apply", "form", "application", "greenhouse", "lever", "ashby"]
-                if any(ind in src.lower() or ind in name.lower() for ind in form_indicators):
+                if any(ind in src or ind in name for ind in form_indicators):
                     print(f"[IFRAME] Found form iframe: {src or name}")
                     
                     # Try to switch to iframe
@@ -222,10 +236,20 @@ class SmartFormFiller:
                         # Check for form fields in iframe
                         inputs = await frame.query_selector_all("input, textarea, select")
                         if inputs:
-                            print(f"[IFRAME] Found {len(inputs)} fields in iframe")
-                            # Update self.page to use the frame
-                            self.page = frame
-                            return
+                            # Verify it's not just a CAPTCHA widget inside
+                            field_names = []
+                            for inp in inputs[:10]:
+                                ftype = await inp.get_attribute("type") or "text"
+                                fname = await inp.get_attribute("name") or ""
+                                if ftype not in ["hidden", "submit", "button"] and fname:
+                                    field_names.append(fname)
+                            
+                            if len(field_names) >= 2:
+                                print(f"[IFRAME] Found {len(field_names)} form fields in iframe")
+                                self.page = frame
+                                return
+                            else:
+                                print(f"[IFRAME] Skipping iframe with only {len(field_names)} fields")
         except Exception as e:
             print(f"[IFRAME] Error handling iframes: {e}")
     
