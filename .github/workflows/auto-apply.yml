@@ -43,6 +43,18 @@ jobs:
           pip install -r requirements.txt
           playwright install chromium
       
+      - name: Scrape fresh jobs
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          python -m job_scraper greenhouse airbnb || true
+          python -m job_scraper greenhouse discord || true
+          python -m job_scraper greenhouse figma || true
+          python -m job_scraper greenhouse coinbase || true
+          python -m job_scraper greenhouse gitlab || true
+          python -m job_scraper lever spotify || true
+          python -m job_scraper stats
+      
       - name: Check daily limit
         id: check-limit
         env:

@@ -23,7 +23,7 @@ class DailyScheduler:
             "max_applications_per_day": 18,  # 15-20, kita pakai 18
             "min_delay_between_apps": 300,  # 5 menit (detik)
             "max_delay_between_apps": 900,  # 15 menit (detik)
-            "active_hours": {"start": 8, "end": 22},  # Jam aktif (UTC)
+            "active_hours": {"start": 0, "end": 24},  # 24/7 (cron handles scheduling)
             "timezone_offset": 7,  # WIB = UTC+7
             "retry_failed": True,
             "max_retries": 2,
