@@ -108,13 +108,18 @@ class FormFillerConfig:
         "phone": "phone",
         "phone_number": "phone",
         "mobile": "phone",
+        "tel": "phone",
         "linkedin": "linkedin",
         "linkedin_url": "linkedin",
+        "linkedin_profile": "linkedin",
+        "profile_url": "linkedin",
         "github": "github",
         "github_url": "github",
         "portfolio": "portfolio",
         "website": "portfolio",
         "personal_website": "portfolio",
+        "url": "portfolio",
+        "candidate_location": "location",
         
         # Location
         "location": "location",

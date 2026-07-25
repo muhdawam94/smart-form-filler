@@ -621,16 +621,32 @@ class SmartFormFiller:
             "last_name": personal.last_name,
             "email": personal.email,
             "phone": personal.phone,
+            "tel": personal.phone,
             "linkedin": personal.linkedin,
+            "linkedin_url": personal.linkedin,
+            "linkedin_profile": personal.linkedin,
+            "profile_url": personal.linkedin,
             "github": personal.github,
+            "github_url": personal.github,
             "portfolio": personal.portfolio,
+            "website": personal.portfolio,
+            "personal_website": personal.portfolio,
             "location": personal.location,
             "city": personal.city,
             "country": personal.country,
-            "website": personal.portfolio,
+            "candidate_location": personal.location,
         }
         
-        return common_fields.get(field_name.lower())
+        value = common_fields.get(field_name.lower())
+        
+        # Auto-add https:// for URL fields
+        if value and field_type in ("url", "text") and any(
+            kw in field_name.lower() for kw in ["url", "linkedin", "github", "website", "portfolio"]
+        ):
+            if value and not value.startswith("http"):
+                value = "https://" + value
+        
+        return value
     
     async def _submit_form(self, strategy: Dict) -> bool:
         """Submit form"""
