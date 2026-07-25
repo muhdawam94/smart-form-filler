@@ -126,4 +126,4 @@ jobs:
           AUTHORIZED_TO_WORK: ${{ secrets.AUTHORIZED_TO_WORK }}
           REQUIRES_SPONSORSHIP: ${{ secrets.REQUIRES_SPONSORSHIP }}
         run: |
-          python main.py fill-db --limit ${{ steps.check-limit.outputs.remaining }}
+          python main.py fill-db --limit ${{ steps.check-limit.outputs.remaining }} --headless
