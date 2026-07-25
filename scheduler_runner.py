@@ -50,6 +50,25 @@ async def run_once():
         print(f"[SKIP] {status['reason']}")
         return {"applied": 0, "reason": status["reason"]}
     
+    # Scrape fresh jobs dulu sebelum apply
+    print("[SCRAPE] Scraping fresh Web3 jobs...")
+    try:
+        from job_scraper import (
+            scrape_web3jobsradar, scrape_greenhouse_bulk,
+            save_jobs_to_db
+        )
+        # Web3JobsRadar (gratis, no auth)
+        fresh_jobs = await scrape_web3jobsradar(query="marketing", remote=True, limit=30)
+        saved = save_jobs_to_db(fresh_jobs, source="web3jobsradar")
+        print(f"  [OK] {saved} new jobs from Web3JobsRadar")
+        
+        # Web3 Greenhouse companies
+        gh_jobs = await scrape_greenhouse_bulk(limit_per_company=10)
+        saved = save_jobs_to_db(gh_jobs, source="web3_greenhouse")
+        print(f"  [OK] {saved} new jobs from Web3 Greenhouse")
+    except Exception as e:
+        print(f"  [WARN] Scrape error (continuing anyway): {e}")
+    
     # Get pending jobs dari database
     remaining = status["remaining_today"]
     jobs = get_pending_jobs(remaining)

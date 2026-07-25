@@ -62,7 +62,7 @@ def init_database():
     
     # Insert default settings
     default_settings = [
-        ("max_applications_per_day", "18"),
+        ("max_applications_per_day", "20"),
         ("min_delay_minutes", "5"),
         ("max_delay_minutes", "15"),
         ("active_hours_start", "15"),

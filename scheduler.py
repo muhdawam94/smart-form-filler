@@ -20,7 +20,7 @@ class DailyScheduler:
     def load_config(self):
         """Load konfigurasi scheduler"""
         default_config = {
-            "max_applications_per_day": 18,  # 15-20, kita pakai 18
+            "max_applications_per_day": 20,  # Max 20 apply per hari
             "min_delay_between_apps": 300,  # 5 menit (detik)
             "max_delay_between_apps": 900,  # 15 menit (detik)
             "active_hours": {"start": 0, "end": 24},  # 24/7 (cron handles scheduling)

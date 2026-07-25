@@ -124,6 +124,124 @@ async def scrape_ashby_board(company_slug: str) -> list:
 
 
 # =============================================
+# WEB3 JOBS RADAR SCRAPER (gratis, tanpa API key)
+# =============================================
+async def scrape_web3jobsradar(query: str = "", remote: bool = True, limit: int = 50) -> list:
+    """Scrape jobs dari web3jobsradar.com - GRATIS, no auth needed"""
+    import requests
+    
+    params = {"limit": limit, "sort": "recent"}
+    if query:
+        params["q"] = query
+    if remote:
+        params["remote"] = "remote"
+    
+    url = "https://web3jobsradar.com/api/jobs"
+    print(f"[SCRAPE] Web3JobsRadar: query={query or 'all'}, remote={remote}")
+    
+    try:
+        resp = requests.get(url, params=params, timeout=20)
+        resp.raise_for_status()
+        data = resp.json()
+        
+        jobs = []
+        for job in data.get("jobs", []):
+            apply_url = job.get("apply_url") or job.get("url") or ""
+            if not apply_url:
+                continue
+            jobs.append({
+                "title": job.get("title", ""),
+                "company": job.get("company", ""),
+                "url": apply_url,
+                "platform": detect_platform_from_url(apply_url),
+                "location": job.get("location", "Remote"),
+                "description": job.get("description", "")[:500] if job.get("description") else "",
+            })
+        
+        print(f"  [OK] Found {len(jobs)} jobs")
+        return jobs
+    except Exception as e:
+        print(f"  [ERROR] {e}")
+        return []
+
+
+# =============================================
+# WEB3.CAREER SCRAPER (gratis dengan token)
+# =============================================
+async def scrape_web3career(token: str = "", tag: str = "", remote: bool = True, limit: int = 50) -> list:
+    """Scrape jobs dari web3.career - GRATIS dengan API token"""
+    import requests
+    
+    api_token = token or os.getenv("WEB3_CAREER_TOKEN", "")
+    if not api_token:
+        print("[SCRAPE] Web3.career: No token provided, skipping")
+        return []
+    
+    params = {"token": api_token, "limit": min(limit, 100)}
+    if tag:
+        params["tag"] = tag
+    if remote:
+        params["remote"] = "true"
+    
+    url = "https://web3.career/api/v1"
+    print(f"[SCRAPE] Web3.career: tag={tag or 'all'}, remote={remote}")
+    
+    try:
+        resp = requests.get(url, params=params, timeout=20)
+        resp.raise_for_status()
+        data = resp.json()
+        
+        jobs = []
+        for job in data.get("jobs", []):
+            apply_url = job.get("url") or job.get("apply_url") or ""
+            if not apply_url:
+                continue
+            jobs.append({
+                "title": job.get("title", ""),
+                "company": job.get("company", ""),
+                "url": apply_url,
+                "platform": detect_platform_from_url(apply_url),
+                "location": job.get("location", "Remote"),
+                "description": job.get("description", "")[:500] if job.get("description") else "",
+            })
+        
+        print(f"  [OK] Found {len(jobs)} jobs")
+        return jobs
+    except Exception as e:
+        print(f"  [ERROR] {e}")
+        return []
+
+
+# =============================================
+# GREENHOUSE BULK SCRAPER (banyak Web3 companies)
+# =============================================
+# Web3/crypto companies yang pakai Greenhouse
+WEB3_GREENHOUSE_COMPANIES = [
+    "coinbase", "robinhood", "discord", "figma", "gitlab",
+    "notion", "vercel", "linear", "posthog", "supabase",
+    "plaid", "stripe", "airtable", "canva", "mui",
+    "odoo", "hasura", "prisma", "netlify", "fly-io",
+    "hashicorp", "elastic", "grafana", "sentry", "datadog",
+    "twilio", "auth0", "okta", "cloudflare", "fastly",
+    "digitalocean", "render", "railway", "zeabur", "deno",
+]
+
+async def scrape_greenhouse_bulk(companies: list = None, limit_per_company: int = 30) -> list:
+    """Scrape banyak Greenhouse companies sekaligus"""
+    if companies is None:
+        companies = WEB3_GREENHOUSE_COMPANIES
+    
+    all_jobs = []
+    for company in companies:
+        jobs = await scrape_greenhouse_board(company)
+        # Batasi per company
+        all_jobs.extend(jobs[:limit_per_company])
+    
+    print(f"[SCRAPE] Greenhouse bulk: {len(all_jobs)} total jobs from {len(companies)} companies")
+    return all_jobs
+
+
+# =============================================
 # GENERIC URL SCRAPER (pakai Playwright)
 # =============================================
 async def scrape_job_board_url(url: str) -> list:
@@ -353,6 +471,23 @@ def main():
     ashby_parser = subparsers.add_parser("ashby", help="Scrape Ashby board")
     ashby_parser.add_argument("company", help="Company slug")
     
+    # Scrape Web3JobsRadar (gratis, no auth)
+    w3r_parser = subparsers.add_parser("web3jobsradar", help="Scrape Web3JobsRadar (free)")
+    w3r_parser.add_argument("--query", default="", help="Search query (e.g., 'marketing')")
+    w3r_parser.add_argument("--no-remote", action="store_true", help="Include on-site jobs")
+    w3r_parser.add_argument("--limit", type=int, default=50, help="Max jobs to scrape")
+    
+    # Scrape Web3.career (needs token)
+    w3c_parser = subparsers.add_parser("web3career", help="Scrape Web3.career (needs token)")
+    w3c_parser.add_argument("--token", default="", help="API token")
+    w3c_parser.add_argument("--tag", default="", help="Filter by tag (e.g., 'marketing')")
+    w3c_parser.add_argument("--no-remote", action="store_true", help="Include on-site jobs")
+    w3c_parser.add_argument("--limit", type=int, default=50, help="Max jobs to scrape")
+    
+    # Scrape Web3 Greenhouse bulk
+    w3gh_parser = subparsers.add_parser("web3-greenhouse", help="Scrape Web3 companies on Greenhouse")
+    w3gh_parser.add_argument("--limit", type=int, default=20, help="Max jobs per company")
+    
     # Scrape URL
     url_parser = subparsers.add_parser("url", help="Scrape job board URL")
     url_parser.add_argument("url", help="Job board URL")
@@ -372,6 +507,9 @@ def main():
     
     # Stats
     subparsers.add_parser("stats", help="Show scraper stats")
+    
+    # Scrape all Web3 sources
+    subparsers.add_parser("scrape-all", help="Scrape all Web3 job sources")
     
     args = parser.parse_args()
     
@@ -398,6 +536,45 @@ def main():
         jobs = asyncio.run(scrape_ashby_board(args.company))
         saved = save_jobs_to_db(jobs, source="ashby_scraper")
         print(f"\n[RESULT] {saved} new jobs saved to database")
+    
+    elif args.command == "web3jobsradar":
+        jobs = asyncio.run(scrape_web3jobsradar(
+            query=args.query, remote=not args.no_remote, limit=args.limit
+        ))
+        saved = save_jobs_to_db(jobs, source="web3jobsradar")
+        print(f"\n[RESULT] {saved} new jobs saved to database")
+    
+    elif args.command == "web3career":
+        jobs = asyncio.run(scrape_web3career(
+            token=args.token, tag=args.tag, remote=not args.no_remote, limit=args.limit
+        ))
+        saved = save_jobs_to_db(jobs, source="web3career")
+        print(f"\n[RESULT] {saved} new jobs saved to database")
+    
+    elif args.command == "web3-greenhouse":
+        jobs = asyncio.run(scrape_greenhouse_bulk(limit_per_company=args.limit))
+        saved = save_jobs_to_db(jobs, source="web3_greenhouse")
+        print(f"\n[RESULT] {saved} new jobs saved to database")
+    
+    elif args.command == "scrape-all":
+        print("[SCRAPE-ALL] Scraping all Web3 job sources...")
+        all_saved = 0
+        
+        # 1. Web3JobsRadar (gratis)
+        jobs = asyncio.run(scrape_web3jobsradar(query="marketing", remote=True, limit=50))
+        all_saved += save_jobs_to_db(jobs, source="web3jobsradar")
+        
+        # 2. Greenhouse Web3 companies
+        jobs = asyncio.run(scrape_greenhouse_bulk(limit_per_company=15))
+        all_saved += save_jobs_to_db(jobs, source="web3_greenhouse")
+        
+        # 3. Web3.career (jika ada token)
+        import os
+        if os.getenv("WEB3_CAREER_TOKEN"):
+            jobs = asyncio.run(scrape_web3career(tag="marketing", remote=True, limit=50))
+            all_saved += save_jobs_to_db(jobs, source="web3career")
+        
+        print(f"\n[RESULT] Total: {all_saved} new jobs saved to database")
     
     elif args.command == "url":
         jobs = asyncio.run(scrape_job_board_url(args.url))
