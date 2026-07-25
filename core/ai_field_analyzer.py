@@ -77,25 +77,37 @@ HTML (first 5000 chars):
         return self._call_ai(prompt, is_json=True)
     
     def generate_answer_for_question(self, question: str, job_context: str = "") -> str:
-        """Generate jawaban untuk custom question"""
+        """Generate jawaban untuk custom question - optimized"""
         p = self.config.personal
+        
+        # Detect simple yes/no questions
+        q_lower = question.lower()
+        simple_yes_no = any(phrase in q_lower for phrase in [
+            "are you", "do you", "have you", "will you", "can you",
+            "authorized", "sponsorship", "legally", "require visa",
+        ])
+        
+        # Simple profile-based answers for yes/no questions
+        if simple_yes_no:
+            if "authorized" in q_lower or "legally" in q_lower:
+                return p.authorized_to_work
+            if "sponsorship" in q_lower or "visa" in q_lower:
+                return p.requires_sponsorship
+            if "willing" in q_lower and "office" in q_lower:
+                return "Yes, I am willing to work from the specified office location."
+            if "relationship" in q_lower:
+                return "No, I do not have any personal or familial relationships with current Robinhood employees."
+            return "Yes"
         
         prompt = f"""
 You are {p.full_name}, a {p.desired_role} with {p.years_experience} years experience.
-You're applying for a job at a company that works with blockchain/Web3.
 
 Job context: {job_context}
 
-Generate a concise, professional answer (2-3 sentences max) for this question:
+Answer this job application question in 1-2 sentences (max 50 words):
 "{question}"
 
-Your answer should:
-- Be specific and relevant
-- Show enthusiasm for the role/company
-- Highlight relevant experience
-- Be professional but personable
-- NOT be generic or copy-paste
-
+Be specific and professional. Do NOT be generic.
 Answer:"""
         return self._call_ai(prompt, is_json=False)
     

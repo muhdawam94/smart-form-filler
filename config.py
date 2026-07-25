@@ -85,6 +85,7 @@ class FormFillerConfig:
     # Database
     db_path: str = "data/form_templates.db"
     submissions_log: str = "data/submissions.json"
+    cv_path: str = os.getenv("CV_PATH", "")  # Path ke file CV/Resume (PDF)
     
     # Platforms to handle
     known_platforms: List[str] = field(default_factory=lambda: [

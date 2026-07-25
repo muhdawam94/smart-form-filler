@@ -82,6 +82,13 @@ async def run_once():
     config = get_config()
     filler = SmartFormFiller(config)
     
+    # Cari CV file
+    cv_path = config.cv_path or filler._find_cv_file()
+    if cv_path:
+        print(f"[CV] Using: {cv_path}")
+    else:
+        print("[CV] No CV file found - will skip file upload fields")
+    
     if not await filler.init_browser():
         print("[ERROR] Failed to init browser")
         return {"applied": 0, "reason": "browser_init_failed"}
@@ -107,7 +114,7 @@ async def run_once():
             
             try:
                 # Fill application (tidak dry-run)
-                result = await filler.fill_application(url, cv_path=None, dry_run=False)
+                result = await filler.fill_application(url, cv_path=cv_path, dry_run=False)
                 
                 success = result.get("status") in ("submitted", "submitted_captcha_may_block")
                 

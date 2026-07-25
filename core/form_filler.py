@@ -137,6 +137,7 @@ class SmartFormFiller:
             
             # Extract job context for better answers
             job_context = self.ai_analyzer.extract_job_context(page_source, url)
+            self._last_job_context = job_context
             print(f"[CONTEXT] Job context extracted")
             
             # Analyze form fields
@@ -283,17 +284,29 @@ class SmartFormFiller:
                 placeholder = await input_el.get_attribute("placeholder") or ""
                 aria_label = await input_el.get_attribute("aria-label") or ""
                 
-                # Skip hidden and submit fields
+                # Skip hidden, submit, button fields
                 if field_type in ["hidden", "submit", "button"]:
                     continue
+                
+                # Skip numeric-only IDs (invalid CSS selectors)
+                if field_id and field_id.isdigit():
+                    field_id = ""
                 
                 label = field_name or field_id or placeholder or aria_label
                 
                 if label:
+                    # Build safe selector
+                    if field_name:
+                        selector = f"input[name='{field_name}']"
+                    elif field_id:
+                        selector = f"#{field_id}"
+                    else:
+                        selector = None
+                    
                     fields.append({
                         "field_name": label,
                         "field_type": field_type,
-                        "selector": f"input[name='{field_name}']" if field_name else f"#{field_id}" if field_id else None,
+                        "selector": selector,
                         "options": [],
                         "required": await input_el.get_attribute("required") is not None,
                     })
@@ -348,7 +361,6 @@ class SmartFormFiller:
         try:
             element = await self.page.query_selector(selector)
             if not element:
-                # Try alternative selectors
                 element = await self._find_element_alternatives(field)
             
             if not element:
@@ -357,6 +369,65 @@ class SmartFormFiller:
             
             # Get value to fill
             value = self._get_field_value(field_name, field_type, field.get("options", []))
+            
+            # Handle file upload - langsung upload CV
+            if field_type == "file":
+                file_path = cv_path or self._find_cv_file()
+                if file_path and os.path.exists(file_path):
+                    try:
+                        await element.set_input_files(file_path)
+                        print(f"  [UPLOAD] {os.path.basename(file_path)}")
+                        return True
+                    except Exception as e:
+                        print(f"  [ERROR] Upload failed: {e}")
+                        return False
+                else:
+                    print(f"  [SKIP] No CV file found for: {field_name}")
+                    return False
+            
+            # Skip sensitive/demographic questions
+            skip_patterns = [
+                "gender", "pronouns", "ethnicity", "hispanic", "latino",
+                "veteran", "disability", "disability_status",
+                "race", "sexual_orientation", "marital",
+                "gdpr_demographic", "g-recaptcha",
+                "diversity", "demographic",
+            ]
+            name_lower = field_name.lower()
+            if any(pat in name_lower for pat in skip_patterns):
+                return False
+            
+            # Also check label text for sensitive questions
+            if field_type == "textarea" or field_name.startswith("question_"):
+                label = await self._get_question_label(element, field_name)
+                if label:
+                    label_lower = label.lower()
+                    if any(pat in label_lower for pat in skip_patterns):
+                        return False
+            
+            # AI generate jawaban untuk custom questions
+            is_custom_question = (
+                value is None and (
+                    field_type == "textarea" or
+                    "?" in field_name or
+                    field_name.startswith("question_") or
+                    "cover_letter" in field_name.lower()
+                )
+            )
+            
+            if is_custom_question:
+                question_text = await self._get_question_label(element, field_name)
+                if question_text:
+                    print(f"  [AI] Generating answer for: {question_text[:60]}...")
+                    job_context = getattr(self, '_last_job_context', '')
+                    value = self.ai_analyzer.generate_answer_for_question(question_text, job_context)
+                    if value and value != "N/A" and value != "Please fill manually":
+                        print(f"  [AI] Generated: {value[:80]}...")
+                    else:
+                        print(f"  [SKIP] AI could not generate answer for: {field_name}")
+                        return False
+                else:
+                    return False
             
             if value is None:
                 print(f"  [SKIP] No value for: {field_name}")
@@ -370,13 +441,14 @@ class SmartFormFiller:
                     await element.check()
             elif field_type == "radio":
                 await element.click()
-            elif field_type == "file":
-                if cv_path and os.path.exists(cv_path):
-                    await element.set_input_files(cv_path)
+            elif field_type == "textarea":
+                # Pakai fill() untuk textarea (lebih cepat dari type())
+                await element.click()
+                await element.fill(str(value)[:1000])
             else:
                 await element.click()
                 await element.fill("")
-                await element.type(str(value), delay=random.randint(30, 80))
+                await element.type(str(value)[:200], delay=random.randint(20, 50))
             
             print(f"  [FILLED] {field_name}: {str(value)[:50]}...")
             return True
@@ -384,6 +456,81 @@ class SmartFormFiller:
         except Exception as e:
             print(f"  [ERROR] {field_name}: {e}")
             return False
+    
+    async def _get_question_label(self, element, field_name: str) -> str:
+        """Ambil teks pertanyaan dari label terdekat - optimized"""
+        try:
+            # Quick checks first
+            placeholder = await element.get_attribute("placeholder") or ""
+            if placeholder and "?" in placeholder:
+                return placeholder
+            
+            aria_label = await element.get_attribute("aria-label") or ""
+            if aria_label and "?" in aria_label:
+                return aria_label
+            
+            # Check field type - only try hard for textareas and text inputs
+            tag = await element.evaluate("el => el.tagName.toLowerCase()")
+            field_type = await element.get_attribute("type") or "text"
+            
+            # Skip select/dropdown questions (Greenhouse style) - they need option matching, not text answers
+            if tag == "select" or field_type == "select-one":
+                return ""
+            
+            # For input fields, check if there's a visible label nearby
+            field_id = await element.get_attribute("id") or ""
+            if field_id:
+                label = await self.page.query_selector(f"label[for='{field_id}']")
+                if label:
+                    text = await label.text_content()
+                    if text and "?" in text:
+                        return text.strip()
+            
+            # Quick parent search (only 2 levels up)
+            label_text = await element.evaluate("""el => {
+                let current = el.parentElement;
+                for (let i = 0; i < 2; i++) {
+                    if (!current) break;
+                    const labels = current.querySelectorAll('label');
+                    for (const lbl of labels) {
+                        const text = lbl.textContent.trim();
+                        if (text && text.includes('?')) return text;
+                    }
+                    current = current.parentElement;
+                }
+                return '';
+            }""")
+            
+            if label_text and "?" in label_text:
+                return label_text
+            
+            return ""
+        except:
+            return ""
+    
+    def _find_cv_file(self) -> str:
+        """Cari file CV/Resume di project"""
+        possible_names = [
+            "Muhammad_Dawam_CV.pdf",
+            "CV.pdf",
+            "Resume.pdf",
+            "muhammad_dawam_cv.pdf",
+            "cv.pdf",
+            "resume.pdf",
+        ]
+        
+        base = os.path.dirname(os.path.dirname(__file__))
+        for name in possible_names:
+            path = os.path.join(base, name)
+            if os.path.exists(path):
+                return path
+        
+        # Cari semua .pdf di root
+        for f in os.listdir(base):
+            if f.lower().endswith(".pdf") and ("cv" in f.lower() or "resume" in f.lower()):
+                return os.path.join(base, f)
+        
+        return ""
     
     async def _fill_select(self, element, value: str, options: List[str]):
         """Isi dropdown select"""
@@ -455,8 +602,17 @@ class SmartFormFiller:
                 return ", ".join(str(v) for v in value[:5])
             return value
         
-        # AI-assisted for custom questions
-        if "?" in field_name or field_type == "textarea":
+        # AI-assisted for custom questions - hanya textarea dan text input
+        # Skip select/dropdown (handled separately) dan field numeric
+        is_textarea_or_input = field_type in ("textarea", "text")
+        is_custom = (
+            is_textarea_or_input and (
+                "?" in field_name or
+                field_name.startswith("question_") or
+                "cover_letter" in field_name.lower()
+            )
+        )
+        if is_custom:
             return None  # Will be handled by AI in form_filler
         
         # Check if it's a common field
