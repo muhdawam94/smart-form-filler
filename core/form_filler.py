@@ -98,6 +98,8 @@ class SmartFormFiller:
             "dry_run": dry_run,
         }
         
+        captcha_start_time = None
+        
         try:
             # Navigate to page
             await self.page.goto(url, wait_until="domcontentloaded", 
@@ -128,9 +130,8 @@ class SmartFormFiller:
             result["captcha_detected"] = captcha_info["has_captcha"]
             
             if captcha_info["has_captcha"]:
+                captcha_start_time = time.time()
                 print(f"[WARNING] CAPTCHA detected: {captcha_info['captcha_types']}")
-                # reCAPTCHA invisible biasanya hanya aktif saat submit, bukan saat fill
-                # Jadi kita tetap coba fill form, tapi tandai bahwa submit mungkin gagal
                 if "recaptcha" in captcha_info["captcha_types"] or "hcaptcha" in captcha_info["captcha_types"]:
                     print(f"[NOTE] CAPTCHA detected - will try to fill form (CAPTCHA only blocks submit)")
                     result["captcha_will_block_submit"] = True
@@ -144,8 +145,38 @@ class SmartFormFiller:
             fields = await self._analyze_fields(page_source, url)
             print(f"[FIELDS] Found {len(fields)} form fields")
             
-            # Fill each field
+            # Jika CAPTCHA terdeteksi dan tidak ada field sama sekali, kemungkinan besar
+            # CAPTCHA memblokir form. Tunggu sebentar lalu cek lagi.
+            if captcha_start_time and len(fields) == 0:
+                print(f"[CAPTCHA] No fields found with CAPTCHA present, waiting for possible challenge resolution...")
+                for wait_attempt in range(3):
+                    await self.page.wait_for_timeout(5000)
+                    elapsed = time.time() - captcha_start_time
+                    if elapsed >= self.config.captcha_skip_timeout:
+                        result["status"] = "captcha_stuck"
+                        result["captcha_skip_reason"] = f"No fields found after {int(elapsed)}s with CAPTCHA"
+                        print(f"[CAPTCHA SKIP] Stuck for {int(elapsed)}s with no fields - SKIPPING")
+                        self._log_submission(result)
+                        return result
+                    # Re-check fields
+                    page_source = await self.page.content()
+                    fields = await self._analyze_fields(page_source, url)
+                    if fields:
+                        print(f"[CAPTCHA] Fields appeared after {int(elapsed)}s wait")
+                        break
+            
+            # Fill each field - dengan timeout check untuk CAPTCHA
             for field in fields:
+                # Cek CAPTCHA timeout sebelum setiap field
+                if captcha_start_time:
+                    elapsed = time.time() - captcha_start_time
+                    if elapsed >= self.config.captcha_skip_timeout:
+                        result["status"] = "captcha_stuck"
+                        result["captcha_skip_reason"] = f"Stuck filling fields for {int(elapsed)}s with CAPTCHA"
+                        print(f"[CAPTCHA SKIP] Stuck for {int(elapsed)}s - SKIPPING remaining fields")
+                        self._log_submission(result)
+                        return result
+                
                 try:
                     filled = await self._fill_field(field, cv_path)
                     if filled:
@@ -162,6 +193,16 @@ class SmartFormFiller:
             
             # Submit if not dry run
             if not dry_run and result["fields_filled"] > 0:
+                # Cek CAPTCHA timeout sebelum submit
+                if captcha_start_time:
+                    elapsed = time.time() - captcha_start_time
+                    if elapsed >= self.config.captcha_skip_timeout:
+                        result["status"] = "captcha_stuck"
+                        result["captcha_skip_reason"] = f"Stuck before submit for {int(elapsed)}s with CAPTCHA"
+                        print(f"[CAPTCHA SKIP] Stuck for {int(elapsed)}s before submit - SKIPPING")
+                        self._log_submission(result)
+                        return result
+                
                 submitted = await self._submit_form(strategy)
                 if submitted:
                     result["status"] = "submitted"
@@ -179,6 +220,15 @@ class SmartFormFiller:
             print(f"[RESULT] Custom questions: {result['custom_questions']}")
             
         except Exception as e:
+            # Jika exception terjadi saat CAPTCHA aktif, cek apakah sudah timeout
+            if captcha_start_time:
+                elapsed = time.time() - captcha_start_time
+                if elapsed >= self.config.captcha_skip_timeout:
+                    result["status"] = "captcha_stuck"
+                    result["captcha_skip_reason"] = f"Exception after {int(elapsed)}s with CAPTCHA: {str(e)}"
+                    print(f"[CAPTCHA SKIP] Exception after {int(elapsed)}s with CAPTCHA - SKIPPING")
+                    self._log_submission(result)
+                    return result
             result["status"] = "error"
             result["errors"].append(str(e))
             print(f"[ERROR] {e}")
@@ -715,7 +765,7 @@ class SmartFormFiller:
         total = len(self.submissions)
         submitted = sum(1 for s in self.submissions if s.get("status") in ("submitted", "submitted_captcha_may_block"))
         failed = sum(1 for s in self.submissions if s.get("status") in ["error", "submit_failed"])
-        blocked = sum(1 for s in self.submissions if s.get("status") == "captcha_blocked")
+        blocked = sum(1 for s in self.submissions if s.get("status") in ("captcha_blocked", "captcha_stuck"))
         
         platforms = {}
         for s in self.submissions:

@@ -144,6 +144,13 @@ async def batch_fill_from_jobs_db(db_path: str = None, cv_path: str = None,
             success = result["status"] == "submitted"
             mark_job_applied(job_id, success)
             
+            # Handle CAPTCHA stuck - skip and notify
+            if result.get("status") == "captcha_stuck":
+                reason = result.get("captcha_skip_reason", "CAPTCHA timeout")
+                print(f"  [CAPTCHA SKIP] {reason}")
+                _send_telegram_captcha_skip(title, company, url, reason)
+                continue
+            
             # Send Telegram notification for each submission
             if not dry_run and success:
                 _send_telegram_notification(title, company, url)
@@ -226,6 +233,32 @@ Submitted: {stats['submitted']}
 Failed: {stats['failed']}
 Blocked: {stats['blocked']}
 Success Rate: {stats['success_rate']:.1f}%"""
+    
+    try:
+        requests.post(
+            f"https://api.telegram.org/bot{token}/sendMessage",
+            json={"chat_id": chat_id, "text": msg, "parse_mode": "Markdown"},
+            timeout=10,
+        )
+    except:
+        pass
+
+
+def _send_telegram_captcha_skip(title: str, company: str, url: str, reason: str):
+    """Kirim notifikasi Telegram saat job di-skip karena CAPTCHA"""
+    token = os.getenv("TELEGRAM_TOKEN")
+    chat_id = os.getenv("TELEGRAM_CHAT_ID")
+    
+    if not token or not chat_id:
+        return
+    
+    msg = f"""*CAPTCHA Blocked - Job Skipped*
+
+Job: {title}
+Company: {company}
+URL: {url}
+Reason: {reason}
+Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"""
     
     try:
         requests.post(

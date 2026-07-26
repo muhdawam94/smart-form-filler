@@ -117,6 +117,7 @@ async def run_once():
                 result = await filler.fill_application(url, cv_path=cv_path, dry_run=False)
                 
                 success = result.get("status") in ("submitted", "submitted_captcha_may_block")
+                captcha_stuck = result.get("status") == "captcha_stuck"
                 
                 # Record to scheduler
                 scheduler.record_application(url, result.get("platform", "unknown"), success)
@@ -124,7 +125,23 @@ async def run_once():
                 # Record to database
                 _save_application_result(job_id, result)
                 
-                if result.get("status") == "captcha_blocked":
+                if captcha_stuck:
+                    failed_count += 1
+                    reason = result.get("captcha_skip_reason", "CAPTCHA timeout")
+                    print(f"  [CAPTCHA SKIP] {reason}")
+                    if job_id:
+                        mark_job_applied(job_id, False)
+                    # Kirim notifikasi Telegram
+                    skip_msg = f"""*CAPTCHA Blocked - Job Skipped*
+
+Job: {title}
+Company: {company}
+URL: {url}
+Reason: {reason}
+Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"""
+                    send_telegram(skip_msg)
+                    continue
+                elif result.get("status") == "captcha_blocked":
                     print(f"  [CAPTCHA] Blocked by CAPTCHA - skipping")
                     if job_id:
                         mark_job_applied(job_id, False)

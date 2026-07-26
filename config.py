@@ -75,7 +75,11 @@ class FormFillerConfig:
     # Browser settings
     headless: bool = False  # False = show browser (untuk debugging)
     slow_mo: int = 500  # Delay antar action (ms)
-    timeout: int = 30000  # Page timeout (ms)
+    timeout: int = 60000  # Page timeout (ms) - 60 detik
+    
+    # CAPTCHA handling
+    captcha_skip_timeout: int = 180  # Skip job jika CAPTCHA stuck > 3 menit (detik)
+    captcha_check_interval: int = 5  # Interval cek CAPTCHA (detik)
     
     # Anti-detection
     random_delay: bool = True
