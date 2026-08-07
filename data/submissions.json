@@ -1,1 +1,209 @@
-[]
+[
+  {
+    "url": "https://boards.greenhouse.io/robinhood/jobs/8114351?t=gh_src=&gh_jid=8114351",
+    "timestamp": "2026-08-07T19:20:41.587924",
+    "platform": "greenhouse",
+    "status": "captcha_blocked",
+    "fields_filled": 18,
+    "fields_skipped": 5,
+    "errors": [],
+    "captcha_detected": true,
+    "custom_questions": 0,
+    "dry_run": false,
+    "captcha_types": [
+      "iframe[src*='recaptcha']",
+      "recaptcha",
+      "textarea[name='g-recaptcha-response']"
+    ],
+    "captcha_skip_reason": "Real CAPTCHA challenge present - cannot submit",
+    "job_id": 1412,
+    "job_title": "Account Maintenance Associate",
+    "company": "robinhood"
+  },
+  {
+    "url": "https://boards.greenhouse.io/robinhood/jobs/8060590?t=gh_src=&gh_jid=8060590",
+    "timestamp": "2026-08-07T19:23:07.333350",
+    "platform": "greenhouse",
+    "status": "captcha_blocked",
+    "fields_filled": 19,
+    "fields_skipped": 5,
+    "errors": [],
+    "captcha_detected": true,
+    "custom_questions": 0,
+    "dry_run": false,
+    "captcha_types": [
+      "iframe[src*='recaptcha']",
+      "recaptcha",
+      "textarea[name='g-recaptcha-response']"
+    ],
+    "captcha_skip_reason": "Real CAPTCHA challenge present - cannot submit",
+    "job_id": 1423,
+    "job_title": "Crypto AML Program Manager",
+    "company": "robinhood"
+  },
+  {
+    "url": "https://boards.greenhouse.io/robinhood/jobs/8068377?t=gh_src=&gh_jid=8068377",
+    "timestamp": "2026-08-07T19:25:56.929639",
+    "platform": "greenhouse",
+    "status": "captcha_stuck",
+    "fields_filled": 7,
+    "fields_skipped": 3,
+    "errors": [],
+    "captcha_detected": true,
+    "custom_questions": 0,
+    "dry_run": false,
+    "captcha_types": [
+      "iframe[src*='recaptcha']",
+      "recaptcha",
+      "textarea[name='g-recaptcha-response']"
+    ],
+    "captcha_skip_reason": "Stuck filling fields for 184s with CAPTCHA",
+    "job_id": 1424,
+    "job_title": "Crypto Risk Senior Specialist",
+    "company": "robinhood"
+  },
+  {
+    "url": "https://boards.greenhouse.io/robinhood/jobs/8024530?t=gh_src=&gh_jid=8024530",
+    "timestamp": "2026-08-07T19:29:13.718344",
+    "platform": "greenhouse",
+    "status": "captcha_stuck",
+    "fields_filled": 1,
+    "fields_skipped": 0,
+    "errors": [],
+    "captcha_detected": true,
+    "custom_questions": 0,
+    "dry_run": false,
+    "captcha_types": [
+      "iframe[src*='recaptcha']",
+      "recaptcha",
+      "textarea[name='g-recaptcha-response']"
+    ],
+    "captcha_skip_reason": "Stuck filling fields for 180s with CAPTCHA",
+    "job_id": 1425,
+    "job_title": "Customer Experience Associate (New Grad)",
+    "company": "robinhood"
+  },
+  {
+    "url": "https://boards.greenhouse.io/robinhood/jobs/7974199?t=gh_src=&gh_jid=7974199",
+    "timestamp": "2026-08-07T19:32:28.103460",
+    "platform": "greenhouse",
+    "status": "captcha_stuck",
+    "fields_filled": 6,
+    "fields_skipped": 4,
+    "errors": [],
+    "captcha_detected": true,
+    "custom_questions": 0,
+    "dry_run": false,
+    "captcha_types": [
+      "iframe[src*='recaptcha']",
+      "recaptcha",
+      "textarea[name='g-recaptcha-response']"
+    ],
+    "captcha_skip_reason": "Stuck filling fields for 241s with CAPTCHA",
+    "job_id": 1426,
+    "job_title": "Customer Experience Manager, Advanced Services",
+    "company": "robinhood"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/discord/jobs/8614971002",
+    "timestamp": "2026-08-07T19:36:41.537171",
+    "platform": "greenhouse",
+    "status": "captcha_stuck",
+    "fields_filled": 0,
+    "fields_skipped": 0,
+    "errors": [],
+    "captcha_detected": true,
+    "custom_questions": 0,
+    "dry_run": false,
+    "captcha_types": [
+      "iframe[src*='recaptcha']",
+      "recaptcha",
+      "textarea[name='g-recaptcha-response']"
+    ],
+    "captcha_skip_reason": "Stuck filling fields for 235s with CAPTCHA",
+    "job_id": 1431,
+    "job_title": "Data Engineer",
+    "company": "discord"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/discord/jobs/8649856002",
+    "timestamp": "2026-08-07T19:40:48.606423",
+    "platform": "greenhouse",
+    "status": "captcha_stuck",
+    "fields_filled": 0,
+    "fields_skipped": 0,
+    "errors": [],
+    "captcha_detected": true,
+    "custom_questions": 0,
+    "dry_run": false,
+    "captcha_types": [
+      "iframe[src*='recaptcha']",
+      "recaptcha",
+      "textarea[name='g-recaptcha-response']"
+    ],
+    "captcha_skip_reason": "Stuck filling fields for 293s with CAPTCHA",
+    "job_id": 1434,
+    "job_title": "Engineering Manager, Platform Security",
+    "company": "discord"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/discord/jobs/8637688002",
+    "timestamp": "2026-08-07T19:45:53.387620",
+    "platform": "greenhouse",
+    "status": "captcha_stuck",
+    "fields_filled": 10,
+    "fields_skipped": 8,
+    "errors": [],
+    "captcha_detected": true,
+    "custom_questions": 0,
+    "dry_run": false,
+    "captcha_types": [
+      "iframe[src*='recaptcha']",
+      "recaptcha",
+      "textarea[name='g-recaptcha-response']"
+    ],
+    "captcha_skip_reason": "Stuck filling fields for 347s with CAPTCHA",
+    "job_id": 1436,
+    "job_title": "Engineering Manager, Safety",
+    "company": "discord"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/discord/jobs/8675215002",
+    "timestamp": "2026-08-07T19:51:52.555969",
+    "platform": "greenhouse",
+    "status": "captcha_stuck",
+    "fields_filled": 9,
+    "fields_skipped": 7,
+    "errors": [],
+    "captcha_detected": true,
+    "custom_questions": 0,
+    "dry_run": false,
+    "captcha_types": [
+      "iframe[src*='recaptcha']",
+      "recaptcha",
+      "textarea[name='g-recaptcha-response']"
+    ],
+    "captcha_skip_reason": "Stuck filling fields for 382s with CAPTCHA",
+    "job_id": 1438,
+    "job_title": "Manager, Safety Analytics",
+    "company": "discord"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/gitlab/jobs/8687171002",
+    "timestamp": "2026-08-07T19:58:27.965893",
+    "platform": "greenhouse",
+    "status": "captcha_stuck",
+    "fields_filled": 5,
+    "fields_skipped": 4,
+    "errors": [],
+    "captcha_detected": true,
+    "custom_questions": 0,
+    "dry_run": false,
+    "captcha_types": [
+      "iframe[src*='recaptcha']",
+      "recaptcha",
+      "textarea[name='g-recaptcha-response']"
+    ],
+    "captcha_skip_reason": "Stuck filling fields for 384s with CAPTCHA"
+  }
+]
