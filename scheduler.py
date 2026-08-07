@@ -1,5 +1,5 @@
 """
-24/7 BOT SCHEDULER - Otomatis apply 15-20 kali sehari
+24/7 BOT SCHEDULER - Otomatis apply 5-10 kali sehari
 Jalankan di cloud (GitHub Actions / Railway / Render) tanpa laptop nyala
 """
 import os
@@ -20,7 +20,7 @@ class DailyScheduler:
     def load_config(self):
         """Load konfigurasi scheduler"""
         default_config = {
-            "max_applications_per_day": 20,  # Max 20 apply per hari
+            "max_applications_per_day": 10,  # Max 10 apply per hari (hemat quota AI)
             "min_delay_between_apps": 300,  # 5 menit (detik)
             "max_delay_between_apps": 900,  # 15 menit (detik)
             "active_hours": {"start": 0, "end": 24},  # 24/7 (cron handles scheduling)
@@ -30,7 +30,7 @@ class DailyScheduler:
             "preferred_platforms": [
                 "greenhouse", "lever", "ashby", "smartrecruiters", "bamboohr"
             ],
-            "skip_platforms": ["workday"],  # Terlalu banyak CAPTCHA
+            "skip_platforms": ["workday", "workable"],  # Terlalu banyak CAPTCHA
             "daily_reset_hour": 0,  # Reset counter jam 00:00 UTC
         }
         

@@ -6,9 +6,11 @@ import asyncio
 import json
 import os
 import random
+import re
 import time
 from typing import Dict, List, Optional, Any
 from datetime import datetime
+from urllib.parse import parse_qs, urlparse
 
 try:
     from playwright.async_api import async_playwright, Page, BrowserContext
@@ -79,8 +81,9 @@ class SmartFormFiller:
             await self.playwright.stop()
     
     async def fill_application(self, url: str, cv_path: str = None, 
-                                dry_run: bool = False) -> Dict:
+                                dry_run: bool = False, company: str = "") -> Dict:
         """Main method: Isi application form di URL"""
+        url = self._normalize_application_url(url, company)
         print(f"\n{'='*60}")
         print(f"FILLING APPLICATION: {url}")
         print(f"{'='*60}")
@@ -125,16 +128,14 @@ class SmartFormFiller:
             print(f"[STRATEGY] Method: {strategy['method']}")
             print(f"[ESTIMATED] Time: {strategy['estimated_time']}")
             
-            # Check for CAPTCHA
-            captcha_info = self.ai_analyzer.detect_captcha(page_source)
+            # Check for CAPTCHA - hanya deteksi challenge DOM yang nyata
+            captcha_info = await self._detect_captcha_dom()
             result["captcha_detected"] = captcha_info["has_captcha"]
             
             if captcha_info["has_captcha"]:
                 captcha_start_time = time.time()
-                print(f"[WARNING] CAPTCHA detected: {captcha_info['captcha_types']}")
-                if "recaptcha" in captcha_info["captcha_types"] or "hcaptcha" in captcha_info["captcha_types"]:
-                    print(f"[NOTE] CAPTCHA detected - will try to fill form (CAPTCHA only blocks submit)")
-                    result["captcha_will_block_submit"] = True
+                print(f"[WARNING] Real CAPTCHA detected: {captcha_info['captcha_types']}")
+                result["captcha_types"] = captcha_info["captcha_types"]
             
             # Extract job context for better answers
             job_context = self.ai_analyzer.extract_job_context(page_source, url)
@@ -191,26 +192,33 @@ class SmartFormFiller:
                 
                 await self._random_delay()
             
-            # Submit if not dry run
+            # Submit jika bukan dry run dan ada field yang terisi
             if not dry_run and result["fields_filled"] > 0:
-                # Cek CAPTCHA timeout sebelum submit
-                if captcha_start_time:
-                    elapsed = time.time() - captcha_start_time
-                    if elapsed >= self.config.captcha_skip_timeout:
-                        result["status"] = "captcha_stuck"
-                        result["captcha_skip_reason"] = f"Stuck before submit for {int(elapsed)}s with CAPTCHA"
-                        print(f"[CAPTCHA SKIP] Stuck for {int(elapsed)}s before submit - SKIPPING")
-                        self._log_submission(result)
-                        return result
-                
-                submitted = await self._submit_form(strategy)
-                if submitted:
-                    result["status"] = "submitted"
-                elif result.get("captcha_will_block_submit"):
-                    result["status"] = "submitted_captcha_may_block"
-                    print("[NOTE] Form submitted but CAPTCHA may block - check Telegram for result")
+                # Re-check CAPTCHA nyata tepat sebelum submit
+                captcha_now = await self._detect_captcha_dom()
+                if captcha_now["has_captcha"]:
+                    result["status"] = "captcha_blocked"
+                    result["captcha_skip_reason"] = "Real CAPTCHA challenge present - cannot submit"
+                    print(f"[CAPTCHA BLOCK] {result['captcha_skip_reason']}: {captcha_now['captcha_types']}")
                 else:
-                    result["status"] = "submit_failed"
+                    # Cek CAPTCHA timeout sebelum submit
+                    if captcha_start_time:
+                        elapsed = time.time() - captcha_start_time
+                        if elapsed >= self.config.captcha_skip_timeout:
+                            result["status"] = "captcha_stuck"
+                            result["captcha_skip_reason"] = f"Stuck before submit for {int(elapsed)}s with CAPTCHA"
+                            print(f"[CAPTCHA SKIP] Stuck for {int(elapsed)}s before submit - SKIPPING")
+                            self._log_submission(result)
+                            return result
+                    
+                    submit_result = await self._submit_form(strategy)
+                    if submit_result.get("verified"):
+                        result["status"] = "submitted"
+                    elif submit_result.get("error"):
+                        result["status"] = "submit_failed"
+                        result["errors"].append(submit_result["error"])
+                    else:
+                        result["status"] = "submit_unverified"
             else:
                 result["status"] = "dry_run" if dry_run else "filled_not_submitted"
             
@@ -235,6 +243,106 @@ class SmartFormFiller:
         
         self._log_submission(result)
         return result
+    
+    def _normalize_application_url(self, url: str, company: str = "") -> str:
+        """Rewrite URL halaman marketing ke halaman form native ATS.
+        
+        Masalah utama bot: halaman marketing (mis. www.coinbase.com/careers/positions/ID?gh_jid=ID)
+        membungkus form Greenhouse di dalam iframe/modal yang sering gagal dideteksi.
+        Solusi: arahkan browser langsung ke form embed Greenhouse yang menampilkan form asli.
+        """
+        lowered = url.lower()
+        
+        # Sudah native greenhouse - tidak perlu diubah
+        if "greenhouse.io" in lowered:
+            return url
+        
+        # Ekstrak job id dari query gh_jid
+        job_id = ""
+        try:
+            qs = parse_qs(urlparse(url).query)
+            if qs.get("gh_jid"):
+                job_id = qs["gh_jid"][0]
+        except Exception:
+            pass
+        if not job_id:
+            m = re.search(r"/(?:positions|jobs)/(\d+)", url)
+            if m:
+                job_id = m.group(1)
+        
+        if not job_id:
+            return url
+        
+        co = (company or "").strip().lower()
+        if not co:
+            try:
+                netloc = urlparse(url).netloc.lower().replace("www.", "")
+                parts = netloc.split(".")
+                co = parts[-2] if len(parts) >= 2 else parts[0]
+            except Exception:
+                co = ""
+        if not co:
+            return url
+        
+        embed = f"https://boards.greenhouse.io/embed/job_app?for={co}&token={job_id}"
+        print(f"[URL] Rewritten: {url}\n      -> {embed}")
+        return embed
+    
+    async def _detect_captcha_dom(self) -> Dict:
+        """Deteksi CAPTCHA dari elemen DOM sungguhan (bukan string scan).
+        Hanya lapor captcha jika ada widget/iframe challenge yang nyata,
+        sehingga tidak terjadi false-positive seperti sebelumnya."""
+        selectors = [
+            "iframe[src*='recaptcha']",
+            "iframe[src*='hcaptcha']",
+            "iframe[src*='turnstile']",
+            "iframe[src*='challenge']",
+            ".g-recaptcha",
+            ".h-captcha",
+            ".cf-turnstile",
+            "div[data-sitekey]",
+            "input[name='g-recaptcha-response']",
+            "input[name='h-captcha-response']",
+            "textarea[name='g-recaptcha-response']",
+        ]
+        found = []
+        try:
+            for sel in selectors:
+                el = await self.page.query_selector(sel)
+                if el:
+                    found.append(sel)
+                    if "recaptcha" in sel:
+                        found.append("recaptcha")
+                    elif "hcaptcha" in sel:
+                        found.append("hcaptcha")
+                    elif "turnstile" in sel:
+                        found.append("turnstile")
+                    else:
+                        found.append("captcha")
+        except Exception:
+            pass
+        
+        # Cek teks challenge yang umum di halaman
+        if not found:
+            try:
+                txt = await self.page.evaluate("document.body ? document.body.innerText : ''")
+                low = (txt or "").lower()
+                if ("verify you are human" in low or "i'm not a robot" in low
+                        or "complete the captcha" in low or "captcha verification" in low):
+                    found.append("captcha")
+            except Exception:
+                pass
+        
+        unique = sorted(set(found))
+        has = len(unique) > 0
+        if has:
+            print(f"[CAPTCHA] Real challenge detected: {unique}")
+        return {
+            "has_captcha": has,
+            "captcha_types": unique,
+            "can_auto_solve": "turnstile" not in unique,
+            "recommendation": "Skip (cannot solve)" if has else "Auto-fill possible",
+        }
     
     async def _click_apply_button(self):
         """Click Apply button jika ada untuk membuka form"""
@@ -281,25 +389,35 @@ class SmartFormFiller:
                     continue
                 
                 # Check if it's a form-related iframe
-                form_indicators = ["apply", "form", "application", "greenhouse", "lever", "ashby"]
+                form_indicators = [
+                    "apply", "form", "application", "greenhouse", "lever", "ashby",
+                    "job_app", "embed", "gh_jid", "boards",
+                ]
                 if any(ind in src or ind in name for ind in form_indicators):
-                    print(f"[IFRAME] Found form iframe: {src or name}")
+                    print(f"[IFRAME] Found form iframe: {src[:80] or name}")
                     
                     # Try to switch to iframe
                     frame = await iframe.content_frame()
                     if frame:
+                        # Wait for iframe content to load
+                        try:
+                            await frame.wait_for_load_state("domcontentloaded", timeout=10000)
+                            await frame.wait_for_timeout(3000)
+                        except:
+                            pass
+                        
                         # Check for form fields in iframe
                         inputs = await frame.query_selector_all("input, textarea, select")
                         if inputs:
                             # Verify it's not just a CAPTCHA widget inside
                             field_names = []
-                            for inp in inputs[:10]:
+                            for inp in inputs[:15]:
                                 ftype = await inp.get_attribute("type") or "text"
                                 fname = await inp.get_attribute("name") or ""
                                 if ftype not in ["hidden", "submit", "button"] and fname:
                                     field_names.append(fname)
                             
-                            if len(field_names) >= 2:
+                            if len(field_names) >= 1:
                                 print(f"[IFRAME] Found {len(field_names)} form fields in iframe")
                                 self.page = frame
                                 return
@@ -344,6 +462,10 @@ class SmartFormFiller:
                 
                 label = field_name or field_id or placeholder or aria_label
                 
+                # Skip hidden tracking fields (bukan bagian form aplikasi)
+                if label and self._is_tracking_field(label):
+                    continue
+                
                 if label:
                     # Build safe selector
                     if field_name:
@@ -372,7 +494,7 @@ class SmartFormFiller:
                     if text:
                         option_texts.append(text.strip())
                 
-                if name:
+                if name and not self._is_tracking_field(name):
                     fields.append({
                         "field_name": name,
                         "field_type": "select",
@@ -385,7 +507,7 @@ class SmartFormFiller:
             textareas = await self.page.query_selector_all("textarea")
             for textarea in textareas:
                 name = await textarea.get_attribute("name") or await textarea.get_attribute("id") or ""
-                if name:
+                if name and not self._is_tracking_field(name):
                     fields.append({
                         "field_name": name,
                         "field_type": "textarea",
@@ -398,6 +520,26 @@ class SmartFormFiller:
             print(f"[FIELD DETECTION ERROR] {e}")
         
         return fields
+    
+    def _is_tracking_field(self, field_name: str) -> bool:
+        """Apakah field ini hanya tracking/marketing hidden field, bukan bagian form aplikasi."""
+        n = field_name.lower().strip()
+        if not n:
+            return True
+        
+        patterns = [
+            r"^ot[-_]group", r"vendor[-_]search", r"^chkbox",
+            r"select[-_]all", r"-handler$", r"[-_]handler$",
+            r"id[-_]c\d+$", r"-id[-_](?:c|group)\d*$",
+            r"^g[-_]?recaptcha", r"^h[-_]?captcha", r"turnstile",
+            r"^csrf", r"^_token", r"^fingerprint", r"^session", r"^device",
+            r"^utm_", r"^fbclid", r"^gclid", r"^li_fat_id", r"^ga_",
+            r"^sentry", r"^dd", r"^gtm", r"^analytics",
+        ]
+        for pat in patterns:
+            if re.search(pat, n):
+                return True
+        return False
     
     async def _fill_field(self, field: Dict, cv_path: str = None) -> bool:
         """Isi satu field"""
@@ -420,8 +562,22 @@ class SmartFormFiller:
             # Get value to fill
             value = self._get_field_value(field_name, field_type, field.get("options", []))
             
-            # Handle file upload - langsung upload CV
+            # Handle file upload
             if field_type == "file":
+                name_lower = field_name.lower()
+                is_cover_letter = any(kw in name_lower for kw in [
+                    "cover_letter", "coverletter", "cover letter",
+                    "motivation", "motivational", "motivation_letter",
+                    "cover_note", "covernote",
+                ])
+                
+                if is_cover_letter:
+                    # Cover letter file upload - skip (cannot generate PDF)
+                    # Try AI text fallback if there's a nearby textarea
+                    print(f"  [SKIP] Cover letter file upload (cannot generate PDF): {field_name}")
+                    return False
+                
+                # Resume/CV upload
                 file_path = cv_path or self._find_cv_file()
                 if file_path and os.path.exists(file_path):
                     try:
@@ -456,17 +612,42 @@ class SmartFormFiller:
                         return False
             
             # AI generate jawaban untuk custom questions
+            field_name_lower = field_name.lower()
+            is_cover_letter_text = (
+                value is None and field_type in ("textarea", "text") and (
+                    "cover_letter" in field_name_lower or
+                    "coverletter" in field_name_lower or
+                    "cover letter" in field_name_lower or
+                    "motivation" in field_name_lower or
+                    "motivational" in field_name_lower
+                )
+            )
             is_custom_question = (
-                value is None and (
+                value is None and not is_cover_letter_text and (
                     field_type == "textarea" or
                     "?" in field_name or
-                    field_name.startswith("question_") or
-                    "cover_letter" in field_name.lower()
+                    field_name.startswith("question_")
                 )
             )
             
-            if is_custom_question:
+            if is_cover_letter_text:
+                # Generate proper cover letter for cover letter fields
                 question_text = await self._get_question_label(element, field_name)
+                label = question_text or field_name
+                print(f"  [AI] Generating cover letter for: {label[:60]}...")
+                job_context = getattr(self, '_last_job_context', '')
+                value = self.ai_analyzer.generate_cover_letter(job_context)
+                if value and value != "N/A" and value != "Please fill manually":
+                    print(f"  [AI] Cover letter generated ({len(value)} chars)")
+                else:
+                    print(f"  [SKIP] AI could not generate cover letter")
+                    return False
+            
+            elif is_custom_question:
+                question_text = await self._get_question_label(element, field_name)
+                # Fallback: pakai field_name jika label tidak ditemukan
+                if not question_text and (field_name.startswith("question_") or "?" in field_name):
+                    question_text = field_name
                 if question_text:
                     print(f"  [AI] Generating answer for: {question_text[:60]}...")
                     job_context = getattr(self, '_last_job_context', '')
@@ -536,13 +717,15 @@ class SmartFormFiller:
                     if text and "?" in text:
                         return text.strip()
             
-            # Quick parent search (only 2 levels up)
+            # Parent search (4 levels up) - termasuk Greenhouse .label / .form-question
             label_text = await element.evaluate("""el => {
                 let current = el.parentElement;
-                for (let i = 0; i < 2; i++) {
+                for (let i = 0; i < 4; i++) {
                     if (!current) break;
-                    const labels = current.querySelectorAll('label');
-                    for (const lbl of labels) {
+                    const candidates = current.querySelectorAll(
+                        'label, .label, .form-label, .field-label, .form-question, .question'
+                    );
+                    for (const lbl of candidates) {
                         const text = lbl.textContent.trim();
                         if (text && text.includes('?')) return text;
                     }
@@ -698,43 +881,103 @@ class SmartFormFiller:
         
         return value
     
-    async def _submit_form(self, strategy: Dict) -> bool:
-        """Submit form"""
+    async def _submit_form(self, strategy: Dict) -> Dict:
+        """Submit form DAN verifikasi bahwa submit benar-benar diterima.
+        Return: {"submitted": bool, "verified": bool, "error": str}
+        Tidak lagi melaporkan sukses tanpa bukti."""
+        url_before = self.page.url
+
         try:
             submit_selector = strategy.get("submit_selector")
-            
+            clicked = False
+
             if submit_selector:
-                submit_btn = await self.page.query_selector(submit_selector)
-                if submit_btn:
-                    await submit_btn.click()
-                    await asyncio.sleep(2)
-                    return True
-            
-            # Try common submit selectors
-            common_selectors = [
-                "input[type='submit']",
-                "button[type='submit']",
-                "button:has-text('Submit')",
-                "button:has-text('Apply')",
-                "button:has-text('Send')",
-                "a:has-text('Submit')",
-            ]
-            
-            for selector in common_selectors:
                 try:
-                    btn = await self.page.query_selector(selector)
-                    if btn:
-                        await btn.click()
-                        await asyncio.sleep(2)
-                        return True
-                except:
-                    continue
-            
-            return False
-            
+                    submit_btn = await self.page.query_selector(submit_selector)
+                    if submit_btn:
+                        await submit_btn.click()
+                        clicked = True
+                except Exception:
+                    pass
+
+            if not clicked:
+                common_selectors = [
+                    "input[type='submit']",
+                    "button[type='submit']",
+                    "button:has-text('Submit Application')",
+                    "button:has-text('Submit')",
+                    "button:has-text('Apply')",
+                    "button:has-text('Send')",
+                    "a:has-text('Submit')",
+                ]
+                for selector in common_selectors:
+                    try:
+                        btn = await self.page.query_selector(selector)
+                        if btn and await btn.is_visible():
+                            await btn.click()
+                            clicked = True
+                            break
+                    except:
+                        continue
+
+            if not clicked:
+                return {"submitted": False, "verified": False, "error": "Submit button not found"}
+
+            print("[SUBMIT] Button clicked, waiting for response...")
+            await asyncio.sleep(3)
+            return await self._verify_submission(url_before)
+
         except Exception as e:
             print(f"[SUBMIT ERROR] {e}")
-            return False
+            return {"submitted": False, "verified": False, "error": str(e)}
+
+    async def _verify_submission(self, url_before: str) -> Dict:
+        """Verifikasi apakah submit benar-benar diterima oleh ATS.
+        Cek: pesan sukses, pesan error, atau perubahan URL."""
+        try:
+            current_url = self.page.url
+            body_text = ""
+            try:
+                body_text = (await self.page.evaluate(
+                    "document.body ? document.body.innerText : ''"
+                )) or ""
+            except Exception:
+                pass
+            low = body_text.lower()
+
+            success_markers = [
+                "thank you", "thanks for applying", "application submitted",
+                "application received", "your application has been",
+                "successfully submitted", "we've received", "we received your",
+                "application complete", "submitted!", "your submission",
+                "we have received your application", "application sent",
+            ]
+            error_markers = [
+                "there was a problem", "please fix", "is required",
+                "required field", "please complete", "please correct",
+                "an error occurred", "something went wrong", "try again",
+                "recaptcha", "captcha", "not a robot", "complete the captcha",
+            ]
+
+            url_ok = any(m in current_url.lower() for m in [
+                "thank", "success", "received", "confirmation",
+            ])
+            matched_success = next((m for m in success_markers if m in low), None)
+            matched_error = next((m for m in error_markers if m in low), None)
+
+            if matched_success or (url_ok and not matched_error):
+                print(f"[VERIFY] Success confirmed: '{matched_success or 'URL change'}'")
+                return {"submitted": True, "verified": True, "error": ""}
+            if matched_error:
+                print(f"[VERIFY] Error detected: '{matched_error}'")
+                return {"submitted": False, "verified": False,
+                        "error": f"Form rejected: {matched_error}"}
+
+            print("[VERIFY] No clear success/error signal (URL unchanged)")
+            return {"submitted": False, "verified": False,
+                    "error": "Could not confirm submission (no success page)"}
+        except Exception as e:
+            return {"submitted": False, "verified": False, "error": str(e)}
     
     async def _random_delay(self):
         """Random delay untuk anti-detection"""
@@ -763,8 +1006,8 @@ class SmartFormFiller:
     def get_stats(self) -> Dict:
         """Get submission statistics"""
         total = len(self.submissions)
-        submitted = sum(1 for s in self.submissions if s.get("status") in ("submitted", "submitted_captcha_may_block"))
-        failed = sum(1 for s in self.submissions if s.get("status") in ["error", "submit_failed"])
+        submitted = sum(1 for s in self.submissions if s.get("status") == "submitted")
+        failed = sum(1 for s in self.submissions if s.get("status") in ["error", "submit_failed", "submit_unverified"])
         blocked = sum(1 for s in self.submissions if s.get("status") in ("captcha_blocked", "captcha_stuck"))
         
         platforms = {}

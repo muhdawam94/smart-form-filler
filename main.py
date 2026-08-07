@@ -12,6 +12,7 @@ from datetime import datetime
 
 from config import get_config, FormFillerConfig
 from core import SmartFormFiller, PlatformDetector
+from scheduler import DailyScheduler
 
 # Import database functions
 sys.path.insert(0, os.path.dirname(__file__))
@@ -124,6 +125,7 @@ async def batch_fill_from_jobs_db(db_path: str = None, cv_path: str = None,
         return []
     
     results = []
+    scheduler = DailyScheduler()
     try:
         for i, job in enumerate(jobs, 1):
             job_id = job["id"]
@@ -134,15 +136,21 @@ async def batch_fill_from_jobs_db(db_path: str = None, cv_path: str = None,
             print(f"\n[{i}/{len(jobs)}] {title} at {company}")
             print(f"  URL: {url}")
             
-            result = await filler.fill_application(url, cv_path, dry_run)
+            result = await filler.fill_application(url, cv_path, dry_run, company=company)
             result["job_id"] = job_id
             result["job_title"] = title
             result["company"] = company
             results.append(result)
             
-            # Update database
+            # Update database - hanya "submitted" (terverifikasi) yang dianggap sukses
             success = result["status"] == "submitted"
             mark_job_applied(job_id, success)
+            
+            # Catat ke scheduler state (persist antar run)
+            try:
+                scheduler.record_application(url, result.get("platform", "unknown"), success)
+            except Exception:
+                pass
             
             # Handle CAPTCHA stuck - skip and notify
             if result.get("status") == "captcha_stuck":
@@ -201,12 +209,16 @@ def _send_telegram_notification(title: str, company: str, url: str):
     if not token or not chat_id:
         return
     
-    msg = f"""*New Application Submitted!*
+    msg = f"""✅ *LAMARAN BERHASIM DIKIRIM!*
+{'='*35}
 
-Job: {title}
-Company: {company}
-URL: {url}
-Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"""
+💼 Job: *{title}*
+🏢 Company: *{company}*
+🔗 URL: {url}
+🕐 Time: *{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*
+
+{'='*35}
+🤖 Smart Form Filler"""
     
     try:
         requests.post(
@@ -226,13 +238,17 @@ def _send_telegram_summary(stats: dict):
     if not token or not chat_id:
         return
     
-    msg = f"""*Auto-Apply Summary*
+    msg = f"""📊 *RINGKASAN AUTO-APPLY*
+{'='*35}
 
-Total: {stats['total']}
-Submitted: {stats['submitted']}
-Failed: {stats['failed']}
-Blocked: {stats['blocked']}
-Success Rate: {stats['success_rate']:.1f}%"""
+📝 Total: *{stats['total']}*
+✅ Berhasil: *{stats['submitted']}*
+❌ Gagal: *{stats['failed']}*
+🚫 Blocked: *{stats['blocked']}*
+📈 Success Rate: *{stats['success_rate']:.1f}%*
+
+{'='*35}
+🤖 Smart Form Filler"""
     
     try:
         requests.post(
@@ -252,13 +268,17 @@ def _send_telegram_captcha_skip(title: str, company: str, url: str, reason: str)
     if not token or not chat_id:
         return
     
-    msg = f"""*CAPTCHA Blocked - Job Skipped*
+    msg = f"""⚠️ *CAPTCHA BLOCKED - JOB SKIP*
+{'='*35}
 
-Job: {title}
-Company: {company}
-URL: {url}
-Reason: {reason}
-Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"""
+💼 Job: *{title}*
+🏢 Company: *{company}*
+🔗 URL: {url}
+❌ Reason: *{reason}*
+🕐 Time: *{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*
+
+{'='*35}
+⏳ Akan di-retry di run berikutnya"""
     
     try:
         requests.post(

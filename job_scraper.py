@@ -127,44 +127,54 @@ async def scrape_ashby_board(company_slug: str) -> list:
 # WEB3 JOBS RADAR SCRAPER (gratis, tanpa API key)
 # =============================================
 async def scrape_web3jobsradar(query: str = "", remote: bool = True, limit: int = 50) -> list:
-    """Scrape jobs dari web3jobsradar.com - GRATIS, no auth needed"""
+    """Scrape jobs dari web3jobsradar.com - GRATIS, no auth needed.
+    API lambat, pakai retry + timeout besar."""
     import requests
     
-    params = {"limit": limit}
+    params = {"limit": min(limit, 50)}
     if query:
         params["q"] = query
     
     url = "https://web3jobsradar.com/api/jobs"
     print(f"[SCRAPE] Web3JobsRadar: query={query or 'all'}, remote={remote}")
     
-    try:
-        resp = requests.get(url, params=params, timeout=20)
-        resp.raise_for_status()
-        data = resp.json()
-        
-        jobs = []
-        for job in data.get("jobs", []):
-            # Filter remote jika diminta
-            if remote and job.get("remote") != "remote":
-                continue
+    for attempt in range(3):
+        try:
+            resp = requests.get(url, params=params, timeout=60)
+            resp.raise_for_status()
+            data = resp.json()
             
-            apply_url = job.get("applyUrl") or job.get("url") or ""
-            if not apply_url:
-                continue
-            jobs.append({
-                "title": job.get("title", ""),
-                "company": job.get("company", ""),
-                "url": apply_url,
-                "platform": detect_platform_from_url(apply_url),
-                "location": job.get("location", "Remote"),
-                "description": ", ".join(job.get("tags", [])) if isinstance(job.get("tags"), list) else str(job.get("tags", "")),
-            })
-        
-        print(f"  [OK] Found {len(jobs)} jobs")
-        return jobs
-    except Exception as e:
-        print(f"  [ERROR] {e}")
-        return []
+            jobs = []
+            for job in data.get("jobs", []):
+                if remote:
+                    remote_val = str(job.get("remote", "")).lower().strip()
+                    if remote_val and remote_val not in ("remote", "true", "yes", "1", "fully remote", "fully-remote"):
+                        continue
+                
+                apply_url = job.get("applyUrl") or job.get("url") or ""
+                if not apply_url:
+                    continue
+                jobs.append({
+                    "title": job.get("title", ""),
+                    "company": job.get("company", ""),
+                    "url": apply_url,
+                    "platform": detect_platform_from_url(apply_url),
+                    "location": job.get("location", "Remote"),
+                    "description": ", ".join(job.get("tags", [])) if isinstance(job.get("tags"), list) else str(job.get("tags", "")),
+                })
+            
+            print(f"  [OK] Found {len(jobs)} jobs")
+            return jobs
+        except requests.exceptions.Timeout:
+            wait = (attempt + 1) * 10
+            print(f"  [TIMEOUT] Attempt {attempt+1}/3, retrying in {wait}s...")
+            time.sleep(wait)
+        except Exception as e:
+            print(f"  [ERROR] {e}")
+            return []
+    
+    print(f"  [FAILED] All 3 attempts timed out")
+    return []
 
 
 # =============================================
@@ -189,13 +199,24 @@ async def scrape_web3career(token: str = "", tag: str = "", remote: bool = True,
     print(f"[SCRAPE] Web3.career: tag={tag or 'all'}, remote={remote}")
     
     try:
-        resp = requests.get(url, params=params, timeout=20)
+        resp = requests.get(url, params=params, timeout=30)
         resp.raise_for_status()
         data = resp.json()
         
+        # API returns [docs_string, params_string, jobs_array] or {jobs: [...]}
+        jobs_list = []
+        if isinstance(data, list) and len(data) >= 3:
+            jobs_list = data[2] if isinstance(data[2], list) else []
+        elif isinstance(data, list) and len(data) >= 2:
+            jobs_list = data[1] if isinstance(data[1], list) else []
+        elif isinstance(data, dict):
+            jobs_list = data.get("jobs", [])
+        
         jobs = []
-        for job in data.get("jobs", []):
-            apply_url = job.get("url") or job.get("apply_url") or ""
+        for job in jobs_list:
+            if not isinstance(job, dict):
+                continue
+            apply_url = job.get("apply_url") or job.get("url") or ""
             if not apply_url:
                 continue
             jobs.append({
@@ -215,17 +236,107 @@ async def scrape_web3career(token: str = "", tag: str = "", remote: bool = True,
 
 
 # =============================================
+# CRYPTOJOBSLIST.COM SCRAPER (HTML parsing, no auth)
+# =============================================
+async def scrape_cryptojobslist(tag: str = "", remote: bool = True, limit: int = 50) -> list:
+    """CryptoJobsList blocks scrapers (403). Kept as stub for future use."""
+    print("[SCRAPE] CryptoJobsList: site blocks automated access (403)")
+    return []
+
+
+# =============================================
+# WEB3.CAREER HTML SCRAPER (no token needed)
+# =============================================
+async def scrape_web3career_html(tag: str = "", remote: bool = True, limit: int = 50) -> list:
+    """Scrape jobs dari web3.career tanpa API token - pakai HTML parsing"""
+    import requests
+    import re
+    
+    if tag:
+        page_url = f"https://web3.career/{tag.replace(' ', '+')}-jobs"
+    elif remote:
+        page_url = "https://web3.career/remote-jobs"
+    else:
+        page_url = "https://web3.career/"
+    
+    print(f"[SCRAPE] Web3.career HTML: tag={tag or 'all'}, remote={remote}")
+    
+    try:
+        resp = requests.get(page_url, timeout=30, headers={"User-Agent": "Mozilla/5.0"})
+        resp.raise_for_status()
+        html = resp.text
+        
+        jobs = []
+        # web3.career uses table rows with onclick="tableTurboRowClick(event, '/slug/id')"
+        row_pattern = re.compile(
+            r'onclick="tableTurboRowClick\(event,\s*\'(/[^\']+/(\d+))\'\)"',
+            re.IGNORECASE
+        )
+        
+        # Also find h2 (company) and h3 (title) tags within the table
+        # Structure: <tr> ... <h2>Company</h2> ... <h3>Job Title</h3> ... </tr>
+        # Split HTML by table rows to match company+title to each link
+        row_blocks = re.split(r'<tr\b', html)
+        
+        seen_urls = set()
+        for block in row_blocks:
+            link_match = row_pattern.search(block)
+            if not link_match:
+                continue
+            
+            path = link_match.group(1)
+            job_url = f"https://web3.career{path}"
+            
+            if job_url in seen_urls:
+                continue
+            seen_urls.add(job_url)
+            
+            if len(jobs) >= limit:
+                break
+            
+            # Extract company from h2 tag
+            company_match = re.search(r'<h2[^>]*>(.*?)</h2>', block, re.DOTALL)
+            company = ""
+            if company_match:
+                company = re.sub(r'<[^>]+>', '', company_match.group(1)).strip()
+            
+            # Extract title from h3 tag
+            title_match = re.search(r'<h3[^>]*>(.*?)</h3>', block, re.DOTALL)
+            title = ""
+            if title_match:
+                title = re.sub(r'<[^>]+>', '', title_match.group(1)).strip()
+            
+            # If no h3 title, try <a> tag text
+            if not title:
+                a_match = re.search(r'<a[^>]*>([^<]+)</a>', block)
+                if a_match:
+                    title = a_match.group(1).strip()
+            
+            platform = detect_platform_from_url(job_url)
+            jobs.append({
+                "title": title,
+                "company": company,
+                "url": job_url,
+                "platform": platform,
+                "location": "Remote" if remote else "",
+                "description": tag,
+            })
+        
+        print(f"  [OK] Found {len(jobs)} jobs")
+        return jobs
+    except Exception as e:
+        print(f"  [ERROR] {e}")
+        return []
+
+
+# =============================================
 # GREENHOUSE BULK SCRAPER (banyak Web3 companies)
 # =============================================
-# Web3/crypto companies yang pakai Greenhouse
+# Web3/crypto companies yang pakai Greenhouse (verified: return 200 + jobs)
 WEB3_GREENHOUSE_COMPANIES = [
     "coinbase", "robinhood", "discord", "figma", "gitlab",
-    "notion", "vercel", "linear", "posthog", "supabase",
-    "plaid", "stripe", "airtable", "canva", "mui",
-    "odoo", "hasura", "prisma", "netlify", "fly-io",
-    "hashicorp", "elastic", "grafana", "sentry", "datadog",
-    "twilio", "auth0", "okta", "cloudflare", "fastly",
-    "digitalocean", "render", "railway", "zeabur", "deno",
+    "vercel", "stripe", "airtable", "cloudflare", "databricks",
+    "twitch", "reddit", "flowtraders", "blockchain", "okx",
 ]
 
 async def scrape_greenhouse_bulk(companies: list = None, limit_per_company: int = 30) -> list:
@@ -379,32 +490,46 @@ def import_urls_from_file(file_path: str) -> int:
     return save_jobs_to_db(jobs, source="file_import")
 
 
-def get_pending_jobs(limit: int = 10) -> list:
-    """Ambil jobs yang belum di-apply, prioritize platform yang bisa di-auto-fill"""
+def get_pending_jobs(limit: int = 10, include_failed: bool = True, max_retries: int = 2) -> list:
+    """Ambil jobs yang belum di-apply atau perlu di-retry, dengan prioritas seimbang.
+    Hanya job yang relevan dengan profil developer yang dikembalikan."""
     conn = get_connection()
     cursor = conn.cursor()
     
-    # Prioritize by platform: Greenhouse (no CAPTCHA) > Ashby > others > Lever (hCaptcha)
-    # Also update scores in DB so future queries benefit
+    # Score lebih seimbang - semua platform punya kesempatan yang sama
     cursor.execute("""
         UPDATE jobs SET score = CASE
-            WHEN platform = 'greenhouse' THEN 10
-            WHEN platform = 'ashby' THEN 8
-            WHEN platform = 'smartrecruiters' THEN 7
-            WHEN platform = 'lever' THEN 0
+            WHEN platform = 'greenhouse' THEN 8
+            WHEN platform = 'ashby' THEN 7
+            WHEN platform = 'lever' THEN 7
+            WHEN platform = 'smartrecruiters' THEN 6
             ELSE 5
         END
-        WHERE applied = 0 AND status = 'pending'
+        WHERE status = 'pending'
     """)
     conn.commit()
     
-    cursor.execute("""
-        SELECT id, title, company, url, platform, location
-        FROM jobs
-        WHERE applied = 0 AND status = 'pending'
-        ORDER BY score DESC, created_at DESC
-        LIMIT ?
-    """, (limit,))
+    # Ambil lebih banyak kandidat karena akan difilter relevansi
+    fetch_limit = limit * 4
+    
+    # Ambil pending jobs, atau failed jobs yang masih bisa di-retry
+    if include_failed:
+        cursor.execute("""
+            SELECT id, title, company, url, platform, location
+            FROM jobs
+            WHERE (applied = 0 AND status = 'pending')
+               OR (status = 'failed' AND retry_count < ?)
+            ORDER BY score DESC, created_at DESC
+            LIMIT ?
+        """, (max_retries, fetch_limit))
+    else:
+        cursor.execute("""
+            SELECT id, title, company, url, platform, location
+            FROM jobs
+            WHERE applied = 0 AND status = 'pending'
+            ORDER BY score DESC, created_at DESC
+            LIMIT ?
+        """, (fetch_limit,))
     
     jobs = []
     for row in cursor.fetchall():
@@ -418,23 +543,95 @@ def get_pending_jobs(limit: int = 10) -> list:
         })
     
     conn.close()
-    return jobs
+    
+    # Filter hanya job yang relevan dengan profil developer
+    filtered = [j for j in jobs if is_relevant_job_title(j.get("title", ""))]
+    return filtered[:limit]
 
 
-def mark_job_applied(job_id: int, success: bool):
-    """Tandai job sudah di-apply"""
+TECH_TITLE_PATTERNS = re.compile(
+    r"\b(engineer|engineering|developer|development|dev\b|software|backend|frontend|"
+    r"full[- ]stack|solidity|smart[- ]?contract|blockchain|web3|rust|python|javascript|"
+    r"typescript|react|node|defi|crypto|sre|devops|platform|infrastructure|"
+    r"security engineer|data engineer|ml engineer|ai engineer|qa engineer|"
+    r"front[- ]end|back[- ]end|contract engineer|protocol)\b",
+    re.IGNORECASE,
+)
+
+NON_TECH_TITLE_PATTERNS = re.compile(
+    r"\b(sales|marketing|legal|counsel|human resources|\bhr\b|recruiting|recruiter|"
+    r"talent|accounting|finance|financial|cashier|customer support|support specialist|"
+    r"support|business development|community manager|customer success|operations manager|"
+    r"compliance|policy|people\b|office|admin|account manager|account executive|"
+    r"writer|content|designer|design lead|brand)\b",
+    re.IGNORECASE,
+)
+
+
+def is_relevant_job_title(title: str) -> bool:
+    """Apakah judul job relevan dengan profil developer/engineer."""
+    if not title:
+        return False
+    t = title.lower()
+    # Job teknis -> relevan
+    if TECH_TITLE_PATTERNS.search(t):
+        return True
+    # Job non-teknis yang jelas -> skip
+    if NON_TECH_TITLE_PATTERNS.search(t):
+        return False
+    # Tidak jelas -> biarkan masuk (filter tidak agresif)
+    return True
+
+
+def mark_job_applied(job_id: int, success: bool, max_retries: int = 2):
+    """Tandai job sudah di-apply. Jika gagal, masih bisa di-retry sampai max_retries."""
     conn = get_connection()
     cursor = conn.cursor()
     
-    status = "applied" if success else "failed"
-    cursor.execute("""
-        UPDATE jobs
-        SET applied = 1, applied_at = ?, status = ?, updated_at = ?
-        WHERE id = ?
-    """, (datetime.now().isoformat(), status, datetime.now().isoformat(), job_id))
+    if success:
+        status = "applied"
+        cursor.execute("""
+            UPDATE jobs
+            SET applied = 1, applied_at = ?, status = ?, updated_at = ?
+            WHERE id = ?
+        """, (datetime.now().isoformat(), status, datetime.now().isoformat(), job_id))
+    else:
+        # Cek berapa kali sudah di-retry
+        cursor.execute("SELECT retry_count FROM jobs WHERE id = ?", (job_id,))
+        row = cursor.fetchone()
+        current_retries = row[0] if row else 0
+        
+        if current_retries + 1 >= max_retries:
+            # Sudah max retries, mark sebagai permanently failed
+            cursor.execute("""
+                UPDATE jobs
+                SET applied = 1, status = 'failed', retry_count = retry_count + 1, updated_at = ?
+                WHERE id = ?
+            """, (datetime.now().isoformat(), job_id))
+        else:
+            # Belum max retries, mark gagal tapi masih bisa di-retry
+            cursor.execute("""
+                UPDATE jobs
+                SET status = 'failed', retry_count = retry_count + 1, updated_at = ?
+                WHERE id = ?
+            """, (datetime.now().isoformat(), job_id))
     
     conn.commit()
     conn.close()
+
+
+def reset_failed_jobs():
+    """Reset semua failed jobs agar bisa di-retry"""
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        UPDATE jobs SET status = 'pending', applied = 0, retry_count = 0, updated_at = ?
+        WHERE status = 'failed'
+    """, (datetime.now().isoformat(),))
+    count = cursor.rowcount
+    conn.commit()
+    conn.close()
+    return count
 
 
 def add_manual_url(url: str, title: str = "", company: str = "") -> bool:
@@ -562,18 +759,29 @@ def main():
         print("[SCRAPE-ALL] Scraping all Web3 job sources...")
         all_saved = 0
         
-        # 1. Web3JobsRadar (gratis)
-        jobs = asyncio.run(scrape_web3jobsradar(query="marketing", remote=True, limit=50))
-        all_saved += save_jobs_to_db(jobs, source="web3jobsradar")
+        # 1. Web3JobsRadar - multiple queries (gratis, fokus developer/engineer)
+        for q in ["", "developer", "engineer", "backend", "frontend", "blockchain",
+                  "solidity", "smart contract", "full stack", "python", "react", "web3"]:
+            jobs = asyncio.run(scrape_web3jobsradar(query=q, remote=True, limit=50))
+            all_saved += save_jobs_to_db(jobs, source="web3jobsradar")
         
         # 2. Greenhouse Web3 companies
         jobs = asyncio.run(scrape_greenhouse_bulk(limit_per_company=15))
         all_saved += save_jobs_to_db(jobs, source="web3_greenhouse")
         
-        # 3. Web3.career (jika ada token)
+        # 3. Web3.career HTML (no token)
+        jobs = asyncio.run(scrape_web3career_html(remote=True, limit=50))
+        all_saved += save_jobs_to_db(jobs, source="web3career_html")
+        
+        # 4. Web3.career API (jika ada token)
         if os.getenv("WEB3_CAREER_TOKEN"):
-            jobs = asyncio.run(scrape_web3career(tag="marketing", remote=True, limit=50))
-            all_saved += save_jobs_to_db(jobs, source="web3career")
+            for tag in ["", "marketing", "engineering", "community"]:
+                jobs = asyncio.run(scrape_web3career(tag=tag, remote=True, limit=50))
+                all_saved += save_jobs_to_db(jobs, source="web3career")
+        
+        # 5. CryptoJobsList
+        jobs = asyncio.run(scrape_cryptojobslist(remote=True, limit=50))
+        all_saved += save_jobs_to_db(jobs, source="cryptojobslist")
         
         print(f"\n[RESULT] Total: {all_saved} new jobs saved to database")
     

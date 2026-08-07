@@ -27,6 +27,7 @@ def init_database():
             applied_at TEXT,
             status TEXT DEFAULT 'pending',
             source TEXT DEFAULT 'manual',
+            retry_count INTEGER DEFAULT 0,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP,
             updated_at TEXT DEFAULT CURRENT_TIMESTAMP
         )
@@ -79,6 +80,12 @@ def init_database():
             (key, value)
         )
     
+    # Migration: add retry_count column if missing
+    try:
+        cursor.execute("ALTER TABLE jobs ADD COLUMN retry_count INTEGER DEFAULT 0")
+    except sqlite3.OperationalError:
+        pass
+
     conn.commit()
     conn.close()
     print(f"[OK] Database initialized at: {DB_PATH}")

@@ -1,0 +1,24 @@
+{
+  "max_applications_per_day": 10,
+  "min_delay_between_apps": 300,
+  "max_delay_between_apps": 900,
+  "active_hours": {
+    "start": 0,
+    "end": 24
+  },
+  "timezone_offset": 7,
+  "retry_failed": true,
+  "max_retries": 2,
+  "preferred_platforms": [
+    "greenhouse",
+    "lever",
+    "ashby",
+    "smartrecruiters",
+    "bamboohr"
+  ],
+  "skip_platforms": [
+    "workday",
+    "workable"
+  ],
+  "daily_reset_hour": 0
+}

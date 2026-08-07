@@ -4,6 +4,8 @@ Ini adalah "otak" dari smart form filler
 """
 import json
 import re
+import os
+import time
 from typing import Dict, List, Optional, Any
 
 try:
@@ -26,12 +28,140 @@ class AIFieldAnalyzer:
         self.config = config
         self.groq_client = None
         self.openai_client = None
+        self._groq_keys = []
+        self._groq_key_index = 0
+        self._groq_key_cooldowns = {}  # key_index -> cooldown_until timestamp
+        self._groq_key_errors = {}     # key_index -> consecutive error count
+        self._all_keys_exhausted_until = 0  # global cooldown when all keys exhausted
+        self._last_env_check = 0       # timestamp of last .env check
+        self._env_check_interval = 60  # check .env every 60 seconds
+        self._low_key_warned = False   # avoid spamming telegram
         
-        if GROQ_AVAILABLE and config.ai.groq_api_key:
-            self.groq_client = Groq(api_key=config.ai.groq_api_key)
+        # Load keys initially
+        self._load_keys_from_env()
+        
+        if GROQ_AVAILABLE and self._groq_keys:
+            self.groq_client = Groq(api_key=self._groq_keys[0])
+            print(f"  [AI] Loaded {len(self._groq_keys)} Groq API key(s)")
         
         if OPENAI_AVAILABLE and config.ai.openai_api_key:
             self.openai_client = openai.OpenAI(api_key=config.ai.openai_api_key)
+    
+    def _load_keys_from_env(self):
+        """Load API keys from .env file (supports hot-reload)"""
+        # Re-read .env to pick up new keys without restart
+        try:
+            from dotenv import load_dotenv
+            env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
+            if os.path.exists(env_path):
+                load_dotenv(env_path, override=True)
+        except:
+            pass
+        
+        keys_str = os.getenv("GROQ_API_KEYS", "") or os.getenv("GROQ_API_KEY", "")
+        new_keys = [k.strip() for k in keys_str.split(",") if k.strip() and k.strip().startswith("gsk_")]
+        
+        # Detect new keys added
+        old_count = len(self._groq_keys)
+        if new_keys != self._groq_keys:
+            self._groq_keys = new_keys
+            if old_count > 0 and len(new_keys) > old_count:
+                print(f"  [AI] New keys detected! {old_count} -> {len(new_keys)} keys")
+                # Reset cooldowns for new keys
+                self._groq_key_cooldowns = {}
+                self._all_keys_exhausted_until = 0
+                self._low_key_warned = False
+                # Switch to first available key
+                if self._groq_keys:
+                    self._groq_key_index = 0
+                    self.groq_client = Groq(api_key=self._groq_keys[0])
+    
+    def _maybe_reload_keys(self):
+        """Periodically check .env for new keys"""
+        now = time.time()
+        if now - self._last_env_check >= self._env_check_interval:
+            self._last_env_check = now
+            self._load_keys_from_env()
+    
+    def _check_low_keys(self):
+        """Send warning when keys are running low"""
+        available = sum(1 for i in range(len(self._groq_keys))
+                       if time.time() >= self._groq_key_cooldowns.get(i, 0))
+        total = len(self._groq_keys)
+        
+        if total <= 1 and not self._low_key_warned:
+            self._low_key_warned = True
+            self._send_key_warning(
+                f"AI keys: {total} total, {available} available.\n"
+                f"Add more free keys at https://console.groq.com/keys\n"
+                f"Then update GROQ_API_KEYS in .env (comma-separated)"
+            )
+        elif available == 0 and total > 0 and not self._low_key_warned:
+            self._low_key_warned = True
+            self._send_key_warning(
+                f"All {total} AI keys on cooldown!\n"
+                f"Bot will auto-retry when keys recover.\n"
+                f"Add more free keys at https://console.groq.com/keys"
+            )
+    
+    def _send_key_warning(self, message: str):
+        """Send Telegram warning about key status"""
+        try:
+            import requests
+            token = os.getenv("TELEGRAM_TOKEN")
+            chat_id = os.getenv("TELEGRAM_CHAT_ID")
+            if token and chat_id:
+                requests.post(
+                    f"https://api.telegram.org/bot{token}/sendMessage",
+                    json={
+                        "chat_id": chat_id,
+                        "text": f"AI Key Warning:\n{message}",
+                    },
+                    timeout=5,
+                )
+        except:
+            pass
+    
+    def _get_available_key_index(self) -> Optional[int]:
+        """Find a key that's not on cooldown"""
+        now = time.time()
+        # Check if global cooldown active
+        if now < self._all_keys_exhausted_until:
+            return None
+        # Find a key not on individual cooldown
+        for i in range(len(self._groq_keys)):
+            cooldown = self._groq_key_cooldowns.get(i, 0)
+            if now >= cooldown:
+                return i
+        return None
+    
+    def _rotate_groq_key(self, failed_index: int):
+        """Mark a key as failed and switch to next available"""
+        # Track consecutive errors per key
+        errors = self._groq_key_errors.get(failed_index, 0) + 1
+        self._groq_key_errors[failed_index] = errors
+        
+        # Exponential backoff: 30s, 60s, 120s, 240s (max 5 min)
+        cooldown = min(30 * (2 ** (errors - 1)), 300)
+        self._groq_key_cooldowns[failed_index] = time.time() + cooldown
+        print(f"  [AI] Key #{failed_index + 1} rate limited (error #{errors}), cooldown {cooldown}s")
+        
+        # Find next available key
+        next_index = self._get_available_key_index()
+        if next_index is not None and next_index != failed_index:
+            self._groq_key_index = next_index
+            self.groq_client = Groq(api_key=self._groq_keys[next_index])
+            print(f"  [AI] Switched to key #{next_index + 1}/{len(self._groq_keys)}")
+            self._check_low_keys()
+            return True
+        
+        # All keys exhausted - set global cooldown (120s base, increases with errors)
+        total_errors = sum(self._groq_key_errors.values())
+        global_cooldown = min(120 + (total_errors * 30), 600)  # max 10 min
+        self._all_keys_exhausted_until = time.time() + global_cooldown
+        print(f"  [AI] ALL {len(self._groq_keys)} keys exhausted, global cooldown {global_cooldown}s")
+        self._check_low_keys()
+        return False
     
     def _get_profile_summary(self) -> str:
         """Get profile summary from config"""
@@ -75,6 +205,31 @@ HTML (first 5000 chars):
 {page_source[:5000]}
 """
         return self._call_ai(prompt, is_json=True)
+    
+    def generate_cover_letter(self, job_context: str = "") -> str:
+        """Generate cover letter untuk application form"""
+        p = self.config.personal
+        skills_str = ", ".join(p.skills[:8]) if p.skills else "Web3, Marketing, Community Management"
+        
+        prompt = f"""
+You are {p.full_name}, a {p.desired_role} with {p.years_experience} years of experience.
+
+Your profile:
+- Skills: {skills_str}
+- Location: {p.location}
+- Work preference: {p.work_type}
+
+Job context: {job_context}
+
+Write a professional cover letter (3-4 paragraphs, ~150 words) for this job application.
+Structure:
+1. Opening: Express enthusiasm for the role
+2. Body: Highlight relevant experience and skills that match the job
+3. Closing: Express eagerness to contribute and availability
+
+Make it specific to the job context. Be genuine and professional.
+Cover Letter:"""
+        return self._call_ai(prompt, is_json=False)
     
     def generate_answer_for_question(self, question: str, job_context: str = "") -> str:
         """Generate jawaban untuk custom question - optimized"""
@@ -188,42 +343,88 @@ Return as plain text summary:"""
         return self._call_ai(prompt, is_json=False)
     
     def _call_ai(self, prompt: str, is_json: bool = False) -> Any:
-        """Call AI provider"""
-        try:
-            # Try Groq first (free)
-            if self.groq_client:
-                response = self.groq_client.chat.completions.create(
-                    model=self.config.ai.groq_model,
-                    messages=[{"role": "user", "content": prompt}],
-                    temperature=0.7 if not is_json else 0.3,
-                    max_tokens=1000,
-                )
-                result = response.choices[0].message.content.strip()
+        """Call AI provider with automatic key rotation on 429
+        
+        Bot never stops - always retries with available keys or waits for cooldown.
+        Auto-reloads new keys from .env every 60s.
+        """
+        # Hot-reload keys from .env (picks up new keys without restart)
+        self._maybe_reload_keys()
+        
+        max_attempts = max(len(self._groq_keys) * 2, 4)  # Try each key at least twice
+        
+        for attempt in range(max_attempts):
+            # Wait if global cooldown active
+            now = time.time()
+            if now < self._all_keys_exhausted_until:
+                wait = self._all_keys_exhausted_until - now
+                if wait > 0:
+                    print(f"  [AI] All keys on cooldown, waiting {int(wait)}s...")
+                    # Sleep in short bursts to allow key reload
+                    for _ in range(int(wait / 5)):
+                        time.sleep(5)
+                        self._maybe_reload_keys()
+                        if self._get_available_key_index() is not None:
+                            print(f"  [AI] Key available after wait!")
+                            break
+                    continue
+            
+            try:
+                # Try Groq first (free)
+                if self.groq_client:
+                    response = self.groq_client.chat.completions.create(
+                        model=self.config.ai.groq_model,
+                        messages=[{"role": "user", "content": prompt}],
+                        temperature=0.7 if not is_json else 0.3,
+                        max_tokens=1000,
+                    )
+                    result = response.choices[0].message.content.strip()
+                    
+                    if is_json:
+                        return self._extract_json(result)
+                    return result
                 
-                if is_json:
-                    return self._extract_json(result)
-                return result
-            
-            # Fallback to OpenAI
-            if self.openai_client:
-                response = self.openai_client.chat.completions.create(
-                    model=self.config.ai.openai_model,
-                    messages=[{"role": "user", "content": prompt}],
-                    temperature=0.7 if not is_json else 0.3,
-                    max_tokens=1000,
-                )
-                result = response.choices[0].message.content.strip()
+                # Fallback to OpenAI
+                if self.openai_client:
+                    response = self.openai_client.chat.completions.create(
+                        model=self.config.ai.openai_model,
+                        messages=[{"role": "user", "content": prompt}],
+                        temperature=0.7 if not is_json else 0.3,
+                        max_tokens=1000,
+                    )
+                    result = response.choices[0].message.content.strip()
+                    
+                    if is_json:
+                        return self._extract_json(result)
+                    return result
                 
-                if is_json:
-                    return self._extract_json(result)
-                return result
-            
-            # No AI available - use basic heuristics
-            return self._fallback_analysis(prompt, is_json)
-            
-        except Exception as e:
-            print(f"[AI ERROR] {e}")
-            return [] if is_json else "N/A"
+                # No AI available - use basic heuristics
+                return self._fallback_analysis(prompt, is_json)
+                
+            except Exception as e:
+                error_str = str(e).lower()
+                is_rate_limit = any(kw in error_str for kw in [
+                    "429", "rate", "limit", "quota", "too many requests",
+                    "requests per", "tokens per",
+                ])
+                
+                if is_rate_limit:
+                    print(f"  [AI] Rate limited (attempt {attempt + 1}/{max_attempts})")
+                    # Rotate to next key
+                    if self._rotate_groq_key(self._groq_key_index):
+                        time.sleep(2)  # Brief pause before retry
+                        continue
+                    else:
+                        # All keys exhausted - wait then retry (bot never stops)
+                        time.sleep(5)
+                        continue
+                else:
+                    print(f"[AI ERROR] {e}")
+                    return [] if is_json else "N/A"
+        
+        # After all attempts, return fallback (bot continues to next job)
+        print(f"  [AI] Max attempts reached, using fallback")
+        return [] if is_json else "Please fill manually"
     
     def _fallback_analysis(self, prompt: str, is_json: bool) -> Any:
         """Fallback analysis tanpa AI"""
