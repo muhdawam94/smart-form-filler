@@ -1454,5 +1454,87 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8610621002",
+    "timestamp": "2026-08-08T22:52:37.562440",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 218,
+    "fields_skipped": 15,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | Please enter your location | This field is required. | candidate-location: Please enter your location | question_37107023002: This field is required. | question_37107025002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1548,
+    "job_title": "Business Intelligence Manager",
+    "company": "twitch"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8600134002",
+    "timestamp": "2026-08-08T23:07:42.778467",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 217,
+    "fields_skipped": 16,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | Please enter your location | This field is required. | candidate-location: Please enter your location | question_37021532002: This field is required. | question_37021533002: This field is required. | question_37021535002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1549,
+    "job_title": "Business Intelligence Manager",
+    "company": "twitch"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8609435002",
+    "timestamp": "2026-08-08T23:22:53.574320",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 21,
+    "fields_skipped": 16,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | Please enter your location | This field is required. | candidate-location: Please enter your location | question_37095971002[]: This field is required. | question_37095972002: This field is required. | question_37095973002: This field is required. | question_37095975002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1552,
+    "job_title": "Contracts Manager",
+    "company": "twitch"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8609436002",
+    "timestamp": "2026-08-08T23:29:24.276013",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 21,
+    "fields_skipped": 16,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | Please enter your location | This field is required. | candidate-location: Please enter your location | question_37095988002[]: This field is required. | question_37095989002: This field is required. | question_37095990002: This field is required. | question_37095992002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1553,
+    "job_title": "Contracts Manager",
+    "company": "twitch"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8607049002",
+    "timestamp": "2026-08-08T23:35:51.560602",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 217,
+    "fields_skipped": 16,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | Please enter your location | This field is required. | candidate-location: Please enter your location | question_37079130002: This field is required. | question_37079131002: This field is required. | question_37079133002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
