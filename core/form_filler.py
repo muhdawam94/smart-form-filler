@@ -84,6 +84,7 @@ class SmartFormFiller:
                                 dry_run: bool = False, company: str = "") -> Dict:
         """Main method: Isi application form di URL"""
         url = self._normalize_application_url(url, company)
+        self._current_company = company
         print(f"\n{'='*60}")
         print(f"FILLING APPLICATION: {url}")
         print(f"{'='*60}")
@@ -217,6 +218,7 @@ class SmartFormFiller:
                     elif submit_result.get("error"):
                         result["status"] = "submit_failed"
                         result["errors"].append(submit_result["error"])
+                        await self._save_debug_screenshot("fail")
                     else:
                         result["status"] = "submit_unverified"
             else:
@@ -1256,25 +1258,53 @@ class SmartFormFiller:
         try:
             details = await self.page.evaluate("""() => {
                 const out = [];
-                const sels = ['.error-list li', '.error-message', '.field-error',
-                              '.validation-error', '.required-error',
-                              '[class*="field_error"]', '.error-description'];
-                for (const s of sels) {
-                    document.querySelectorAll(s).forEach(el => {
-                        const t = (el.innerText || '').trim();
-                        if (t && t.length < 200) out.push(t);
-                    });
-                }
+                const push = (t) => {
+                    t = (t || '').replace(/\\s+/g, ' ').trim();
+                    if (t && t.length >= 3 && t.length < 160) out.push(t);
+                };
+                // 1) Elemen error validasi (id berakhiran -error, class error, dsb)
+                document.querySelectorAll(
+                    '[id$="-error"], .error, .field-error, .error-message, ' +
+                    '.validation-error, [class*="field_error"], [class*="alert"]'
+                ).forEach(el => push(el.innerText || el.textContent));
+                // 2) Field yang ditandai invalid
+                document.querySelectorAll('[aria-invalid="true"]').forEach(el => {
+                    const id = el.id || el.name || 'field';
+                    const em = el.getAttribute('aria-errormessage');
+                    let msg = '';
+                    if (em) {
+                        const m = document.getElementById(em);
+                        if (m) msg = (m.innerText || '').trim();
+                    }
+                    out.push((id + ': ' + msg).replace(/\\s+/g, ' ').trim() || id);
+                });
+                // 3) Fallback: teks pendek mengandung kata error/required/missing
                 if (!out.length) {
-                    const body = document.body ? document.body.innerText : '';
-                    const idx = body.search(/required|error|missing/i);
-                    if (idx >= 0) out.push(body.slice(Math.max(0, idx - 120), idx + 220).trim());
+                    document.querySelectorAll('p, li, span, small').forEach(el => {
+                        const t = (el.innerText || '').trim();
+                        if (t.length >= 5 && t.length < 140 && /required|error|missing|invalid/i.test(t))
+                            out.push(t.replace(/\\s+/g, ' '));
+                    });
                 }
                 return [...new Set(out)].slice(0, 15).join(' | ');
             }""")
             return (details or "").strip()
         except Exception:
             return ""
+
+    async def _save_debug_screenshot(self, tag: str = "fail"):
+        """Simpan screenshot untuk debugging (muncul di artifact workflow)."""
+        try:
+            company = getattr(self, "_current_company", "") or ""
+            safe = re.sub(r"\W+", "_", company)[-40:]
+            path = os.path.join(
+                os.path.dirname(os.path.dirname(__file__)),
+                f"debug_{tag}_{safe}.png",
+            )
+            await self.page.screenshot(path=path, full_page=False)
+            print(f"[DEBUG] Screenshot saved: {os.path.basename(path)}")
+        except Exception as e:
+            print(f"[DEBUG] Screenshot failed: {e}")
     
     async def _random_delay(self):
         """Random delay untuk anti-detection"""

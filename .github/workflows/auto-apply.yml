@@ -160,6 +160,14 @@ jobs:
         run: |
           python main.py fill-db --limit ${{ steps.check-limit.outputs.remaining }} --headless
       
+      - name: Upload debug screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-screenshots
+          path: debug_*.png
+          if-no-files-found: ignore
+      
       - name: Persist state (commit DB + scheduler)
         if: always()
         run: |
