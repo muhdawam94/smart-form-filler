@@ -953,5 +953,172 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/airtable/jobs/8626638002",
+    "timestamp": "2026-08-08T19:54:53.338381",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 10,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Airtable? Get future opportunities sent straight to your email. Create alert | Please enter your location | This field is required. | candidate-location: Please enter your location | question_37248102002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1514,
+    "job_title": "Manager, Business Development Representatives",
+    "company": "airtable"
+  },
+  {
+    "url": "https://boards.greenhouse.io/cloudflare/jobs/8084358?gh_jid=8084358",
+    "timestamp": "2026-08-08T19:56:22.284914",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 12,
+    "fields_skipped": 11,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_68238275: This field is required. | question_68238274: This field is required. | question_68298800: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1521,
+    "job_title": "Business Development Manager",
+    "company": "cloudflare"
+  },
+  {
+    "url": "https://boards.greenhouse.io/cloudflare/jobs/6696709?gh_jid=6696709",
+    "timestamp": "2026-08-08T19:58:26.889474",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 8,
+    "fields_skipped": 8,
+    "errors": [
+      "Form rejected: is required -> Please enter your location | This field is required. | candidate-location: Please enter your location | question_54780443: This field is required. | question_54780798: This field is required. | question_54782039: This field is required. | question_54780441: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1523,
+    "job_title": "Business Development Representative - Arabic Speaking",
+    "company": "cloudflare"
+  },
+  {
+    "url": "https://boards.greenhouse.io/cloudflare/jobs/7504487?gh_jid=7504487",
+    "timestamp": "2026-08-08T20:00:03.573625",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 8,
+    "fields_skipped": 8,
+    "errors": [
+      "Form rejected: is required -> Please enter your location | This field is required. | candidate-location: Please enter your location | question_62450739: This field is required. | question_62450741: This field is required. | question_62450743: This field is required. | question_68212297: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1528,
+    "job_title": "Business Development Representative - German Speaking",
+    "company": "cloudflare"
+  },
+  {
+    "url": "https://boards.greenhouse.io/cloudflare/jobs/7772239?gh_jid=7772239",
+    "timestamp": "2026-08-08T20:01:44.611308",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 8,
+    "fields_skipped": 8,
+    "errors": [
+      "Form rejected: is required -> Please enter your location | This field is required. | candidate-location: Please enter your location | question_65123260: This field is required. | question_65123261: This field is required. | question_65123262: This field is required. | question_65123263: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1529,
+    "job_title": "Business Development Representative - Turkish Speaking",
+    "company": "cloudflare"
+  },
+  {
+    "url": "https://boards.greenhouse.io/cloudflare/jobs/8076815?gh_jid=8076815",
+    "timestamp": "2026-08-08T20:03:11.971896",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 9,
+    "fields_skipped": 9,
+    "errors": [
+      "Form rejected: is required -> Please enter your location | This field is required. | candidate-location: Please enter your location | question_68175369: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1530,
+    "job_title": "Chief of Staff to Chief Strategy Officer",
+    "company": "cloudflare"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8559344002",
+    "timestamp": "2026-08-08T20:04:51.124996",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 7,
+    "fields_skipped": 11,
+    "errors": [
+      "Form rejected: is required -> Preferred First Name is required. | This field is required. | preferred_name: Preferred First Name is required. | question_36647321002: This field is required. | question_36647322002: This field is required. | question_37115557002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1532,
+    "job_title": "ソリューションアーキテクト (プリセールス)",
+    "company": "databricks"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8428882002",
+    "timestamp": "2026-08-08T20:06:23.832131",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 7,
+    "fields_skipped": 12,
+    "errors": [
+      "Could not confirm submission (no success page)"
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1533,
+    "job_title": "デリバリーソリューションアーキテクト",
+    "company": "databricks"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8099751002",
+    "timestamp": "2026-08-08T20:08:39.261026",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 19,
+    "fields_skipped": 12,
+    "errors": [
+      "Form rejected: is required -> Preferred First Name is required. | Please enter your location | School is required. | Degree is required. | Discipline is required. | Start year is required. | End year is required. | This field is required. | preferred_name: Preferred First Name is required. | candidate-location: Please enter your location | school--0: School is required. | degree--0: Degree is required. | discipline--0: Discipline is required. | start-year--0: Start year is required. | end-year--0: End year is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1538,
+    "job_title": "AI Engineer - FDE (Forward Deployed Engineer)",
+    "company": "databricks"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8298792002",
+    "timestamp": "2026-08-08T20:10:27.356860",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 21,
+    "fields_skipped": 8,
+    "errors": [
+      "Form rejected: is required -> Preferred First Name is required. | This field is required. | preferred_name: Preferred First Name is required. | question_34302803002: This field is required. | question_34302804002: This field is required. | question_34302805002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
