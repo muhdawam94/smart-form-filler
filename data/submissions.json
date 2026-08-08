@@ -786,5 +786,172 @@
       "recaptcha"
     ],
     "captcha_skip_reason": "Real CAPTCHA challenge present - cannot submit"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/airtable/jobs/8606309002",
+    "timestamp": "2026-08-08T19:33:28.573645",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 9,
+    "fields_skipped": 7,
+    "errors": [
+      "Form rejected: is required -> technical judgment across full-stack product development; AI product experience is strongly preferred but not strictly required.\nA track record of leading teams through ambiguity, changing priorities, and high-visibility goals.\nExcellent communication skills, including the ability to create clarity for engineers, cross-functional partner"
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1512,
+    "job_title": "Engineering Manager, AI Tooling",
+    "company": "airtable"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/airtable/jobs/8490611002",
+    "timestamp": "2026-08-08T19:34:39.400790",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 9,
+    "fields_skipped": 8,
+    "errors": [
+      "Form rejected: required field -> eer at Airtable? Get future opportunities sent straight to your email.\n\nCreate alert\nApply for this job\n\n*\n\nindicates a required field\n\nQuick Apply with MyGreenhouse\nFirst Name*\nLast Name*\nPreferred First Name\nEmail*\nPhone\nCountry\n+62\nPhone\nResume/CV*\n\nMuhammad_Dawam_CV.pdf\n\nCover Letter\nAttach\nAttach\nDropbox\nGoogle Drive\nEnter manually\nE"
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1513,
+    "job_title": "Global Payroll Manager",
+    "company": "airtable"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/airtable/jobs/8626638002",
+    "timestamp": "2026-08-08T19:35:49.198319",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 10,
+    "errors": [
+      "Form rejected: is required -> eer at Airtable? Get future opportunities sent straight to your email.\n\nCreate alert\nApply for this job\n\n*\n\nindicates a required field\n\nQuick Apply with MyGreenhouse\nFirst Name*\nLast Name*\nPreferred First Name\nEmail*\nPhone\nCountry\n+62\nPhone\nLocation (City)*\noption , selected.Select is focused ,type to refine list, press Down to open the m"
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1514,
+    "job_title": "Manager, Business Development Representatives",
+    "company": "airtable"
+  },
+  {
+    "url": "https://boards.greenhouse.io/cloudflare/jobs/8084358?gh_jid=8084358",
+    "timestamp": "2026-08-08T19:37:14.496107",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 12,
+    "fields_skipped": 11,
+    "errors": [
+      "Form rejected: is required -> -mail at hr@cloudflare.com or via mail at 101 Townsend St. San Francisco, CA 94107.\n\nApply for this job\n\n*\n\nindicates a required field\n\nFirst Name*\nLast Name*\nPreferred First Name\nEmail*\nPhone\nCountry\n+62\nPhone\nResume/CV\n\nMuhammad_Dawam_CV.pdf\n\nCover Letter\nAttach\nAttach\nDropbox\nGoogle Drive\nEnter manually\nEnter manually\n\nAccepted file ty"
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1521,
+    "job_title": "Business Development Manager",
+    "company": "cloudflare"
+  },
+  {
+    "url": "https://boards.greenhouse.io/cloudflare/jobs/6696709?gh_jid=6696709",
+    "timestamp": "2026-08-08T19:39:19.306131",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 8,
+    "fields_skipped": 8,
+    "errors": [
+      "Form rejected: is required -> ent of 18-24 months before you may be eligible to apply for another role within the company.\n\nAbout the Role\n\nLanguages required: English & Arabic\n\nThis is a great opportunity to be an early member of a high performing sales team at a fast growing technology company. We are looking for ownership-oriented team members with excellent commun"
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1523,
+    "job_title": "Business Development Representative - Arabic Speaking",
+    "company": "cloudflare"
+  },
+  {
+    "url": "https://boards.greenhouse.io/cloudflare/jobs/7504487?gh_jid=7504487",
+    "timestamp": "2026-08-08T19:40:56.416682",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 8,
+    "fields_skipped": 8,
+    "errors": [
+      "Form rejected: is required -> ply for another role within the company.\n\nAbout the Role\n\nLocation: Lisbon, Portugal\n\nThis is a hybrid role.\n\nLanguages required: English & German\n\nThis is a great opportunity to be an early member of a high performing sales team at a fast growing technology company. We are looking for ownership-oriented team members with excellent commun"
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1528,
+    "job_title": "Business Development Representative - German Speaking",
+    "company": "cloudflare"
+  },
+  {
+    "url": "https://boards.greenhouse.io/cloudflare/jobs/7772239?gh_jid=7772239",
+    "timestamp": "2026-08-08T19:42:35.378856",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 8,
+    "fields_skipped": 8,
+    "errors": [
+      "Form rejected: is required -> ent of 18-24 months before you may be eligible to apply for another role within the company.\n\nAbout the Role\n\nLanguages required: English & Turkish\n\nThis is a great opportunity to be an early member of a high performing sales team at a fast growing technology company. We are looking for ownership-oriented team members with excellent commu"
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1529,
+    "job_title": "Business Development Representative - Turkish Speaking",
+    "company": "cloudflare"
+  },
+  {
+    "url": "https://boards.greenhouse.io/cloudflare/jobs/8076815?gh_jid=8076815",
+    "timestamp": "2026-08-08T19:44:13.276824",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 9,
+    "fields_skipped": 9,
+    "errors": [
+      "Form rejected: is required -> he ideal candidate is naturally curious, possesses deep technical product fluency, and brings the sharp business acumen required to step into the room on the CSO’s behalf at a moment's notice.\n\nResponsibilities\nExecutive Representation: Act as a high-leverage surrogate for the CSO, attending key meetings and customer discussions on her be"
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1530,
+    "job_title": "Chief of Staff to Chief Strategy Officer",
+    "company": "cloudflare"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8559344002",
+    "timestamp": "2026-08-08T19:45:59.123208",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 7,
+    "fields_skipped": 11,
+    "errors": [
+      "Form rejected: is required -> Apply for this job\n\n*\n\nindicates a required field\n\nFirst Name*\nLast Name*\nPreferred First Name*\n\nPreferred First Name is required.\n\nEmail*\nPhone\nCountry*\n+62\nPhone*\nResume/CV*\n\nMuhammad_Dawam_CV.pdf\n\nCover Letter\nAttach\nAttach\nDropbox\nEnter manually\nEnter"
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1532,
+    "job_title": "ソリューションアーキテクト (プリセールス)",
+    "company": "databricks"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8428882002",
+    "timestamp": "2026-08-08T19:47:22.585899",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 7,
+    "fields_skipped": 12,
+    "errors": [
+      "Could not confirm submission (no success page)"
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
