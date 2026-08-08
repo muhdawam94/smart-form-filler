@@ -513,6 +513,8 @@ class SmartFormFiller:
                         "selector": selector,
                         "options": [],
                         "required": await input_el.get_attribute("required") is not None,
+                        "role": (await input_el.get_attribute("role")) or "",
+                        "cls": (await input_el.get_attribute("class")) or "",
                     })
             
             # Find all select elements
@@ -736,6 +738,14 @@ class SmartFormFiller:
                 await element.click()
                 await element.fill("")
                 await element.type(str(value)[:200], delay=random.randint(20, 50))
+                # Combobox (headless UI / Greenhouse baru): commit opsi dropdown
+                role = (field.get("role") or "").lower()
+                cls = (field.get("cls") or "").lower()
+                if "combobox" in role or "select__input" in cls:
+                    await element.press("ArrowDown")
+                    await element.wait_for_timeout(200)
+                    await element.press("Enter")
+                    await element.wait_for_timeout(300)
             
             print(f"  [FILLED] {field_name}: {str(value)[:50]}...")
             return True
@@ -1226,6 +1236,11 @@ class SmartFormFiller:
                 print(f"[VERIFY] Success confirmed: '{matched_success or 'URL change'}'")
                 return {"submitted": True, "verified": True, "error": ""}
             if matched_error:
+                details = await self._extract_error_details()
+                if details:
+                    print(f"[VERIFY] Error detected: '{matched_error}' | details: {details}")
+                    return {"submitted": False, "verified": False,
+                            "error": f"Form rejected: {matched_error} -> {details}"}
                 print(f"[VERIFY] Error detected: '{matched_error}'")
                 return {"submitted": False, "verified": False,
                         "error": f"Form rejected: {matched_error}"}
@@ -1235,6 +1250,31 @@ class SmartFormFiller:
                     "error": "Could not confirm submission (no success page)"}
         except Exception as e:
             return {"submitted": False, "verified": False, "error": str(e)}
+
+    async def _extract_error_details(self) -> str:
+        """Ekstrak detail error validasi form (field mana yang required dll)."""
+        try:
+            details = await self.page.evaluate("""() => {
+                const out = [];
+                const sels = ['.error-list li', '.error-message', '.field-error',
+                              '.validation-error', '.required-error',
+                              '[class*="field_error"]', '.error-description'];
+                for (const s of sels) {
+                    document.querySelectorAll(s).forEach(el => {
+                        const t = (el.innerText || '').trim();
+                        if (t && t.length < 200) out.push(t);
+                    });
+                }
+                if (!out.length) {
+                    const body = document.body ? document.body.innerText : '';
+                    const idx = body.search(/required|error|missing/i);
+                    if (idx >= 0) out.push(body.slice(Math.max(0, idx - 120), idx + 220).trim());
+                }
+                return [...new Set(out)].slice(0, 15).join(' | ');
+            }""")
+            return (details or "").strip()
+        except Exception:
+            return ""
     
     async def _random_delay(self):
         """Random delay untuk anti-detection"""
