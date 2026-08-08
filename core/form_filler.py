@@ -483,6 +483,14 @@ class SmartFormFiller:
             pass
         return False
 
+    def _css_id_selector(self, field_id: str) -> str:
+        """Buat CSS selector untuk id; escape karakter khusus (Greenhouse memakai
+        id seperti 'question_37412452002[]' yang invalid untuk #id)."""
+        if re.match(r"^[A-Za-z_][A-Za-z0-9_\-]*$", field_id):
+            return f"#{field_id}"
+        escaped = field_id.replace("\\", "\\\\").replace('"', '\\"')
+        return f'[id="{escaped}"]'
+
     async def _detect_fields_by_selector(self) -> List[Dict]:
         """Detect fields menggunakan Playwright selectors"""
         fields = []
@@ -517,7 +525,7 @@ class SmartFormFiller:
                     if raw_name:
                         selector = f"input[name='{raw_name}']"
                     elif field_id:
-                        selector = f"#{field_id}"
+                        selector = self._css_id_selector(field_id)
                     else:
                         selector = None
                     
@@ -770,7 +778,7 @@ class SmartFormFiller:
     
     async def _commit_combobox(self, element, value: Any, field_name: str = "") -> str:
         """Commit pilihan combobox (Greenhouse baru / headless UI):
-        ketik -> tunggu suggestions -> ArrowDown -> Enter -> verifikasi.
+        ketik -> tunggu suggestions -> baca opsi listbox bila cocok -> ArrowDown+Enter.
         Jika belum ter-commit, coba ulang dengan varian nilai yang lebih sederhana
         (kota saja, lalu 'Remote')."""
         value = str(value)
@@ -783,13 +791,18 @@ class SmartFormFiller:
         
         for candidate in tried:
             try:
+                await element.click()
                 await element.press("Control+A")
+                await self.page.wait_for_timeout(150)
                 await element.type(candidate[:120], delay=random.randint(40, 70))
-                await element.wait_for_timeout(900)  # tunggu suggestions load
+                await self.page.wait_for_timeout(900)  # tunggu suggestions load
+                picked = await self._pick_open_combobox_option(candidate)
+                if picked:
+                    return picked
                 await element.press("ArrowDown")
-                await element.wait_for_timeout(250)
+                await self.page.wait_for_timeout(250)
                 await element.press("Enter")
-                await element.wait_for_timeout(400)
+                await self.page.wait_for_timeout(400)
                 committed = (await element.input_value()) or ""
                 if committed.strip():
                     return committed
@@ -798,6 +811,32 @@ class SmartFormFiller:
             except Exception as e:
                 print(f"  [COMB-BOX] retry error ({candidate[:30]}): {e}")
         return ""
+
+    async def _pick_open_combobox_option(self, value: str) -> str:
+        """Baca opsi yang TERBUKA di listbox (role=option, hanya yang visible) dan
+        pilih yang paling cocok dengan nilai target. Return label yang dipilih,
+        atau '' jika tidak ada opsi yang cocok."""
+        try:
+            opts = await self.page.query_selector_all('[role="option"]')
+            if not opts:
+                return ""
+            v = (value or "").strip().lower()
+            for o in opts:
+                try:
+                    if not await o.is_visible():
+                        continue
+                except Exception:
+                    continue
+                t = ((await o.text_content()) or "").strip()
+                if not t:
+                    continue
+                if v and (t.lower() == v or v in t.lower() or t.lower() in v):
+                    await o.click()
+                    await self.page.wait_for_timeout(300)
+                    return t
+            return ""
+        except Exception:
+            return ""
 
     async def _get_question_label(self, element, field_name: str) -> str:
         """Ambil teks pertanyaan dari label terdekat - optimized"""
@@ -1199,6 +1238,8 @@ class SmartFormFiller:
             "start_year": personal.start_year,
             "end_year": personal.end_year,
             "graduation_year": personal.end_year,
+            "start_month": "January",
+            "end_month": "December",
         }
         
         value = common_fields.get(field_name.lower())

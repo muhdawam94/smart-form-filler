@@ -174,6 +174,8 @@ class FormFillerConfig:
         "start_year": "start_year",
         "end_year": "end_year",
         "graduation_year": "end_year",
+        "start_month": "start_month",
+        "end_month": "end_month",
         
         # Skills
         "skills": "skills",
