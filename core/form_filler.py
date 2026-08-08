@@ -470,10 +470,22 @@ class SmartFormFiller:
         
         return fields if fields else []
     
+    async def _is_required(self, element) -> bool:
+        """Field dianggap wajib jika punya atribut required ATAU aria-required="true".
+        Greenhouse baru (Remix) memakai aria-required tanpa atribut HTML required."""
+        try:
+            if await element.get_attribute("required") is not None:
+                return True
+            aria = (await element.get_attribute("aria-required")) or ""
+            if aria.lower() == "true":
+                return True
+        except Exception:
+            pass
+        return False
+
     async def _detect_fields_by_selector(self) -> List[Dict]:
         """Detect fields menggunakan Playwright selectors"""
         fields = []
-        
         try:
             # Find all input fields
             inputs = await self.page.query_selector_all("input, textarea, select")
@@ -514,7 +526,7 @@ class SmartFormFiller:
                         "field_type": field_type,
                         "selector": selector,
                         "options": [],
-                        "required": await input_el.get_attribute("required") is not None,
+                        "required": await self._is_required(input_el),
                         "role": (await input_el.get_attribute("role")) or "",
                         "cls": (await input_el.get_attribute("class")) or "",
                     })
@@ -538,7 +550,7 @@ class SmartFormFiller:
                         "field_type": "select",
                         "selector": f"select[name='{raw_name}']",
                         "options": option_texts,
-                        "required": await select.get_attribute("required") is not None,
+                        "required": await self._is_required(select),
                     })
             
             # Find all textareas
@@ -553,7 +565,7 @@ class SmartFormFiller:
                         "field_type": "textarea",
                         "selector": f"textarea[name='{raw_name}']",
                         "options": [],
-                        "required": await textarea.get_attribute("required") is not None,
+                        "required": await self._is_required(textarea),
                     })
         
         except Exception as e:
@@ -738,16 +750,16 @@ class SmartFormFiller:
                 await element.fill(str(value)[:1000])
             else:
                 await element.click()
-                await element.fill("")
-                await element.type(str(value)[:200], delay=random.randint(20, 50))
-                # Combobox (headless UI / Greenhouse baru): commit opsi dropdown
                 role = (field.get("role") or "").lower()
                 cls = (field.get("cls") or "").lower()
                 if "combobox" in role or "select__input" in cls:
-                    await element.press("ArrowDown")
-                    await element.wait_for_timeout(200)
-                    await element.press("Enter")
-                    await element.wait_for_timeout(300)
+                    committed = await self._commit_combobox(element, value, field_name)
+                    if not committed:
+                        print(f"  [COMB-BOX] Failed to commit value for: {field_name}")
+                        return False
+                else:
+                    await element.fill("")
+                    await element.type(str(value)[:200], delay=random.randint(20, 50))
             
             print(f"  [FILLED] {field_name}: {str(value)[:50]}...")
             return True
@@ -756,6 +768,37 @@ class SmartFormFiller:
             print(f"  [ERROR] {field_name}: {e}")
             return False
     
+    async def _commit_combobox(self, element, value: Any, field_name: str = "") -> str:
+        """Commit pilihan combobox (Greenhouse baru / headless UI):
+        ketik -> tunggu suggestions -> ArrowDown -> Enter -> verifikasi.
+        Jika belum ter-commit, coba ulang dengan varian nilai yang lebih sederhana
+        (kota saja, lalu 'Remote')."""
+        value = str(value)
+        tried = [value]
+        if "," in value:
+            city = value.split(",")[0].strip()
+            if city and city != value:
+                tried.append(city)
+        tried.append("Remote")
+        
+        for candidate in tried:
+            try:
+                await element.press("Control+A")
+                await element.type(candidate[:120], delay=random.randint(40, 70))
+                await element.wait_for_timeout(900)  # tunggu suggestions load
+                await element.press("ArrowDown")
+                await element.wait_for_timeout(250)
+                await element.press("Enter")
+                await element.wait_for_timeout(400)
+                committed = (await element.input_value()) or ""
+                if committed.strip():
+                    return committed
+                await element.press("Control+A")
+                await element.press("Backspace")
+            except Exception as e:
+                print(f"  [COMB-BOX] retry error ({candidate[:30]}): {e}")
+        return ""
+
     async def _get_question_label(self, element, field_name: str) -> str:
         """Ambil teks pertanyaan dari label terdekat - optimized"""
         try:
@@ -829,6 +872,18 @@ class SmartFormFiller:
             return p.location or "Remote"
         if any(k in q for k in ["available", "start", "notice", "when can"]):
             return p.availability or "Immediately"
+        if any(k in q for k in ["school", "university", "institution", "college"]):
+            return p.school or ""
+        if any(k in q for k in ["degree", "education", "qualification"]):
+            return p.education or ""
+        if any(k in q for k in ["discipline", "field of study", "major", "area of study"]):
+            return p.discipline or ""
+        if any(k in q for k in ["graduat", "graduation year", "end year"]):
+            return p.end_year or ""
+        if any(k in q for k in ["start year", "started", "enrolled"]):
+            return p.start_year or ""
+        if any(k in q for k in ["resume", "cv", "upload"]):
+            return ""
         return None
     
     def _find_cv_file(self) -> str:
@@ -1081,7 +1136,14 @@ class SmartFormFiller:
         mappings = self.config.field_mappings
         
         # Map field name to profile attribute
-        attr_name = mappings.get(field_name.lower().replace(" ", "_").replace("-", "_"))
+        norm = field_name.lower().replace(" ", "_").replace("-", "_")
+        attr_name = mappings.get(norm)
+        # Greenhouse baru pakai nama ber-index seperti school--0, degree--0,
+        # start-year--0 -> coba match tanpa suffix indeks
+        if not attr_name:
+            m = re.match(r"^(.*?)_+(\d+)$", norm)
+            if m:
+                attr_name = mappings.get(m.group(1))
         
         if attr_name and hasattr(personal, attr_name):
             value = getattr(personal, attr_name)
@@ -1109,7 +1171,9 @@ class SmartFormFiller:
         # Check if it's a common field
         common_fields = {
             "first_name": personal.first_name,
+            "preferred_name": personal.first_name,
             "last_name": personal.last_name,
+            "full_name": personal.full_name,
             "email": personal.email,
             "phone": personal.phone,
             "tel": personal.phone,
@@ -1126,6 +1190,15 @@ class SmartFormFiller:
             "city": personal.city,
             "country": personal.country,
             "candidate_location": personal.location,
+            "school": personal.school,
+            "university": personal.school,
+            "institution": personal.school,
+            "discipline": personal.discipline,
+            "field_of_study": personal.discipline,
+            "major": personal.discipline,
+            "start_year": personal.start_year,
+            "end_year": personal.end_year,
+            "graduation_year": personal.end_year,
         }
         
         value = common_fields.get(field_name.lower())

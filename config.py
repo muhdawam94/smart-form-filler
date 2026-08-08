@@ -40,6 +40,12 @@ class PersonalInfo:
     years_experience: str = os.getenv("YEARS_EXPERIENCE", "7+")
     education: str = os.getenv("EDUCATION", "Bachelor's Degree")
     
+    # Education detail (untuk form ATS seperti Greenhouse)
+    school: str = os.getenv("SCHOOL", "")
+    discipline: str = os.getenv("DISCIPLINE", "")
+    start_year: str = os.getenv("START_YEAR", "")
+    end_year: str = os.getenv("END_YEAR", "")
+    
     # Skills (untuk dropdown/checkbox forms)
     skills: List[str] = field(default_factory=lambda: os.getenv("SKILLS", 
         "Python,JavaScript,TypeScript,React,Next.js,Node.js,Solidity,Rust,Solana,Anchor,Web3,DeFi,Smart Contracts,REST API,GraphQL,PostgreSQL,MongoDB,Docker,AWS,Git,UI/UX Design,Figma,Tailwind CSS,HTML/CSS"
@@ -106,6 +112,7 @@ class FormFillerConfig:
         "last_name": "last_name",
         "full_name": "full_name",
         "name": "full_name",
+        "preferred_name": "first_name",
         
         # Contact
         "email": "email",
@@ -158,6 +165,15 @@ class FormFillerConfig:
         # Education
         "education": "education",
         "degree": "education",
+        "school": "school",
+        "university": "school",
+        "institution": "school",
+        "discipline": "discipline",
+        "field_of_study": "discipline",
+        "major": "discipline",
+        "start_year": "start_year",
+        "end_year": "end_year",
+        "graduation_year": "end_year",
         
         # Skills
         "skills": "skills",
