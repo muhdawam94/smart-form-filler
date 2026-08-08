@@ -412,5 +412,192 @@
       "textarea[name='g-recaptcha-response']"
     ],
     "captcha_skip_reason": "Real CAPTCHA challenge present - cannot submit"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/8015790",
+    "timestamp": "2026-08-08T18:26:44.002919",
+    "platform": "greenhouse",
+    "status": "captcha_blocked",
+    "fields_filled": 16,
+    "fields_skipped": 3,
+    "errors": [],
+    "captcha_detected": true,
+    "custom_questions": 0,
+    "dry_run": false,
+    "captcha_types": [
+      "recaptcha"
+    ],
+    "captcha_skip_reason": "Real CAPTCHA challenge present - cannot submit",
+    "job_id": 6359,
+    "job_title": "Creative Strategist, KarmaLab",
+    "company": "reddit"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/discord/jobs/8675215002",
+    "timestamp": "2026-08-08T18:28:53.992676",
+    "platform": "greenhouse",
+    "status": "captcha_blocked",
+    "fields_filled": 15,
+    "fields_skipped": 9,
+    "errors": [],
+    "captcha_detected": true,
+    "custom_questions": 0,
+    "dry_run": false,
+    "captcha_types": [
+      "recaptcha"
+    ],
+    "captcha_skip_reason": "Real CAPTCHA challenge present - cannot submit",
+    "job_id": 1438,
+    "job_title": "Manager, Safety Analytics",
+    "company": "discord"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/gitlab/jobs/8687381002",
+    "timestamp": "2026-08-08T18:30:32.940261",
+    "platform": "greenhouse",
+    "status": "captcha_blocked",
+    "fields_filled": 17,
+    "fields_skipped": 6,
+    "errors": [],
+    "captcha_detected": true,
+    "custom_questions": 0,
+    "dry_run": false,
+    "captcha_types": [
+      "recaptcha"
+    ],
+    "captcha_skip_reason": "Real CAPTCHA challenge present - cannot submit",
+    "job_id": 1468,
+    "job_title": "Business Development Representative - UKI",
+    "company": "gitlab"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/vercel/jobs/5832366004",
+    "timestamp": "2026-08-08T18:32:41.068326",
+    "platform": "greenhouse",
+    "status": "captcha_blocked",
+    "fields_filled": 19,
+    "fields_skipped": 2,
+    "errors": [],
+    "captcha_detected": true,
+    "custom_questions": 0,
+    "dry_run": false,
+    "captcha_types": [
+      "recaptcha"
+    ],
+    "captcha_skip_reason": "Real CAPTCHA challenge present - cannot submit",
+    "job_id": 1481,
+    "job_title": "Community Engineer",
+    "company": "vercel"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/vercel/jobs/6122437004",
+    "timestamp": "2026-08-08T18:34:42.703786",
+    "platform": "greenhouse",
+    "status": "captcha_blocked",
+    "fields_filled": 15,
+    "fields_skipped": 2,
+    "errors": [],
+    "captcha_detected": true,
+    "custom_questions": 0,
+    "dry_run": false,
+    "captcha_types": [
+      "recaptcha"
+    ],
+    "captcha_skip_reason": "Real CAPTCHA challenge present - cannot submit",
+    "job_id": 1482,
+    "job_title": "DevRel Engineer, Agentic Infrastructure",
+    "company": "vercel"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/vercel/jobs/6120051004",
+    "timestamp": "2026-08-08T18:36:15.059386",
+    "platform": "greenhouse",
+    "status": "captcha_blocked",
+    "fields_filled": 19,
+    "fields_skipped": 2,
+    "errors": [],
+    "captcha_detected": true,
+    "custom_questions": 0,
+    "dry_run": false,
+    "captcha_types": [
+      "recaptcha"
+    ],
+    "captcha_skip_reason": "Real CAPTCHA challenge present - cannot submit",
+    "job_id": 1485,
+    "job_title": "Director of Forward Deployed Engineering",
+    "company": "vercel"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/vercel/jobs/6119846004",
+    "timestamp": "2026-08-08T18:38:12.472115",
+    "platform": "greenhouse",
+    "status": "captcha_blocked",
+    "fields_filled": 20,
+    "fields_skipped": 2,
+    "errors": [],
+    "captcha_detected": true,
+    "custom_questions": 0,
+    "dry_run": false,
+    "captcha_types": [
+      "recaptcha"
+    ],
+    "captcha_skip_reason": "Real CAPTCHA challenge present - cannot submit",
+    "job_id": 1486,
+    "job_title": "Director, Solutions Architect",
+    "company": "vercel"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/airtable/jobs/8654173002",
+    "timestamp": "2026-08-08T18:40:10.650717",
+    "platform": "greenhouse",
+    "status": "captcha_blocked",
+    "fields_filled": 10,
+    "fields_skipped": 7,
+    "errors": [],
+    "captcha_detected": true,
+    "custom_questions": 0,
+    "dry_run": false,
+    "captcha_types": [
+      "recaptcha"
+    ],
+    "captcha_skip_reason": "Real CAPTCHA challenge present - cannot submit",
+    "job_id": 1506,
+    "job_title": "Delivery Consultant",
+    "company": "airtable"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/airtable/jobs/8485839002",
+    "timestamp": "2026-08-08T18:41:17.672624",
+    "platform": "greenhouse",
+    "status": "captcha_blocked",
+    "fields_filled": 10,
+    "fields_skipped": 7,
+    "errors": [],
+    "captcha_detected": true,
+    "custom_questions": 0,
+    "dry_run": false,
+    "captcha_types": [
+      "recaptcha"
+    ],
+    "captcha_skip_reason": "Real CAPTCHA challenge present - cannot submit",
+    "job_id": 1510,
+    "job_title": "Director, Technical Account Management",
+    "company": "airtable"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/airtable/jobs/8625370002",
+    "timestamp": "2026-08-08T18:42:24.751323",
+    "platform": "greenhouse",
+    "status": "captcha_blocked",
+    "fields_filled": 10,
+    "fields_skipped": 6,
+    "errors": [],
+    "captcha_detected": true,
+    "custom_questions": 0,
+    "dry_run": false,
+    "captcha_types": [
+      "recaptcha"
+    ],
+    "captcha_skip_reason": "Real CAPTCHA challenge present - cannot submit"
   }
 ]
