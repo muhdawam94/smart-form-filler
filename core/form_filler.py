@@ -302,13 +302,20 @@ class SmartFormFiller:
         """
         found = []
         try:
-            # 1) reCAPTCHA checkbox/anchor/challenge iframe yang terlihat
+            # 1) reCAPTCHA checkbox/anchor/challenge iframe yang terlihat.
+            #    Variant INVISIBLE (size=invisible) = badge pasif, diabaikan.
             anchors = await self.page.query_selector_all(
                 "iframe[src*='/recaptcha/api2/anchor'], "
                 "iframe[src*='/recaptcha/api2/bframe'], "
                 "iframe[src*='recaptcha']"
             )
             for a in anchors:
+                try:
+                    src = (await a.get_attribute("src")) or ""
+                except Exception:
+                    src = ""
+                if "size=invisible" in src:
+                    continue
                 if await self._is_box_visible(a):
                     found.append("recaptcha")
                     break
