@@ -563,7 +563,10 @@ NON_TECH_TITLE_PATTERNS = re.compile(
     r"talent|accounting|finance|financial|cashier|customer support|support specialist|"
     r"support|business development|community manager|customer success|operations manager|"
     r"compliance|policy|people\b|office|admin|account manager|account executive|"
-    r"writer|content|designer|design lead|brand)\b",
+    r"writer|content|designer|design lead|brand)\b"
+    r"|\b(associate|coordinator|program manager|project manager|account maintenance|"
+    r"customer experience|customer service|representative|administrator|specialist|"
+    r"analyst|\baml\b|operations)\b",
     re.IGNORECASE,
 )
 

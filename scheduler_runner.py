@@ -203,8 +203,9 @@ async def run_once():
                 success = result.get("status") == "submitted"
                 captcha_stuck = result.get("status") == "captcha_stuck"
                 
-                # Record to scheduler
-                scheduler.record_application(url, result.get("platform", "unknown"), success)
+                # Record to scheduler - HANYA yang sukses (kegagalan tidak habiskan kuota)
+                if success:
+                    scheduler.record_application(url, result.get("platform", "unknown"), True)
                 
                 # Record to database
                 _save_application_result(job_id, result)

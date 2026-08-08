@@ -36,6 +36,7 @@ class AIFieldAnalyzer:
         self._last_env_check = 0       # timestamp of last .env check
         self._env_check_interval = 60  # check .env every 60 seconds
         self._low_key_warned = False   # avoid spamming telegram
+        self._MAX_WAIT_PER_CALL = 20   # budget nunggu cooldown per panggilan AI (detik)
         
         # Load keys initially
         self._load_keys_from_env()
@@ -354,19 +355,24 @@ Return as plain text summary:"""
         max_attempts = max(len(self._groq_keys) * 2, 4)  # Try each key at least twice
         
         for attempt in range(max_attempts):
-            # Wait if global cooldown active
+            # Wait if global cooldown active - tapi dibatasi budget kecil per call
+            # supaya satu pertanyaan tidak menghentikan proses isi form berjam-jam.
             now = time.time()
             if now < self._all_keys_exhausted_until:
-                wait = self._all_keys_exhausted_until - now
+                wait = min(self._all_keys_exhausted_until - now, self._MAX_WAIT_PER_CALL)
                 if wait > 0:
-                    print(f"  [AI] All keys on cooldown, waiting {int(wait)}s...")
-                    # Sleep in short bursts to allow key reload
-                    for _ in range(int(wait / 5)):
+                    print(f"  [AI] All keys on cooldown, waiting up to {int(wait)}s (budget)...")
+                    waited = 0
+                    while waited < wait:
                         time.sleep(5)
+                        waited += 5
                         self._maybe_reload_keys()
                         if self._get_available_key_index() is not None:
                             print(f"  [AI] Key available after wait!")
                             break
+                    if self._get_available_key_index() is None:
+                        print("  [AI] Keys still unavailable - using fallback for this call")
+                        return [] if is_json else "Please fill manually"
                     continue
             
             try:
@@ -412,11 +418,11 @@ Return as plain text summary:"""
                     print(f"  [AI] Rate limited (attempt {attempt + 1}/{max_attempts})")
                     # Rotate to next key
                     if self._rotate_groq_key(self._groq_key_index):
-                        time.sleep(2)  # Brief pause before retry
+                        time.sleep(1)  # Brief pause before retry
                         continue
                     else:
-                        # All keys exhausted - wait then retry (bot never stops)
-                        time.sleep(5)
+                        # All keys exhausted - short wait then retry (bot continues)
+                        time.sleep(2)
                         continue
                 else:
                     print(f"[AI ERROR] {e}")

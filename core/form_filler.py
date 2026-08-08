@@ -289,41 +289,53 @@ class SmartFormFiller:
         return embed
     
     async def _detect_captcha_dom(self) -> Dict:
-        """Deteksi CAPTCHA dari elemen DOM sungguhan (bukan string scan).
-        Hanya lapor captcha jika ada widget/iframe challenge yang nyata,
-        sehingga tidak terjadi false-positive seperti sebelumnya."""
-        selectors = [
-            "iframe[src*='recaptcha']",
-            "iframe[src*='hcaptcha']",
-            "iframe[src*='turnstile']",
-            "iframe[src*='challenge']",
-            ".g-recaptcha",
-            ".h-captcha",
-            ".cf-turnstile",
-            "div[data-sitekey]",
-            "input[name='g-recaptcha-response']",
-            "input[name='h-captcha-response']",
-            "textarea[name='g-recaptcha-response']",
-        ]
+        """Deteksi CAPTCHA challenge yang BENAR-BENAR interaktif dari DOM.
+
+        Penting: hampir semua form Greenhouse/ATS memasang reCAPTCHA INVISIBLE
+        (badge kecil + textarea token tersembunyi). Widget itu pasif dan TIDAK
+        memblokir submit, jadi tidak boleh dianggap sebagai captcha.
+        Yang dianggap captcha hanya widget yang benar-benar minta interaksi:
+        - checkbox reCAPTCHA yang terlihat (.g-recaptcha, data-size != invisible)
+        - iframe challenge/bframe/anchor yang terlihat dengan ukuran nyata
+        - hCaptcha / Cloudflare Turnstile yang terlihat
+        - teks challenge eksplisit ("verify you are human", dll)
+        """
         found = []
         try:
-            for sel in selectors:
-                el = await self.page.query_selector(sel)
-                if el:
-                    found.append(sel)
-                    if "recaptcha" in sel:
+            # 1) reCAPTCHA checkbox/anchor/challenge iframe yang terlihat
+            anchors = await self.page.query_selector_all(
+                "iframe[src*='/recaptcha/api2/anchor'], "
+                "iframe[src*='/recaptcha/api2/bframe'], "
+                "iframe[src*='recaptcha']"
+            )
+            for a in anchors:
+                if await self._is_box_visible(a):
+                    found.append("recaptcha")
+                    break
+
+            # 2) Widget .g-recaptcha EKSPLISIT (checkbox), bukan size=invisible
+            g = await self.page.query_selector(".g-recaptcha")
+            if g and "recaptcha" not in found:
+                try:
+                    size = await g.get_attribute("data-size") or ""
+                    if "invisible" not in size and await self._is_box_visible(g):
                         found.append("recaptcha")
-                    elif "hcaptcha" in sel:
-                        found.append("hcaptcha")
-                    elif "turnstile" in sel:
-                        found.append("turnstile")
-                    else:
-                        found.append("captcha")
-        except Exception:
-            pass
-        
-        # Cek teks challenge yang umum di halaman
-        if not found:
+                except Exception:
+                    pass
+
+            # 3) hCaptcha / Turnstile yang terlihat
+            for sel in (".h-captcha", "iframe[src*='hcaptcha']",
+                        ".cf-turnstile", "iframe[src*='turnstile']",
+                        "iframe[src*='challenge']"):
+                try:
+                    el = await self.page.query_selector(sel)
+                    if el and await self._is_box_visible(el):
+                        found.append("turnstile" if "turnstile" in sel else
+                                     "hcaptcha" if "hcaptcha" in sel else "captcha")
+                except Exception:
+                    continue
+
+            # 4) Teks challenge eksplisit di halaman
             try:
                 txt = await self.page.evaluate("document.body ? document.body.innerText : ''")
                 low = (txt or "").lower()
@@ -332,17 +344,29 @@ class SmartFormFiller:
                     found.append("captcha")
             except Exception:
                 pass
-        
+        except Exception:
+            pass
+
         unique = sorted(set(found))
         has = len(unique) > 0
         if has:
-            print(f"[CAPTCHA] Real challenge detected: {unique}")
+            print(f"[CAPTCHA] Interactive challenge detected: {unique}")
+        else:
+            print("[CAPTCHA] No interactive challenge (invisible reCAPTCHA ignored)")
         return {
             "has_captcha": has,
             "captcha_types": unique,
             "can_auto_solve": "turnstile" not in unique,
             "recommendation": "Skip (cannot solve)" if has else "Auto-fill possible",
         }
+
+    async def _is_box_visible(self, el) -> bool:
+        """Cek apakah element punya bounding box nyata (terlihat di layar)"""
+        try:
+            box = await el.bounding_box()
+            return bool(box and box["width"] > 0 and box["height"] > 0)
+        except Exception:
+            return False
     
     async def _click_apply_button(self):
         """Click Apply button jika ada untuk membuka form"""
@@ -447,7 +471,8 @@ class SmartFormFiller:
             
             for input_el in inputs:
                 field_type = await input_el.get_attribute("type") or "text"
-                field_name = await input_el.get_attribute("name") or ""
+                raw_name = await input_el.get_attribute("name") or ""
+                field_name = self._normalize_field_name(raw_name)
                 field_id = await input_el.get_attribute("id") or ""
                 placeholder = await input_el.get_attribute("placeholder") or ""
                 aria_label = await input_el.get_attribute("aria-label") or ""
@@ -468,8 +493,8 @@ class SmartFormFiller:
                 
                 if label:
                     # Build safe selector
-                    if field_name:
-                        selector = f"input[name='{field_name}']"
+                    if raw_name:
+                        selector = f"input[name='{raw_name}']"
                     elif field_id:
                         selector = f"#{field_id}"
                     else:
@@ -486,7 +511,9 @@ class SmartFormFiller:
             # Find all select elements
             selects = await self.page.query_selector_all("select")
             for select in selects:
-                name = await select.get_attribute("name") or await select.get_attribute("id") or ""
+                raw_name = await select.get_attribute("name") or ""
+                field_id = await select.get_attribute("id") or ""
+                name = self._normalize_field_name(raw_name) or field_id
                 options = await select.query_selector_all("option")
                 option_texts = []
                 for opt in options:
@@ -498,7 +525,7 @@ class SmartFormFiller:
                     fields.append({
                         "field_name": name,
                         "field_type": "select",
-                        "selector": f"select[name='{name}']",
+                        "selector": f"select[name='{raw_name}']",
                         "options": option_texts,
                         "required": await select.get_attribute("required") is not None,
                     })
@@ -506,12 +533,14 @@ class SmartFormFiller:
             # Find all textareas
             textareas = await self.page.query_selector_all("textarea")
             for textarea in textareas:
-                name = await textarea.get_attribute("name") or await textarea.get_attribute("id") or ""
+                raw_name = await textarea.get_attribute("name") or ""
+                field_id = await textarea.get_attribute("id") or ""
+                name = self._normalize_field_name(raw_name) or field_id
                 if name and not self._is_tracking_field(name):
                     fields.append({
                         "field_name": name,
                         "field_type": "textarea",
-                        "selector": f"textarea[name='{name}']",
+                        "selector": f"textarea[name='{raw_name}']",
                         "options": [],
                         "required": await textarea.get_attribute("required") is not None,
                     })
@@ -520,6 +549,15 @@ class SmartFormFiller:
             print(f"[FIELD DETECTION ERROR] {e}")
         
         return fields
+    
+    def _normalize_field_name(self, name: str) -> str:
+        """Strip wrapper ATS seperti 'job_application[first_name]' -> 'first_name'."""
+        if not name:
+            return ""
+        m = re.search(r"\[([^\]]+)\]\s*$", name)
+        if m:
+            return m.group(1)
+        return name
     
     def _is_tracking_field(self, field_name: str) -> bool:
         """Apakah field ini hanya tracking/marketing hidden field, bukan bagian form aplikasi."""
@@ -655,11 +693,22 @@ class SmartFormFiller:
                     if value and value != "N/A" and value != "Please fill manually":
                         print(f"  [AI] Generated: {value[:80]}...")
                     else:
-                        print(f"  [SKIP] AI could not generate answer for: {field_name}")
-                        return False
+                        fallback = self._fallback_answer_for_question(question_text, job_context)
+                        if fallback and field.get("required"):
+                            value = fallback
+                            print(f"  [AI-FALLBACK] Required question filled with template: {value[:60]}...")
+                        else:
+                            print(f"  [SKIP] AI could not generate answer for: {field_name}")
+                            return False
                 else:
                     return False
             
+            # Select fields: pilih option terbaik (heuristic dulu, lalu AI cadangan)
+            if field_type == "select" and value is None and field.get("options"):
+                value = await self._pick_select_option(field_name, field.get("options", []))
+                if value:
+                    print(f"  [SELECT] Chose '{value}' for: {field_name}")
+
             if value is None:
                 print(f"  [SKIP] No value for: {field_name}")
                 return False
@@ -740,6 +789,28 @@ class SmartFormFiller:
             return ""
         except:
             return ""
+
+    def _fallback_answer_for_question(self, question: str, job_context: str = "") -> Optional[str]:
+        """Jawaban template untuk custom question REQUIRED saat AI tidak tersedia
+        (rate limit / key habis). Lebih baik terisi daripada kosong (submit ditolak)."""
+        q = (question or "").lower()
+        p = self.config.personal
+        skills = ", ".join(p.skills[:6]) if p.skills else "Web3, DeFi, Python"
+        role = p.desired_role or "the role"
+
+        if any(k in q for k in ["why", "interest", "motivat", "passion"]):
+            return (f"I am excited about this opportunity because it lets me apply my "
+                    f"{p.years_experience} years of experience as a {role} to a high-impact team. "
+                    f"My strengths in {skills} make me ready to contribute from day one.")
+        if any(k in q for k in ["experience", "background", "about yourself", "tell us about"]):
+            return f"I have {p.years_experience} years of experience as a {role}, working in remote-first teams across {skills}."
+        if any(k in q for k in ["skill", "qualif", "strength", "what makes you"]):
+            return f"My core strengths include {skills}, which I have applied across multiple remote projects and teams."
+        if any(k in q for k in ["where", "located", "location", "reside"]):
+            return p.location or "Remote"
+        if any(k in q for k in ["available", "start", "notice", "when can"]):
+            return p.availability or "Immediately"
+        return None
     
     def _find_cv_file(self) -> str:
         """Cari file CV/Resume di project"""
@@ -792,6 +863,174 @@ class SmartFormFiller:
                 return
             except:
                 pass
+
+    async def _pick_select_option(self, field_name: str, options: List[str]) -> Optional[str]:
+        """Pilih option terbaik untuk dropdown select.
+        Heuristic berbasis keyword dulu (tanpa AI, cepat), lalu AI sebagai cadangan."""
+        if not options:
+            return None
+
+        real = [o for o in options if not self._is_placeholder_option(o)]
+        if not real:
+            return None
+
+        fn = field_name.lower()
+        p = self.config.personal
+        opt_low = [str(o).strip().lower() for o in real]
+
+        # Work authorization
+        if any(k in fn for k in ["authorize", "work_authorization", "legally", "right_to_work", "eligible", "permitted"]):
+            for o in opt_low:
+                if any(y in o for y in ["yes", "authorized", "citizen", "permanent resident"]):
+                    return real[opt_low.index(o)]
+            return real[0]
+
+        # Sponsorship / visa
+        if any(k in fn for k in ["sponsorship", "visa", "sponsor"]):
+            val = (p.requires_sponsorship or "No").strip().lower()
+            for o in opt_low:
+                if val in o or o.startswith("no") or "not" in o:
+                    return real[opt_low.index(o)]
+            return real[0]
+
+        # Gender / demografi - tidak diisi (voluntary)
+        if any(k in fn for k in ["gender", "pronoun", "ethnic", "race", "veteran", "disability", "diversity"]):
+            return None
+
+        # Location
+        if any(k in fn for k in ["location", "country", "city", "remote", "based", "resid"]):
+            loc = (p.location or "").lower()
+            for o in opt_low:
+                if "remote" in o or "anywhere" in o or "worldwide" in o or "global" in o:
+                    return real[opt_low.index(o)]
+            if loc:
+                for o in opt_low:
+                    if loc.split()[0] in o:
+                        return real[opt_low.index(o)]
+            return real[0]
+
+        # Years of experience
+        if "experience" in fn:
+            try:
+                target = int(float(str(p.years_experience or "7").replace("+", "")))
+            except ValueError:
+                target = 7
+            best_opt, best_diff = None, None
+            for o in opt_low:
+                m = re.search(r"(\d+)\s*\+?\s*(?:years?|yrs?)", o)
+                if m:
+                    n = int(m.group(1))
+                    diff = abs(n - target)
+                    if best_diff is None or diff < best_diff:
+                        best_opt, best_diff = real[opt_low.index(o)], diff
+            if best_opt:
+                return best_opt
+            for o in opt_low:
+                if "7+" in o or "more than 5" in o or "5-10" in o or "6-10" in o:
+                    return real[opt_low.index(o)]
+            return real[-1]
+
+        # Salary / compensation
+        if any(k in fn for k in ["salary", "compensation", "pay", "rate", "annual"]):
+            sal = (p.expected_salary or "").lower()
+            m = re.search(r"(\d+)", sal)
+            if m:
+                target = int(m.group(1))
+                best_opt, best_diff = None, None
+                for o in opt_low:
+                    om = re.search(r"(\d+)", o)
+                    if om:
+                        diff = abs(int(om.group(1)) - target)
+                        if best_diff is None or diff < best_diff:
+                            best_opt, best_diff = real[opt_low.index(o)], diff
+                if best_opt:
+                    return best_opt
+            for o in opt_low:
+                if any(y in o for y in ["negotiable", "open", "depends", "any", "other"]):
+                    return real[opt_low.index(o)]
+            return real[len(real) // 2]
+
+        # Availability / notice / start date
+        if any(k in fn for k in ["availability", "notice", "start", "when can", "available"]):
+            avail = (p.availability or "immediately").lower()
+            for o in opt_low:
+                if avail in o or "immediately" in o or "immediate" in o or "now" in o or "today" in o:
+                    return real[opt_low.index(o)]
+            return real[0]
+
+        # How did you hear / source
+        if any(k in fn for k in ["hear", "source", "referred", "referral", "found", "apply where"]):
+            for o in opt_low:
+                if "linkedin" in o:
+                    return real[opt_low.index(o)]
+            for o in opt_low:
+                if "website" in o or "job board" in o or "online" in o or "other" in o:
+                    return real[opt_low.index(o)]
+            return real[0]
+
+        # Employment type
+        if any(k in fn for k in ["employment", "work_type", "contract", "full_time", "part_time", "type of work"]):
+            wt = (p.work_type or "").lower()
+            for o in opt_low:
+                if "contract" in wt and ("contract" in o or "freelance" in o):
+                    return real[opt_low.index(o)]
+                if "remote" in wt and "remote" in o:
+                    return real[opt_low.index(o)]
+                if "full" in wt and "full" in o:
+                    return real[opt_low.index(o)]
+            return real[0]
+
+        # Education
+        if any(k in fn for k in ["education", "degree", "qualification", "school"]):
+            edu = (p.education or "").lower()
+            edu_kw = edu.split()[0] if edu.split() else ""
+            for o in opt_low:
+                if edu_kw and edu_kw in o:
+                    return real[opt_low.index(o)]
+            for kw in ("bachelor", "master", "associate", "high school", "ph.d", "phd", "doctoral", "doctorate"):
+                if kw in edu:
+                    for o in opt_low:
+                        if kw in o:
+                            return real[opt_low.index(o)]
+            return real[0]
+
+        # English / language fluency
+        if any(k in fn for k in ["language", "english", "fluency"]):
+            if "english" in fn:
+                for o in opt_low:
+                    if any(y in o for y in ["professional", "advanced", "fluent", "full", "native"]):
+                        return real[opt_low.index(o)]
+            for o in opt_low:
+                if "indonesian" in o or "bahasa" in o:
+                    return real[opt_low.index(o)]
+            return real[0]
+
+        # Cadangan AI (budget kecil) lalu opsi non-placeholder pertama
+        try:
+            job_context = getattr(self, '_last_job_context', '')
+            best = await self.ai_analyzer.select_best_option(field_name, real, job_context)
+            for o in real:
+                if str(o).strip().lower() == str(best).strip().lower():
+                    return o
+        except Exception:
+            pass
+        for o in real:
+            if "other" in str(o).lower():
+                return o
+        return real[0]
+
+    def _is_placeholder_option(self, opt) -> bool:
+        """Apakah option cuma placeholder (mis. '-- Select --' / 'Choose...')"""
+        s = str(opt).strip().lower()
+        if not s:
+            return True
+        if re.match(r"^[-–—\s]*$", s):
+            return True
+        if re.match(r"^(please\s+)?(select|choose|pick)\b", s):
+            return True
+        if re.match(r"^--?\s*(select|choose|pick|please)", s):
+            return True
+        return False
     
     async def _find_element_alternatives(self, field: Dict):
         """Cari element dengan alternative selectors"""
@@ -924,8 +1163,16 @@ class SmartFormFiller:
                 return {"submitted": False, "verified": False, "error": "Submit button not found"}
 
             print("[SUBMIT] Button clicked, waiting for response...")
-            await asyncio.sleep(3)
-            return await self._verify_submission(url_before)
+            last = {"submitted": False, "verified": False,
+                    "error": "Could not confirm submission (no success page)"}
+            for _ in range(6):
+                await asyncio.sleep(2.5)
+                last = await self._verify_submission(url_before)
+                if last.get("verified"):
+                    return last
+                if last.get("error") and "no success page" not in last.get("error", ""):
+                    return last
+            return last
 
         except Exception as e:
             print(f"[SUBMIT ERROR] {e}")
@@ -951,12 +1198,15 @@ class SmartFormFiller:
                 "successfully submitted", "we've received", "we received your",
                 "application complete", "submitted!", "your submission",
                 "we have received your application", "application sent",
+                "your application was submitted", "has been submitted",
             ]
             error_markers = [
                 "there was a problem", "please fix", "is required",
                 "required field", "please complete", "please correct",
                 "an error occurred", "something went wrong", "try again",
                 "recaptcha", "captcha", "not a robot", "complete the captcha",
+                "please fix the following", "the following errors",
+                "please review the form", "highlighted below",
             ]
 
             url_ok = any(m in current_url.lower() for m in [

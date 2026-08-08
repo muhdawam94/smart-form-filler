@@ -46,6 +46,28 @@ jobs:
           pip install -r requirements.txt
           playwright install chromium
       
+      - name: Generate CV PDF for applications
+        env:
+          FULL_NAME: ${{ secrets.FULL_NAME }}
+          EMAIL: ${{ secrets.EMAIL }}
+          PHONE: ${{ secrets.PHONE }}
+          LINKEDIN: ${{ secrets.LINKEDIN }}
+          GITHUB: ${{ secrets.PROFILE_URL }}
+          PORTFOLIO: ${{ secrets.PORTFOLIO }}
+          LOCATION: ${{ secrets.LOCATION }}
+          CITY: ${{ secrets.CITY }}
+          COUNTRY: ${{ secrets.COUNTRY }}
+          DESIRED_ROLE: ${{ secrets.DESIRED_ROLE }}
+          WORK_TYPE: ${{ secrets.WORK_TYPE }}
+          EXPECTED_SALARY: ${{ secrets.EXPECTED_SALARY }}
+          AVAILABILITY: ${{ secrets.AVAILABILITY }}
+          YEARS_EXPERIENCE: ${{ secrets.YEARS_EXPERIENCE }}
+          EDUCATION: ${{ secrets.EDUCATION }}
+          SKILLS: ${{ secrets.SKILLS }}
+          LANGUAGES: ${{ secrets.LANGUAGES }}
+        run: |
+          python make_cv.py
+      
       - name: Scrape fresh jobs (fokus developer/engineer)
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
@@ -145,6 +167,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/jobs.db data/submissions.json scheduler_state.json scheduler_config.json 2>/dev/null || true
           git commit -m "chore: persist bot state [skip ci]" || echo "Nothing to commit"
+          git pull --rebase --autostash "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" master || echo "Pull rebase failed"
           git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:master || echo "Push failed"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

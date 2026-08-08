@@ -146,9 +146,11 @@ async def batch_fill_from_jobs_db(db_path: str = None, cv_path: str = None,
             success = result["status"] == "submitted"
             mark_job_applied(job_id, success)
             
-            # Catat ke scheduler state (persist antar run)
+            # Catat ke scheduler state (persist antar run) - HANYA yang sukses.
+            # Kegagalan tidak boleh menghabiskan kuota harian.
             try:
-                scheduler.record_application(url, result.get("platform", "unknown"), success)
+                if success:
+                    scheduler.record_application(url, result.get("platform", "unknown"), True)
             except Exception:
                 pass
             
