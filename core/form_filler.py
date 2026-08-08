@@ -64,6 +64,9 @@ class SmartFormFiller:
         )
         
         self.page = await self.context.new_page()
+        # Batasi default timeout agar hang (mis. menu react-select yang terbuka
+        # menghalangi klik) tidak menunggu 30s per field.
+        self.context.set_default_timeout(8000)
         
         # Anti-detection scripts
         await self.context.add_init_script("""
@@ -777,63 +780,103 @@ class SmartFormFiller:
             return False
     
     async def _commit_combobox(self, element, value: Any, field_name: str = "") -> str:
-        """Commit pilihan combobox (Greenhouse baru / headless UI):
-        ketik -> tunggu suggestions -> baca opsi listbox bila cocok -> ArrowDown+Enter.
-        Jika belum ter-commit, coba ulang dengan varian nilai yang lebih sederhana
-        (kota saja, lalu 'Remote')."""
+        """Commit pilihan combobox react-select (Greenhouse baru):
+        ketik -> baca opsi listbox yang terbuka -> pilih yang cocok.
+        Urutan kandidat: nilai asli, kota, negara profil, 'Remote', Yes/No/Other.
+        Hanya dianggap sukses jika opsi BENAR-BENAR terpilih (bukan sekadar teks
+        terketik di input). Selalu tutup menu (Escape) agar tidak menghalangi
+        klik field berikutnya."""
         value = str(value)
+        p = self.config.personal
         tried = [value]
         if "," in value:
             city = value.split(",")[0].strip()
             if city and city != value:
                 tried.append(city)
-        tried.append("Remote")
+        country = (p.country or "").strip()
+        if country and country not in tried:
+            tried.append(country)
+        for extra in ["Remote", "Yes", "No", "Other"]:
+            if extra not in tried:
+                tried.append(extra)
         
         for candidate in tried:
             try:
+                await self.page.keyboard.press("Escape")  # tutup menu lama bila masih terbuka
+                await self.page.wait_for_timeout(120)
                 await element.click()
-                await element.press("Control+A")
                 await self.page.wait_for_timeout(150)
+                await element.press("Control+A")
+                await self.page.wait_for_timeout(100)
                 await element.type(candidate[:120], delay=random.randint(40, 70))
-                await self.page.wait_for_timeout(900)  # tunggu suggestions load
+                await self.page.wait_for_timeout(1200)  # tunggu suggestions async
                 picked = await self._pick_open_combobox_option(candidate)
                 if picked:
+                    try:
+                        await element.press("Escape")
+                    except Exception:
+                        pass
                     return picked
                 await element.press("ArrowDown")
                 await self.page.wait_for_timeout(250)
                 await element.press("Enter")
-                await self.page.wait_for_timeout(400)
+                await self.page.wait_for_timeout(350)
                 committed = (await element.input_value()) or ""
-                if committed.strip():
+                # react-select: input berubah jadi LABEL opsi yang dipilih,
+                # bukan teks yang diketik -> tanda commit beneran
+                if committed.strip() and committed != candidate:
+                    try:
+                        await element.press("Escape")
+                    except Exception:
+                        pass
                     return committed
                 await element.press("Control+A")
                 await element.press("Backspace")
             except Exception as e:
                 print(f"  [COMB-BOX] retry error ({candidate[:30]}): {e}")
+        # tutup menu apapun yang masih terbuka agar tidak menghalangi field lain
+        try:
+            await element.press("Escape")
+        except Exception:
+            pass
         return ""
 
     async def _pick_open_combobox_option(self, value: str) -> str:
-        """Baca opsi yang TERBUKA di listbox (role=option, hanya yang visible) dan
-        pilih yang paling cocok dengan nilai target. Return label yang dipilih,
-        atau '' jika tidak ada opsi yang cocok."""
+        """Baca opsi yang TERBUKA di listbox (role=option, hanya visible) dan pilih
+        yang paling cocok dengan nilai target. Return label yang dipilih, atau ''
+        jika tidak ada opsi yang cocok. Substring match hanya untuk nilai >= 3 char
+        agar tidak salah pilih (mis. 'No' cocok dengan 'Norway')."""
         try:
             opts = await self.page.query_selector_all('[role="option"]')
-            if not opts:
-                return ""
-            v = (value or "").strip().lower()
+            visible = []
             for o in opts:
                 try:
-                    if not await o.is_visible():
-                        continue
+                    if await o.is_visible():
+                        visible.append(o)
                 except Exception:
                     continue
+            if not visible:
+                return ""
+            v = (value or "").strip().lower()
+            texts = []
+            for o in visible:
                 t = ((await o.text_content()) or "").strip()
-                if not t:
-                    continue
-                if v and (t.lower() == v or v in t.lower() or t.lower() in v):
+                if t:
+                    texts.append((t, o))
+            # exact match
+            for t, o in texts:
+                if t.lower() == v:
                     await o.click()
                     await self.page.wait_for_timeout(300)
                     return t
+            # substring match (hanya nilai cukup panjang, hindari false positive)
+            if v and len(v) >= 3:
+                for t, o in texts:
+                    tl = t.lower()
+                    if v in tl or tl in v:
+                        await o.click()
+                        await self.page.wait_for_timeout(300)
+                        return t
             return ""
         except Exception:
             return ""
