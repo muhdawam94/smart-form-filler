@@ -1,10 +1,10 @@
 {
   "today_date": "2026-08-08",
-  "applications_today": 10,
+  "applications_today": 0,
   "total_applications": 20,
   "successful_applications": 0,
   "failed_applications": 20,
-  "last_application_time": "2026-08-08T01:01:32.986779",
+  "last_application_time": null,
   "applied_jobs": [
     {
       "url": "https://boards.greenhouse.io/robinhood/jobs/8114351?t=gh_src=&gh_jid=8114351",
