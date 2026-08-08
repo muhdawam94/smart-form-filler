@@ -1,10 +1,10 @@
 {
-  "today_date": "2026-08-07",
+  "today_date": "2026-08-08",
   "applications_today": 10,
-  "total_applications": 10,
+  "total_applications": 20,
   "successful_applications": 0,
-  "failed_applications": 10,
-  "last_application_time": "2026-08-07T20:05:01.454475",
+  "failed_applications": 20,
+  "last_application_time": "2026-08-08T01:01:32.986779",
   "applied_jobs": [
     {
       "url": "https://boards.greenhouse.io/robinhood/jobs/8114351?t=gh_src=&gh_jid=8114351",
@@ -65,8 +65,74 @@
       "platform": "greenhouse",
       "timestamp": "2026-08-07T20:05:01.454479",
       "success": false
+    },
+    {
+      "url": "https://job-boards.greenhouse.io/reddit/jobs/8015790",
+      "platform": "greenhouse",
+      "timestamp": "2026-08-08T00:40:43.217364",
+      "success": false
+    },
+    {
+      "url": "https://boards.greenhouse.io/robinhood/jobs/8011599?t=gh_src=&gh_jid=8011599",
+      "platform": "greenhouse",
+      "timestamp": "2026-08-08T00:43:22.319991",
+      "success": false
+    },
+    {
+      "url": "https://boards.greenhouse.io/robinhood/jobs/8114351?t=gh_src=&gh_jid=8114351",
+      "platform": "greenhouse",
+      "timestamp": "2026-08-08T00:45:46.598615",
+      "success": false
+    },
+    {
+      "url": "https://boards.greenhouse.io/robinhood/jobs/8060590?t=gh_src=&gh_jid=8060590",
+      "platform": "greenhouse",
+      "timestamp": "2026-08-08T00:48:24.856144",
+      "success": false
+    },
+    {
+      "url": "https://boards.greenhouse.io/robinhood/jobs/8068377?t=gh_src=&gh_jid=8068377",
+      "platform": "greenhouse",
+      "timestamp": "2026-08-08T00:50:55.658253",
+      "success": false
+    },
+    {
+      "url": "https://boards.greenhouse.io/robinhood/jobs/8024530?t=gh_src=&gh_jid=8024530",
+      "platform": "greenhouse",
+      "timestamp": "2026-08-08T00:53:50.157208",
+      "success": false
+    },
+    {
+      "url": "https://boards.greenhouse.io/robinhood/jobs/7974199?t=gh_src=&gh_jid=7974199",
+      "platform": "greenhouse",
+      "timestamp": "2026-08-08T00:57:06.219940",
+      "success": false
+    },
+    {
+      "url": "https://job-boards.greenhouse.io/discord/jobs/8614971002",
+      "platform": "greenhouse",
+      "timestamp": "2026-08-08T00:58:27.822363",
+      "success": false
+    },
+    {
+      "url": "https://job-boards.greenhouse.io/discord/jobs/8649856002",
+      "platform": "greenhouse",
+      "timestamp": "2026-08-08T01:00:03.174214",
+      "success": false
+    },
+    {
+      "url": "https://job-boards.greenhouse.io/discord/jobs/8637688002",
+      "platform": "greenhouse",
+      "timestamp": "2026-08-08T01:01:32.986781",
+      "success": false
     }
   ],
-  "daily_history": [],
+  "daily_history": [
+    {
+      "date": "2026-08-07",
+      "applications": 10,
+      "successful": 0
+    }
+  ],
   "daily_successful": 0
 }
