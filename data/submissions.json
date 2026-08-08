@@ -1287,5 +1287,172 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8330188002",
+    "timestamp": "2026-08-08T21:38:32.604237",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 21,
+    "fields_skipped": 8,
+    "errors": [
+      "Form rejected: is required -> Preferred First Name is required. | This field is required. | preferred_name: Preferred First Name is required. | question_34540710002: This field is required. | question_34540711002: This field is required. | question_34540712002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1540,
+    "job_title": "AI Engineer - FDE (Forward Deployed Engineer)",
+    "company": "databricks"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8546367002",
+    "timestamp": "2026-08-08T21:41:10.047248",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 27,
+    "fields_skipped": 12,
+    "errors": [
+      "Form rejected: is required -> Preferred First Name is required. | Degree is required. | This field is required. | preferred_name: Preferred First Name is required. | degree--0: Degree is required. | question_36493421002: This field is required. | question_36493422002: This field is required. | question_37465110002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1541,
+    "job_title": "AI Engineer - FDE (Forward Deployed Engineer)",
+    "company": "databricks"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8569392002",
+    "timestamp": "2026-08-08T21:44:18.965700",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 7,
+    "fields_skipped": 11,
+    "errors": [
+      "Form rejected: is required -> Preferred First Name is required. | This field is required. | preferred_name: Preferred First Name is required. | question_36739368002: This field is required. | question_36739369002: This field is required. | question_37586780002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1542,
+    "job_title": "AI Engineer - FDE (Forward Deployed Engineer)",
+    "company": "databricks"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8569390002",
+    "timestamp": "2026-08-08T21:45:49.401283",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 17,
+    "fields_skipped": 15,
+    "errors": [
+      "Form rejected: is required -> Preferred First Name is required. | This field is required. | preferred_name: Preferred First Name is required. | question_36739352002: This field is required. | question_36739353002: This field is required. | question_36739354002: This field is required. | question_36739355002[]_242878445002: This field is required. | question_36739355002[]_242878446002: This field is required. | question_36739355002[]_242878447002: This field is required. | question_36739355002[]_242878448002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1543,
+    "job_title": "AI Engineer - FDE (Forward Deployed Engineer)",
+    "company": "databricks"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8593713002",
+    "timestamp": "2026-08-08T21:50:12.991859",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 29,
+    "fields_skipped": 8,
+    "errors": [
+      "Form rejected: is required -> Preferred First Name is required. | This field is required. | preferred_name: Preferred First Name is required. | question_36971481002: This field is required. | question_36971482002: This field is required. | question_36971487002: This field is required. | question_37114260002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1544,
+    "job_title": "AI Engineer - FDE (Forward Deployed Engineer)",
+    "company": "databricks"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8574655002",
+    "timestamp": "2026-08-08T21:53:22.017238",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 20,
+    "fields_skipped": 12,
+    "errors": [
+      "Form rejected: is required -> Preferred First Name is required. | Please enter your location | This field is required. | preferred_name: Preferred First Name is required. | candidate-location: Please enter your location | question_36781667002: This field is required. | question_36781668002: This field is required. | question_36781673002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1545,
+    "job_title": "AI Engineer - FDE (Forward Deployed Engineer)",
+    "company": "databricks"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8638847002",
+    "timestamp": "2026-08-08T21:55:37.161909",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 9,
+    "fields_skipped": 9,
+    "errors": [
+      "Form rejected: is required -> Preferred First Name is required. | This field is required. | preferred_name: Preferred First Name is required. | question_37375120002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1546,
+    "job_title": "AI Engineer — GTM Analytics",
+    "company": "databricks"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8643186002",
+    "timestamp": "2026-08-08T21:56:53.124432",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 13,
+    "fields_skipped": 31,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | Please enter your location | This field is required. | candidate-location: Please enter your location | question_37412440002: This field is required. | question_37412441002: This field is required. | question_37412443002: This field is required. | question_37412444002: This field is required. | question_37412445002: This field is required. | question_37412446002: This field is required. | question_37412447002: This field is required. | question_37412448002: This field is required. | question_37412449002: This field is required. | question_37412450002: This field is required. | question_37412451002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1547,
+    "job_title": "Business Development Manager",
+    "company": "twitch"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8610621002",
+    "timestamp": "2026-08-08T22:01:13.898324",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 205,
+    "fields_skipped": 28,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | Please enter your location | This field is required. | candidate-location: Please enter your location | question_37107011002: This field is required. | question_37107012002: This field is required. | question_37107013002: This field is required. | question_37107014002: This field is required. | question_37107015002: This field is required. | question_37107016002: This field is required. | question_37107017002: This field is required. | question_37107018002: This field is required. | question_37107019002: This field is required. | question_37107020002: This field is required. | question_37107022002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1548,
+    "job_title": "Business Intelligence Manager",
+    "company": "twitch"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8600134002",
+    "timestamp": "2026-08-08T22:12:48.653811",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 205,
+    "fields_skipped": 28,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | Please enter your location | This field is required. | candidate-location: Please enter your location | question_37021521002: This field is required. | question_37021522002: This field is required. | question_37021523002: This field is required. | question_37021524002: This field is required. | question_37021525002: This field is required. | question_37021526002: This field is required. | question_37021527002: This field is required. | question_37021528002: This field is required. | question_37021529002: This field is required. | question_37021530002: This field is required. | question_37021532002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
