@@ -1746,5 +1746,34 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/7991536",
+    "timestamp": "2026-08-09T02:54:55.329774",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 13,
+    "fields_skipped": 7,
+    "errors": [
+      "Form rejected: is required -> This field is required. | Please accept the terms to proceed. | question_67486442: This field is required. | 430: This field is required. | 431: This field is required. | 432: This field is required. | 433: This field is required. | 434: This field is required. | 436: This field is required. | gdpr_demographic_data_consent_given_1: Please accept the terms to proceed."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1567,
+    "job_title": "Agency Development Lead III",
+    "company": "reddit"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/7922994",
+    "timestamp": "2026-08-09T02:57:55.316616",
+    "platform": "greenhouse",
+    "status": "filled_not_submitted",
+    "fields_filled": 0,
+    "fields_skipped": 3,
+    "errors": [],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
