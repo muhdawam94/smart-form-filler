@@ -1618,5 +1618,70 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/7617155",
+    "timestamp": "2026-08-09T00:40:28.282940",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 15,
+    "fields_skipped": 5,
+    "errors": [
+      "Form rejected: is required -> This field is required. | Please accept the terms to proceed. | question_63497933: This field is required. | 430: This field is required. | 431: This field is required. | 432: This field is required. | 433: This field is required. | 434: This field is required. | 436: This field is required. | gdpr_demographic_data_consent_given_1: Please accept the terms to proceed."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1562,
+    "job_title": "3rd Party Partnerships Manager - Commerce",
+    "company": "reddit"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/8089959",
+    "timestamp": "2026-08-09T00:43:27.091620",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 14,
+    "fields_skipped": 6,
+    "errors": [
+      "Form rejected: is required -> This field is required. | Please accept the terms to proceed. | question_68278141: This field is required. | 430: This field is required. | 431: This field is required. | 432: This field is required. | 433: This field is required. | 434: This field is required. | 436: This field is required. | gdpr_demographic_data_consent_given_1: Please accept the terms to proceed."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1563,
+    "job_title": "3rd Party Partnerships Manager - Signals",
+    "company": "reddit"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/7792848",
+    "timestamp": "2026-08-09T00:46:19.338702",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 14,
+    "fields_skipped": 7,
+    "errors": [
+      "Form rejected: is required -> This field is required. | Please accept the terms to proceed. | question_65381808: This field is required. | 430: This field is required. | 431: This field is required. | 432: This field is required. | 433: This field is required. | 434: This field is required. | 436: This field is required. | gdpr_demographic_data_consent_given_1: Please accept the terms to proceed."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1565,
+    "job_title": "Ads Conversion Modeling, Machine Learning Engineering Manager",
+    "company": "reddit"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/8015018",
+    "timestamp": "2026-08-09T00:49:19.098379",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 14,
+    "fields_skipped": 5,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_67695798: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
