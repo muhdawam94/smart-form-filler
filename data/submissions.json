@@ -1536,5 +1536,87 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8609435002",
+    "timestamp": "2026-08-08T23:52:28.837711",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 21,
+    "fields_skipped": 16,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | Please enter your location | This field is required. | candidate-location: Please enter your location | question_37095971002[]: This field is required. | question_37095972002: This field is required. | question_37095973002: This field is required. | question_37095975002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1552,
+    "job_title": "Contracts Manager",
+    "company": "twitch"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8609436002",
+    "timestamp": "2026-08-08T23:58:54.132469",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 21,
+    "fields_skipped": 16,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | Please enter your location | This field is required. | candidate-location: Please enter your location | question_37095988002[]: This field is required. | question_37095989002: This field is required. | question_37095990002: This field is required. | question_37095992002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1553,
+    "job_title": "Contracts Manager",
+    "company": "twitch"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8607049002",
+    "timestamp": "2026-08-09T00:05:29.368229",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 217,
+    "fields_skipped": 16,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | Please enter your location | This field is required. | candidate-location: Please enter your location | question_37079130002: This field is required. | question_37079131002: This field is required. | question_37079133002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1554,
+    "job_title": "Contracts Manager",
+    "company": "twitch"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/7617155",
+    "timestamp": "2026-08-09T00:20:55.831736",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 16,
+    "fields_skipped": 4,
+    "errors": [
+      "Form rejected: is required -> Please enter your location | This field is required. | Please accept the terms to proceed. | candidate-location: Please enter your location | question_63497933: This field is required. | 430: This field is required. | 431: This field is required. | 432: This field is required. | 433: This field is required. | 434: This field is required. | 436: This field is required. | gdpr_demographic_data_consent_given_1: Please accept the terms to proceed."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 1562,
+    "job_title": "3rd Party Partnerships Manager - Commerce",
+    "company": "reddit"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/8089959",
+    "timestamp": "2026-08-09T00:24:00.139033",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 16,
+    "fields_skipped": 4,
+    "errors": [
+      "Form rejected: is required -> Please enter your location | This field is required. | Please accept the terms to proceed. | candidate-location: Please enter your location | question_68278141: This field is required. | 430: This field is required. | 431: This field is required. | 432: This field is required. | 433: This field is required. | 434: This field is required. | 436: This field is required. | gdpr_demographic_data_consent_given_1: Please accept the terms to proceed."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
