@@ -1936,5 +1936,36 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/airtable/jobs/8400814002",
+    "timestamp": "2026-08-10T17:29:44.209913",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 12,
+    "fields_skipped": 6,
+    "errors": [
+      "Form rejected: required field -> Create a Job Alert Interested in building your career at Airtable? Get future opportunities sent straight to your email. Create alert"
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 76530,
+    "job_title": "Product Manager",
+    "company": "airtable"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/airtable/jobs/8475571002",
+    "timestamp": "2026-08-10T17:31:07.121054",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 12,
+    "fields_skipped": 6,
+    "errors": [
+      "Form rejected: required field -> Create a Job Alert Interested in building your career at Airtable? Get future opportunities sent straight to your email. Create alert"
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
