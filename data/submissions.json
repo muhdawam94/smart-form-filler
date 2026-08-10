@@ -1789,5 +1789,70 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/gitlab/jobs/8691636002",
+    "timestamp": "2026-08-10T15:10:56.024531",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 15,
+    "fields_skipped": 9,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_37690015002: This field is required. | question_37690018002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 75686,
+    "job_title": "Business Development Representative, German Speaking",
+    "company": "gitlab"
+  },
+  {
+    "url": "https://boards.greenhouse.io/cloudflare/jobs/8097321?gh_jid=8097321",
+    "timestamp": "2026-08-10T15:15:44.983752",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 9,
+    "errors": [
+      "Form rejected: is required -> Please enter your location | Resume/CV is required. | This field is required. | candidate-location: Please enter your location | question_68338703: This field is required. | question_68338705: This field is required. | question_68338706: This field is required. | question_68338707[]_738777769: This field is required. | question_68338708: This field is required. | question_68338709: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 75739,
+    "job_title": "AI Security Research & Red Team Engineer",
+    "company": "cloudflare"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/blockchain/jobs/8049507",
+    "timestamp": "2026-08-10T15:18:01.694773",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 9,
+    "fields_skipped": 2,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Blockchain.com? Get future opportunities sent straight to your email. Create alert"
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 75821,
+    "job_title": "Country Manager and Wealth Lead, Singapore",
+    "company": "blockchain"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/vercel/jobs/5701765004",
+    "timestamp": "2026-08-10T15:19:06.156238",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 15,
+    "fields_skipped": 4,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Vercel? Get future opportunities sent straight to your email. Create alert | This field is required. | question_14568365004: This field is required. | question_14568371004: This field is required. | question_14568372004: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
