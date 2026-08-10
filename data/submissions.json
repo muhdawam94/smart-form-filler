@@ -1854,5 +1854,87 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/airtable/jobs/8400814002",
+    "timestamp": "2026-08-10T16:26:12.571511",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 12,
+    "fields_skipped": 6,
+    "errors": [
+      "Form rejected: required field -> Create a Job Alert Interested in building your career at Airtable? Get future opportunities sent straight to your email. Create alert"
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 76530,
+    "job_title": "Product Manager",
+    "company": "airtable"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/airtable/jobs/8475571002",
+    "timestamp": "2026-08-10T16:27:36.147951",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 12,
+    "fields_skipped": 6,
+    "errors": [
+      "Form rejected: required field -> Create a Job Alert Interested in building your career at Airtable? Get future opportunities sent straight to your email. Create alert"
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 76531,
+    "job_title": "Product Manager, Funnel & Activation",
+    "company": "airtable"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/gitlab/jobs/8691636002",
+    "timestamp": "2026-08-10T16:28:56.222505",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 15,
+    "fields_skipped": 9,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_37690015002: This field is required. | question_37690018002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 75686,
+    "job_title": "Business Development Representative, German Speaking",
+    "company": "gitlab"
+  },
+  {
+    "url": "https://boards.greenhouse.io/cloudflare/jobs/8097321?gh_jid=8097321",
+    "timestamp": "2026-08-10T16:33:51.005076",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 13,
+    "fields_skipped": 7,
+    "errors": [
+      "Form rejected: is required -> Please enter your location | Resume/CV is required. | This field is required. | candidate-location: Please enter your location | question_68338703: This field is required. | question_68338705: This field is required. | question_68338706: This field is required. | question_68338707[]_738777769: This field is required. | question_68338708: This field is required. | question_68338709: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 75739,
+    "job_title": "AI Security Research & Red Team Engineer",
+    "company": "cloudflare"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/blockchain/jobs/8049507",
+    "timestamp": "2026-08-10T16:36:09.202693",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 9,
+    "fields_skipped": 2,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Blockchain.com? Get future opportunities sent straight to your email. Create alert"
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
