@@ -1995,5 +1995,19 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8015848002",
+    "timestamp": "2026-08-11T06:28:12.177898",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 29,
+    "fields_skipped": 1,
+    "errors": [
+      "Form rejected: is required -> Start year is required. | End year is required. | start-year--0: Start year is required. | end-year--0: End year is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
