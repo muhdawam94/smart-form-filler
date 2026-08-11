@@ -2153,5 +2153,87 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8625665002",
+    "timestamp": "2026-08-11T19:13:25.589180",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 33,
+    "fields_skipped": 11,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | This field is required. | question_37240601002: This field is required. | question_37240602002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 102935,
+    "job_title": "Data Scientist",
+    "company": "twitch"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/airtable/jobs/8498915002",
+    "timestamp": "2026-08-11T19:21:34.739151",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 2,
+    "errors": [
+      "Form rejected: required field -> Create a Job Alert Interested in building your career at Airtable? Get future opportunities sent straight to your email. Create alert"
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 102096,
+    "job_title": "Senior Solutions Architect",
+    "company": "airtable"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/airtable/jobs/8597941002",
+    "timestamp": "2026-08-11T19:22:45.525143",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 2,
+    "errors": [
+      "Form rejected: required field -> Create a Job Alert Interested in building your career at Airtable? Get future opportunities sent straight to your email. Create alert"
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 102097,
+    "job_title": "Senior Solutions Architect- West Coast",
+    "company": "airtable"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8648669002",
+    "timestamp": "2026-08-11T19:23:53.421148",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 29,
+    "fields_skipped": 3,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_37453636002: This field is required. | question_37453637002: This field is required. | question_37453638002: This field is required. | question_37453639002[]_250288443002: This field is required. | question_37453639002[]_250288444002: This field is required. | question_37453639002[]_250288445002: This field is required. | question_37453639002[]_250288446002: This field is required. | question_37453640002[]_250288447002: This field is required. | question_37453640002[]_250288448002: This field is required. | question_37453640002[]_250288449002: This field is required. | question_37453640002[]_250288450002: This field is required. | question_37453641002[]_250288451002: This field is required. | question_37453641002[]_250288452002: This field is required. | question_37453641002[]_250288453002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 102120,
+    "job_title": "AI Engineer - FDE (Forward Deployed Engineer)",
+    "company": "databricks"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8696599002",
+    "timestamp": "2026-08-11T19:26:31.790333",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 30,
+    "fields_skipped": 2,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_37722146002: This field is required. | question_37722147002: This field is required. | question_37722148002: This field is required. | question_37722149002[]_251310204002: This field is required. | question_37722149002[]_251310205002: This field is required. | question_37722149002[]_251310206002: This field is required. | question_37722149002[]_251310207002: This field is required. | question_37722150002[]_251310208002: This field is required. | question_37722150002[]_251310209002: This field is required. | question_37722150002[]_251310210002: This field is required. | question_37722150002[]_251310211002: This field is required. | question_37722151002[]_251310212002: This field is required. | question_37722151002[]_251310213002: This field is required. | question_37722151002[]_251310214002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
