@@ -2023,5 +2023,36 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8623477002",
+    "timestamp": "2026-08-11T16:27:29.602655",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 32,
+    "fields_skipped": 12,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | This field is required. | question_37221630002: This field is required. | question_37221631002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 101358,
+    "job_title": "Data Scientist",
+    "company": "twitch"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8625664002",
+    "timestamp": "2026-08-11T16:35:46.459042",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 33,
+    "fields_skipped": 11,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | This field is required. | question_37240582002: This field is required. | question_37240583002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
