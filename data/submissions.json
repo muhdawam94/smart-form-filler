@@ -2277,5 +2277,19 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/ondofinance/jobs/4364220009",
+    "timestamp": "2026-08-12T07:59:44.677931",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 10,
+    "fields_skipped": 5,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_7179730009: This field is required. | question_7179731009: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
