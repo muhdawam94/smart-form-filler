@@ -2249,5 +2249,19 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/gitlab/jobs/8695515002",
+    "timestamp": "2026-08-12T03:40:01.833971",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 14,
+    "fields_skipped": 7,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_37715397002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
