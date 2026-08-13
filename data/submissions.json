@@ -2544,5 +2544,19 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://boards.greenhouse.io/robinhood/jobs/8128629?t=gh_src=&gh_jid=8128629",
+    "timestamp": "2026-08-13T19:13:42.151033",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 20,
+    "fields_skipped": 6,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Robinhood? Get future opportunities sent straight to your email. Create alert | This field is required. | Please accept the terms to proceed. | question_68580531: This field is required. | 1255: This field is required. | 1258: This field is required. | 1259: This field is required. | 1261: This field is required. | gdpr_demographic_data_consent_given_1: Please accept the terms to proceed."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
