@@ -2395,5 +2395,19 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/nansen/jobs/6141832004",
+    "timestamp": "2026-08-13T09:20:22.533528",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 16,
+    "fields_skipped": 2,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Nansen.ai? Get future opportunities sent straight to your email. Create alert | This field is required. | question_19426852004: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
