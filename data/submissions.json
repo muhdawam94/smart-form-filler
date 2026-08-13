@@ -2606,5 +2606,36 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/gitlab/jobs/8687932002",
+    "timestamp": "2026-08-13T21:25:04.010980",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 10,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_37670778002: This field is required. | question_37670779002: This field is required. | question_37670782002: This field is required. | question_37670783002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 152519,
+    "job_title": "Backend Engineer, Create: Repository Management (Ruby)",
+    "company": "gitlab"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/gitlab/jobs/8687926002",
+    "timestamp": "2026-08-13T21:27:57.648584",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 13,
+    "fields_skipped": 8,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_37670742002: This field is required. | question_37670743002: This field is required. | question_37670746002: This field is required. | question_37670747002: This field is required. | question_37780239002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
