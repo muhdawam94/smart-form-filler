@@ -2516,5 +2516,19 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/7947591",
+    "timestamp": "2026-08-13T16:28:05.816143",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 14,
+    "fields_skipped": 6,
+    "errors": [
+      "Form rejected: is required -> This field is required. | Please accept the terms to proceed. | question_67090849: This field is required. | 430: This field is required. | 431: This field is required. | 432: This field is required. | 433: This field is required. | 434: This field is required. | 436: This field is required. | gdpr_demographic_data_consent_given_1: Please accept the terms to proceed."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
