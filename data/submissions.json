@@ -2333,5 +2333,36 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/galaxydigitalservices/jobs/6142354004",
+    "timestamp": "2026-08-13T03:10:07.552779",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 13,
+    "fields_skipped": 2,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Galaxy? Get future opportunities sent straight to your email. Create alert | Please enter your location | This field is required. | candidate-location: Please enter your location | question_19431384004: This field is required. | question_19431385004: This field is required. | question_19431386004: This field is required. | question_19431387004: This field is required. | question_19431388004: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 134576,
+    "job_title": "Vice President, Environmental",
+    "company": "Galaxy"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8688812002",
+    "timestamp": "2026-08-13T03:11:49.662551",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 25,
+    "fields_skipped": 7,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_37675082002: This field is required. | question_37675083002: This field is required. | question_37675084002: This field is required. | question_37675085002[]_251088051002: This field is required. | question_37675085002[]_251088052002: This field is required. | question_37675085002[]_251088053002: This field is required. | question_37675085002[]_251088054002: This field is required. | question_37675086002[]_251088055002: This field is required. | question_37675086002[]_251088056002: This field is required. | question_37675086002[]_251088057002: This field is required. | question_37675086002[]_251088058002: This field is required. | question_37675086002[]_251088059002: This field is required. | question_37675086002[]_251088060002: This field is required. | question_37675086002[]_251088061002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
