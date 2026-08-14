@@ -2766,5 +2766,36 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/okx/jobs/7869819003",
+    "timestamp": "2026-08-14T17:03:30.712058",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 42,
+    "fields_skipped": 3,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at OKX? Get future opportunities sent straight to your email. Create alert | This field is required. | question_31899035003: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 175780,
+    "job_title": "VIP Relationship Manager, Vietnam",
+    "company": "OKX"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/8022366",
+    "timestamp": "2026-08-14T17:07:19.442662",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 6,
+    "errors": [
+      "Form rejected: is required -> This field is required. | Please accept the terms to proceed. | question_67762319: This field is required. | 430: This field is required. | 431: This field is required. | 432: This field is required. | 433: This field is required. | 434: This field is required. | 436: This field is required. | gdpr_demographic_data_consent_given_1: Please accept the terms to proceed."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
