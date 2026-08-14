@@ -2735,5 +2735,36 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/8022366",
+    "timestamp": "2026-08-14T15:58:41.619463",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 13,
+    "fields_skipped": 4,
+    "errors": [
+      "Form rejected: is required -> This field is required. | Please accept the terms to proceed. | question_67762319: This field is required. | 430: This field is required. | 431: This field is required. | 432: This field is required. | 433: This field is required. | 434: This field is required. | 436: This field is required. | gdpr_demographic_data_consent_given_1: Please accept the terms to proceed."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 175291,
+    "job_title": "Engineering Manager, Ads ML Efficiency",
+    "company": "reddit"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/flowtraders/jobs/4782837",
+    "timestamp": "2026-08-14T16:01:07.632155",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 16,
+    "fields_skipped": 5,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Flow Traders? Get future opportunities sent straight to your email. Create alert | Cover Letter is required. | End month is required. | End year is required. | This field is required. | end-month--0: End month is required. | end-year--0: End year is required. | question_37784153: This field is required. | question_37784154: This field is required. | question_45463124: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
