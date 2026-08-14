@@ -2811,5 +2811,19 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/airtable/jobs/8400373002",
+    "timestamp": "2026-08-14T21:32:38.732182",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 16,
+    "fields_skipped": 8,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Airtable? Get future opportunities sent straight to your email. Create alert | This field is required. | question_35134915002: This field is required. | question_35134916002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
