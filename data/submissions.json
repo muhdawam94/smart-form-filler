@@ -2707,5 +2707,19 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=stripe&token=8041076",
+    "timestamp": "2026-08-14T08:20:51.914403",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 20,
+    "fields_skipped": 4,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_68588008: This field is required. | question_68588010: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
