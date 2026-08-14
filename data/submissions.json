@@ -2839,5 +2839,19 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=coinbase&token=8131316",
+    "timestamp": "2026-08-14T23:44:56.106134",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 25,
+    "fields_skipped": 16,
+    "errors": [
+      "Form rejected: is required -> Company name is required. | Title is required. | Start date month is required. | Start date year is required. | End date month is required. | End date year is required. | This field is required. | company-name-0: Company name is required. | title-0: Title is required. | start-date-month-0: Start date month is required. | start-date-year-0: Start date year is required. | end-date-month-0: End date month is required. | end-date-year-0: End date year is required. | question_68601371: This field is required. | question_68601372: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
