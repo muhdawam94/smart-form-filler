@@ -2867,5 +2867,19 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/flowtraders/jobs/8131776",
+    "timestamp": "2026-08-17T14:36:06.151292",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 9,
+    "fields_skipped": 6,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Flow Traders? Get future opportunities sent straight to your email. Create alert | Please enter your location | Resume/CV is required. | This field is required. | candidate-location: Please enter your location | question_68605169: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
