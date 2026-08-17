@@ -2926,5 +2926,53 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8603477002",
+    "timestamp": "2026-08-17T19:34:46.684936",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 32,
+    "fields_skipped": 14,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | This field is required. | question_37071137002: This field is required. | question_37071138002: This field is required. | question_37046577002: This field is required. | question_37046579002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 270018,
+    "job_title": "Director of Engineering, Ads",
+    "company": "twitch"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/7966985",
+    "timestamp": "2026-08-17T19:41:22.503375",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 10,
+    "fields_skipped": 9,
+    "errors": [
+      "Form rejected: is required -> This field is required. | Please accept the terms to proceed. | question_67277247: This field is required. | question_67277248: This field is required. | question_67277251: This field is required. | question_67344388: This field is required. | 430: This field is required. | 431: This field is required. | 432: This field is required. | 433: This field is required. | 434: This field is required. | 436: This field is required. | gdpr_demographic_data_consent_given_1: Please accept the terms to proceed."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 269205,
+    "job_title": "Engineering Manager, Advanced Signals (SWE)",
+    "company": "reddit"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/7859086",
+    "timestamp": "2026-08-17T19:43:14.136883",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 10,
+    "fields_skipped": 7,
+    "errors": [
+      "Form rejected: is required -> This field is required. | Please accept the terms to proceed. | question_66105889: This field is required. | question_66105890: This field is required. | question_66105891: This field is required. | question_66105894: This field is required. | 430: This field is required. | 431: This field is required. | 432: This field is required. | 433: This field is required. | 434: This field is required. | 436: This field is required. | gdpr_demographic_data_consent_given_1: Please accept the terms to proceed."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
