@@ -2974,5 +2974,19 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8603477002",
+    "timestamp": "2026-08-17T20:35:37.758720",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 32,
+    "fields_skipped": 14,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | This field is required. | question_37071137002: This field is required. | question_37071138002: This field is required. | question_37046577002: This field is required. | question_37046579002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
