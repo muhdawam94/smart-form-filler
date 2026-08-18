@@ -3047,5 +3047,36 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8688836002",
+    "timestamp": "2026-08-18T04:59:02.449217",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 10,
+    "fields_skipped": 18,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_37675207002[]_251088141002: This field is required. | question_37675207002[]_251088142002: This field is required. | question_37675207002[]_251088143002: This field is required. | question_37675207002[]_251088144002: This field is required. | question_37675208002[]_251088145002: This field is required. | question_37675208002[]_251088146002: This field is required. | question_37675208002[]_251088147002: This field is required. | question_37675208002[]_251088148002: This field is required. | question_37675208002[]_251088149002: This field is required. | question_37675208002[]_251088150002: This field is required. | question_37675208002[]_251088151002: This field is required. | question_37675208002[]_251088152002: This field is required. | question_37675208002[]_251088153002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 282496,
+    "job_title": "Alliance Director",
+    "company": "databricks"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8632401002",
+    "timestamp": "2026-08-18T05:01:01.822995",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 10,
+    "fields_skipped": 22,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_37323343002[]_247837225002: This field is required. | question_37323343002[]_247837226002: This field is required. | question_37323343002[]_247837227002: This field is required. | question_37323343002[]_247837228002: This field is required. | question_37323344002[]_247837229002: This field is required. | question_37323344002[]_247837230002: This field is required. | question_37323344002[]_247837231002: This field is required. | question_37323344002[]_247837232002: This field is required. | question_37323344002[]_247837233002: This field is required. | question_37323344002[]_247837234002: This field is required. | question_37323344002[]_247837235002: This field is required. | question_37323344002[]_247837236002: This field is required. | question_37323344002[]_247837237002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
