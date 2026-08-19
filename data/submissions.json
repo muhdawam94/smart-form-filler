@@ -3092,5 +3092,19 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/okx/jobs/7897680003",
+    "timestamp": "2026-08-19T02:09:58.800838",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 43,
+    "fields_skipped": 8,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at OKX? Get future opportunities sent straight to your email. Create alert | This field is required. | question_32060241003: This field is required. | question_32060245003: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
