@@ -3249,5 +3249,36 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://boards.greenhouse.io/cloudflare/jobs/8143309?gh_jid=8143309",
+    "timestamp": "2026-08-20T23:48:18.074343",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 8,
+    "fields_skipped": 6,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_68703742: This field is required. | question_68703746[]_748836268: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 360902,
+    "job_title": "Business Development Representative",
+    "company": "cloudflare"
+  },
+  {
+    "url": "https://boards.greenhouse.io/cloudflare/jobs/8143314?gh_jid=8143314",
+    "timestamp": "2026-08-20T23:50:01.689826",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 10,
+    "fields_skipped": 5,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_68703770: This field is required. | question_68703774[]_748836300: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
