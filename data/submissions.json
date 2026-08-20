@@ -3162,5 +3162,19 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=gemini&token=8142658&gh_jid=8142658",
+    "timestamp": "2026-08-20T17:02:58.945622",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 7,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Gemini? Get future opportunities sent straight to your email. Create alert | This field is required. | question_68698832[]_748821134: This field is required. | question_68698832[]_748821135: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
