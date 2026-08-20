@@ -3176,5 +3176,36 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/discord/jobs/8722538002",
+    "timestamp": "2026-08-20T17:58:57.580975",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 19,
+    "fields_skipped": 3,
+    "errors": [
+      "Form rejected: is required -> This field is required. | 4033064002: This field is required. | 4033065002: This field is required. | 4033066002: This field is required. | 4033067002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 353763,
+    "job_title": "Engineering Manager, Machine Learning (Safety)",
+    "company": "discord"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=gemini&token=8142658&gh_jid=8142658",
+    "timestamp": "2026-08-20T18:02:11.109113",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 7,
+    "errors": [
+      "Form rejected: is required -> Get new jobs like this in your inbox We'll email you when Gemini posts a job like this one. Create alert | This field is required. | question_68698832[]_748821134: This field is required. | question_68698832[]_748821135: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
