@@ -3342,5 +3342,36 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://boards.greenhouse.io/cloudflare/jobs/8143252?gh_jid=8143252",
+    "timestamp": "2026-08-21T02:15:25.714505",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 10,
+    "fields_skipped": 6,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_68703317: This field is required. | question_68703321[]_748833985: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 362675,
+    "job_title": "Business Development Representative (Cantonese Speaking)",
+    "company": "cloudflare"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/ondofinance/jobs/4377888009",
+    "timestamp": "2026-08-21T02:17:05.833949",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 10,
+    "fields_skipped": 5,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_7298127009: This field is required. | question_7298128009: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
