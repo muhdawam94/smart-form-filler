@@ -3387,5 +3387,19 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/vercel/jobs/5822513004",
+    "timestamp": "2026-08-21T17:03:29.057517",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 16,
+    "fields_skipped": 5,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Vercel? Get future opportunities sent straight to your email. Create alert | This field is required. | question_15584688004: This field is required. | question_15584694004: This field is required. | question_15584695004: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
