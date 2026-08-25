@@ -3527,5 +3527,19 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=7803651002",
+    "timestamp": "2026-08-25T23:46:57.418270",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 10,
+    "fields_skipped": 23,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_30307528002: This field is required. | question_35110982002[]_221058385002: This field is required. | question_35110982002[]_221058386002: This field is required. | question_35110982002[]_221058387002: This field is required. | question_35110982002[]_221058390002: This field is required. | question_35114664002[]_221077793002: This field is required. | question_35114664002[]_221077796002: This field is required. | question_35114664002[]_221077798002: This field is required. | question_35114664002[]_221077800002: This field is required. | question_35114664002[]_221077807002: This field is required. | question_35114664002[]_221077820002: This field is required. | question_35114664002[]_221077831002: This field is required. | question_35114664002[]_221077841002: This field is required. | question_35114664002[]_221077847002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
