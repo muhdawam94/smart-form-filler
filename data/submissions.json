@@ -3663,5 +3663,36 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8578146002",
+    "timestamp": "2026-08-26T10:42:25.181005",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 8,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_36810776002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 527360,
+    "job_title": "デリバリーソリューションアーキテクト",
+    "company": "databricks"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/ondofinance/jobs/4382521009",
+    "timestamp": "2026-08-26T10:44:13.297078",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 10,
+    "fields_skipped": 5,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_7344178009: This field is required. | question_7344179009: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
