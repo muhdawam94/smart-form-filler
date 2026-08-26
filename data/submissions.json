@@ -3541,5 +3541,19 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://boards.greenhouse.io/cloudflare/jobs/8152697?gh_jid=8152697",
+    "timestamp": "2026-08-26T03:53:43.657062",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 8,
+    "fields_skipped": 6,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_68773925: This field is required. | question_68773927[]_749294046: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
