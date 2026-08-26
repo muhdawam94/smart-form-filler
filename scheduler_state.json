@@ -1,10 +1,10 @@
 {
   "today_date": "2026-08-26",
-  "applications_today": 0,
-  "total_applications": 20,
-  "successful_applications": 0,
+  "applications_today": 1,
+  "total_applications": 21,
+  "successful_applications": 1,
   "failed_applications": 20,
-  "last_application_time": null,
+  "last_application_time": "2026-08-26T09:54:42.699196",
   "applied_jobs": [
     {
       "url": "https://boards.greenhouse.io/robinhood/jobs/8114351?t=gh_src=&gh_jid=8114351",
@@ -125,6 +125,12 @@
       "platform": "greenhouse",
       "timestamp": "2026-08-08T01:01:32.986781",
       "success": false
+    },
+    {
+      "url": "https://job-boards.greenhouse.io/galaxydigitalservices/jobs/6163325004",
+      "platform": "greenhouse",
+      "timestamp": "2026-08-26T09:54:42.699201",
+      "success": true
     }
   ],
   "daily_history": [
@@ -134,5 +140,5 @@
       "successful": 0
     }
   ],
-  "daily_successful": 0
+  "daily_successful": 1
 }
