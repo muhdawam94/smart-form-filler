@@ -3708,5 +3708,19 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=gemini&token=8144366&gh_jid=8144366",
+    "timestamp": "2026-08-26T18:19:15.799527",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 7,
+    "errors": [
+      "Form rejected: is required -> Get new jobs like this in your inbox We'll email you when Gemini posts a job like this one. Create alert | This field is required. | question_68712002[]_748877701: This field is required. | question_68712002[]_748877702: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
