@@ -3843,5 +3843,53 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://boards.greenhouse.io/robinhood/jobs/8144996?t=gh_src=&gh_jid=8144996",
+    "timestamp": "2026-08-27T10:41:31.609122",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 12,
+    "fields_skipped": 10,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Robinhood? Get future opportunities sent straight to your email. Create alert | This field is required. | question_68716624: This field is required. | question_68716627: This field is required. | question_68812466: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 538241,
+    "job_title": "Crypto Risk Lead",
+    "company": "robinhood"
+  },
+  {
+    "url": "https://boards.greenhouse.io/cloudflare/jobs/8143311?gh_jid=8143311",
+    "timestamp": "2026-08-27T10:44:42.420791",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 8,
+    "fields_skipped": 6,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_68703752: This field is required. | question_68703756[]_748836276: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 538341,
+    "job_title": "Business Development Representative, ASEAN (Vietnamese speaking)",
+    "company": "cloudflare"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/flowtraders/jobs/7927974",
+    "timestamp": "2026-08-27T10:46:29.398381",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 10,
+    "fields_skipped": 5,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Flow Traders? Get future opportunities sent straight to your email. Create alert | This field is required. | question_67212191: This field is required. | question_66886495: This field is required. | question_66886493: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
