@@ -3750,5 +3750,36 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=coinbase&token=8160771",
+    "timestamp": "2026-08-27T02:27:20.068972",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 18,
+    "fields_skipped": 18,
+    "errors": [
+      "Form rejected: is required -> Company name is required. | Title is required. | Start date month is required. | Start date year is required. | End date month is required. | End date year is required. | This field is required. | company-name-0: Company name is required. | title-0: Title is required. | start-date-month-0: Start date month is required. | start-date-year-0: Start date year is required. | end-date-month-0: End date month is required. | end-date-year-0: End date year is required. | question_68849243: This field is required. | question_68849244: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 533981,
+    "job_title": "Communications Generalist",
+    "company": "coinbase"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/8148431",
+    "timestamp": "2026-08-27T02:31:43.173879",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 10,
+    "fields_skipped": 7,
+    "errors": [
+      "Form rejected: is required -> This field is required. | Please accept the terms to proceed. | question_68746071: This field is required. | question_68746072: This field is required. | question_68746075: This field is required. | 430: This field is required. | 431: This field is required. | 432: This field is required. | 433: This field is required. | 434: This field is required. | 436: This field is required. | gdpr_demographic_data_consent_given_1: Please accept the terms to proceed."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
