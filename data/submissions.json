@@ -4031,5 +4031,104 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://boards.greenhouse.io/cloudflare/jobs/7540853?gh_jid=7540853",
+    "timestamp": "2026-09-01T17:25:42.155803",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 10,
+    "fields_skipped": 6,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_62803398: This field is required. | question_62803400[]_618465246: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 646823,
+    "job_title": "Business Development Representative",
+    "company": "cloudflare"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8760289002",
+    "timestamp": "2026-09-01T17:27:27.331083",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 28,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_38051539002: This field is required. | question_38051540002: This field is required. | question_38051541002: This field is required. | question_38051542002: This field is required. | question_38051543002: This field is required. | question_38051547002[]_252711345002: This field is required. | question_38051547002[]_252711346002: This field is required. | question_38051547002[]_252711347002: This field is required. | question_38051547002[]_252711348002: This field is required. | question_38051548002[]_252711349002: This field is required. | question_38051548002[]_252711350002: This field is required. | question_38051548002[]_252711351002: This field is required. | question_38051548002[]_252711352002: This field is required. | question_38051548002[]_252711353002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 646840,
+    "job_title": "AI Engineer - FDE (Forward Deployed Engineer)",
+    "company": "databricks"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8760282002",
+    "timestamp": "2026-09-01T17:29:54.089653",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 28,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_38051487002: This field is required. | question_38051488002: This field is required. | question_38051489002: This field is required. | question_38051490002: This field is required. | question_38051491002: This field is required. | question_38051495002[]_252711290002: This field is required. | question_38051495002[]_252711291002: This field is required. | question_38051495002[]_252711292002: This field is required. | question_38051495002[]_252711293002: This field is required. | question_38051496002[]_252711294002: This field is required. | question_38051496002[]_252711295002: This field is required. | question_38051496002[]_252711296002: This field is required. | question_38051496002[]_252711297002: This field is required. | question_38051496002[]_252711298002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 646841,
+    "job_title": "AI Engineer - FDE (Forward Deployed Engineer)",
+    "company": "databricks"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8760319002",
+    "timestamp": "2026-09-01T17:32:15.417063",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 28,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_38051770002: This field is required. | question_38051771002: This field is required. | question_38051772002: This field is required. | question_38051773002: This field is required. | question_38051774002: This field is required. | question_38051778002[]_252712408002: This field is required. | question_38051778002[]_252712409002: This field is required. | question_38051778002[]_252712410002: This field is required. | question_38051778002[]_252712411002: This field is required. | question_38051779002[]_252712412002: This field is required. | question_38051779002[]_252712413002: This field is required. | question_38051779002[]_252712414002: This field is required. | question_38051779002[]_252712415002: This field is required. | question_38051779002[]_252712416002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 646845,
+    "job_title": "AI Engineer - FDE (Forward Deployed Engineer)",
+    "company": "databricks"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8760318002",
+    "timestamp": "2026-09-01T17:34:37.511688",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 28,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_38051759002: This field is required. | question_38051760002: This field is required. | question_38051761002: This field is required. | question_38051762002: This field is required. | question_38051763002: This field is required. | question_38051767002[]_252712390002: This field is required. | question_38051767002[]_252712391002: This field is required. | question_38051767002[]_252712392002: This field is required. | question_38051767002[]_252712393002: This field is required. | question_38051768002[]_252712394002: This field is required. | question_38051768002[]_252712395002: This field is required. | question_38051768002[]_252712396002: This field is required. | question_38051768002[]_252712397002: This field is required. | question_38051768002[]_252712398002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 646846,
+    "job_title": "AI Engineer - FDE (Forward Deployed Engineer)",
+    "company": "databricks"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8760299002",
+    "timestamp": "2026-09-01T17:37:03.323714",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 28,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_38051588002: This field is required. | question_38051589002: This field is required. | question_38051590002: This field is required. | question_38051591002: This field is required. | question_38051592002: This field is required. | question_38051596002[]_252711382002: This field is required. | question_38051596002[]_252711383002: This field is required. | question_38051596002[]_252711384002: This field is required. | question_38051596002[]_252711385002: This field is required. | question_38051597002[]_252711386002: This field is required. | question_38051597002[]_252711387002: This field is required. | question_38051597002[]_252711388002: This field is required. | question_38051597002[]_252711389002: This field is required. | question_38051597002[]_252711390002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
