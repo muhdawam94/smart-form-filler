@@ -4263,5 +4263,70 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8760283002",
+    "timestamp": "2026-09-01T22:47:03.836568",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 28,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_38051498002: This field is required. | question_38051499002: This field is required. | question_38051500002: This field is required. | question_38051501002: This field is required. | question_38051502002: This field is required. | question_38051506002[]_252711308002: This field is required. | question_38051506002[]_252711309002: This field is required. | question_38051506002[]_252711310002: This field is required. | question_38051506002[]_252711311002: This field is required. | question_38051507002[]_252711312002: This field is required. | question_38051507002[]_252711313002: This field is required. | question_38051507002[]_252711314002: This field is required. | question_38051507002[]_252711315002: This field is required. | question_38051507002[]_252711316002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 648660,
+    "job_title": "AI Engineer - FDE (Forward Deployed Engineer)",
+    "company": "databricks"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8760298002",
+    "timestamp": "2026-09-01T22:49:24.236028",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 28,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_38051577002: This field is required. | question_38051578002: This field is required. | question_38051579002: This field is required. | question_38051580002: This field is required. | question_38051581002: This field is required. | question_38051585002[]_252711364002: This field is required. | question_38051585002[]_252711365002: This field is required. | question_38051585002[]_252711366002: This field is required. | question_38051585002[]_252711367002: This field is required. | question_38051586002[]_252711368002: This field is required. | question_38051586002[]_252711369002: This field is required. | question_38051586002[]_252711370002: This field is required. | question_38051586002[]_252711371002: This field is required. | question_38051586002[]_252711372002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 648661,
+    "job_title": "AI Engineer - FDE (Forward Deployed Engineer)",
+    "company": "databricks"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8760281002",
+    "timestamp": "2026-09-01T22:51:55.525154",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 28,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_38051476002: This field is required. | question_38051477002: This field is required. | question_38051478002: This field is required. | question_38051479002: This field is required. | question_38051480002: This field is required. | question_38051484002[]_252711272002: This field is required. | question_38051484002[]_252711273002: This field is required. | question_38051484002[]_252711274002: This field is required. | question_38051484002[]_252711275002: This field is required. | question_38051485002[]_252711276002: This field is required. | question_38051485002[]_252711277002: This field is required. | question_38051485002[]_252711278002: This field is required. | question_38051485002[]_252711279002: This field is required. | question_38051485002[]_252711280002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 647750,
+    "job_title": "AI Engineer - FDE (Forward Deployed Engineer)",
+    "company": "databricks"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8760332002",
+    "timestamp": "2026-09-01T22:54:21.081279",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 28,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_38051883002: This field is required. | question_38051884002: This field is required. | question_38051885002: This field is required. | question_38051886002: This field is required. | question_38051887002: This field is required. | question_38051891002[]_252712559002: This field is required. | question_38051891002[]_252712560002: This field is required. | question_38051891002[]_252712561002: This field is required. | question_38051891002[]_252712562002: This field is required. | question_38051892002[]_252712563002: This field is required. | question_38051892002[]_252712564002: This field is required. | question_38051892002[]_252712565002: This field is required. | question_38051892002[]_252712566002: This field is required. | question_38051892002[]_252712567002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
