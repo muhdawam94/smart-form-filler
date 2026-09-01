@@ -4328,5 +4328,36 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8760283002",
+    "timestamp": "2026-09-01T23:43:20.778434",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 28,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_38051498002: This field is required. | question_38051499002: This field is required. | question_38051500002: This field is required. | question_38051501002: This field is required. | question_38051502002: This field is required. | question_38051506002[]_252711308002: This field is required. | question_38051506002[]_252711309002: This field is required. | question_38051506002[]_252711310002: This field is required. | question_38051506002[]_252711311002: This field is required. | question_38051507002[]_252711312002: This field is required. | question_38051507002[]_252711313002: This field is required. | question_38051507002[]_252711314002: This field is required. | question_38051507002[]_252711315002: This field is required. | question_38051507002[]_252711316002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 648660,
+    "job_title": "AI Engineer - FDE (Forward Deployed Engineer)",
+    "company": "databricks"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8760298002",
+    "timestamp": "2026-09-01T23:45:54.363688",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 28,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_38051577002: This field is required. | question_38051578002: This field is required. | question_38051579002: This field is required. | question_38051580002: This field is required. | question_38051581002: This field is required. | question_38051585002[]_252711364002: This field is required. | question_38051585002[]_252711365002: This field is required. | question_38051585002[]_252711366002: This field is required. | question_38051585002[]_252711367002: This field is required. | question_38051586002[]_252711368002: This field is required. | question_38051586002[]_252711369002: This field is required. | question_38051586002[]_252711370002: This field is required. | question_38051586002[]_252711371002: This field is required. | question_38051586002[]_252711372002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
