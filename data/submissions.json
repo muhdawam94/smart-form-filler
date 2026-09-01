@@ -3989,5 +3989,19 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.eu.greenhouse.io/bybit/jobs/4964902101",
+    "timestamp": "2026-09-01T07:56:49.924995",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 9,
+    "fields_skipped": 6,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_9570543101: This field is required. | question_9570545101: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
