@@ -4404,5 +4404,36 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/discord/jobs/8703614002",
+    "timestamp": "2026-09-02T22:48:24.774371",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 14,
+    "fields_skipped": 7,
+    "errors": [
+      "Form rejected: is required -> This field is required. | 4033064002: This field is required. | 4033065002: This field is required. | 4033066002: This field is required. | 4033067002: This field is required. | gender: This field is required. | hispanic_ethnicity: This field is required. | veteran_status: This field is required. | disability_status: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 669350,
+    "job_title": "QA/DevOps Engineer",
+    "company": "discord"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/7895468",
+    "timestamp": "2026-09-02T22:50:30.939641",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 10,
+    "fields_skipped": 7,
+    "errors": [
+      "Form rejected: is required -> This field is required. | Please accept the terms to proceed. | question_66513276: This field is required. | question_66513277: This field is required. | question_66513278: This field is required. | question_66513281: This field is required. | 430: This field is required. | 431: This field is required. | 432: This field is required. | 433: This field is required. | 434: This field is required. | 436: This field is required. | gdpr_demographic_data_consent_given_1: Please accept the terms to proceed."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
