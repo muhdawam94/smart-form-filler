@@ -4373,5 +4373,36 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/7895468",
+    "timestamp": "2026-09-02T20:04:42.695474",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 10,
+    "fields_skipped": 7,
+    "errors": [
+      "Form rejected: is required -> This field is required. | Please accept the terms to proceed. | question_66513276: This field is required. | question_66513277: This field is required. | question_66513278: This field is required. | question_66513281: This field is required. | 430: This field is required. | 431: This field is required. | 432: This field is required. | 433: This field is required. | 434: This field is required. | 436: This field is required. | gdpr_demographic_data_consent_given_1: Please accept the terms to proceed."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 668609,
+    "job_title": "Fullstack Software Engineer, Notifications Lifecycle",
+    "company": "reddit"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8760167002",
+    "timestamp": "2026-09-02T20:06:32.873078",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 19,
+    "fields_skipped": 20,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_38050578002[]_252709986002: This field is required. | question_38050578002[]_252709987002: This field is required. | question_38050578002[]_252709988002: This field is required. | question_38050578002[]_252709989002: This field is required. | question_38050579002[]_252709990002: This field is required. | question_38050579002[]_252709991002: This field is required. | question_38050579002[]_252709992002: This field is required. | question_38050579002[]_252709993002: This field is required. | question_38050579002[]_252709994002: This field is required. | question_38050579002[]_252709995002: This field is required. | question_38050579002[]_252709996002: This field is required. | question_38050579002[]_252709997002: This field is required. | question_38050579002[]_252709998002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
