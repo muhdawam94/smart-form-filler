@@ -4497,5 +4497,53 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/discord/jobs/8730666002",
+    "timestamp": "2026-09-03T22:46:21.172171",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 18,
+    "fields_skipped": 3,
+    "errors": [
+      "Form rejected: is required -> This field is required. | 4033064002: This field is required. | 4033065002: This field is required. | 4033066002: This field is required. | 4033067002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 688567,
+    "job_title": "Senior Data Scientist, Causal Inference + Experimentation",
+    "company": "discord"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=stripe&token=8172508",
+    "timestamp": "2026-09-03T22:49:33.147094",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 39,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_68935488: This field is required. | question_68935489: This field is required. | question_68935490: This field is required. | question_68935491[]_749881747: This field is required. | question_68935491[]_749881748: This field is required. | question_68935491[]_749881749: This field is required. | question_68935491[]_749881750: This field is required. | question_68935491[]_749881751: This field is required. | question_68935491[]_749881752: This field is required. | question_68935491[]_749881753: This field is required. | question_68935491[]_749881754: This field is required. | question_68935491[]_749881755: This field is required. | question_68935491[]_749881756: This field is required. | question_68935491[]_749881757: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 688613,
+    "job_title": "Abuse Investigator",
+    "company": "stripe"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=stripe&token=8172487",
+    "timestamp": "2026-09-03T22:52:42.869240",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 11,
+    "fields_skipped": 39,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_68935294: This field is required. | question_68935295: This field is required. | question_68935296: This field is required. | question_68935297[]_749879710: This field is required. | question_68935297[]_749879711: This field is required. | question_68935297[]_749879712: This field is required. | question_68935297[]_749879713: This field is required. | question_68935297[]_749879714: This field is required. | question_68935297[]_749879715: This field is required. | question_68935297[]_749879716: This field is required. | question_68935297[]_749879717: This field is required. | question_68935297[]_749879718: This field is required. | question_68935297[]_749879719: This field is required. | question_68935297[]_749879720: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
