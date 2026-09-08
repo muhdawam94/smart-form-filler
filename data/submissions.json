@@ -4643,5 +4643,53 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/gitlab/jobs/8784553002",
+    "timestamp": "2026-09-08T20:10:51.454681",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 13,
+    "fields_skipped": 11,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_38201461002: This field is required. | question_38201463002: This field is required. | question_38201467002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 792898,
+    "job_title": "Business Development Representative, Turkish Speaking   ",
+    "company": "gitlab"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8592666002",
+    "timestamp": "2026-09-08T20:14:15.257478",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 27,
+    "fields_skipped": 10,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | This field is required. | question_36963532002: This field is required. | question_36963534002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 792988,
+    "job_title": "Senior iOS Engineer",
+    "company": "twitch"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/gitlab/jobs/8736457002",
+    "timestamp": "2026-09-08T20:19:45.648841",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 10,
+    "fields_skipped": 10,
+    "errors": [
+      "Form rejected: is required -> Please enter your location | This field is required. | candidate-location: Please enter your location | question_37916087002: This field is required. | question_37916089002: This field is required. | question_37942158002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
