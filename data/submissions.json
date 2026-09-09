@@ -4841,5 +4841,121 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=coinbase&token=8175363",
+    "timestamp": "2026-09-09T00:29:11.282218",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 19,
+    "fields_skipped": 19,
+    "errors": [
+      "Form rejected: is required -> Company name is required. | Title is required. | Start date month is required. | Start date year is required. | End date month is required. | End date year is required. | This field is required. | company-name-0: Company name is required. | title-0: Title is required. | start-date-month-0: Start date month is required. | start-date-year-0: Start date year is required. | end-date-month-0: End date month is required. | end-date-year-0: End date year is required. | question_69050588: This field is required. | question_68957453: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 793713,
+    "job_title": "Accelerations Programs Intern",
+    "company": "coinbase"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=coinbase&token=8175471",
+    "timestamp": "2026-09-09T00:33:39.861999",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 18,
+    "fields_skipped": 20,
+    "errors": [
+      "Form rejected: is required -> Company name is required. | Title is required. | Start date month is required. | Start date year is required. | End date month is required. | End date year is required. | This field is required. | company-name-0: Company name is required. | title-0: Title is required. | start-date-month-0: Start date month is required. | start-date-year-0: Start date year is required. | end-date-month-0: End date month is required. | end-date-year-0: End date year is required. | question_68980083: This field is required. | question_68958423: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 793723,
+    "job_title": "Analytics Engineer Intern",
+    "company": "coinbase"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=coinbase&token=8175366",
+    "timestamp": "2026-09-09T00:39:09.111141",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 20,
+    "fields_skipped": 19,
+    "errors": [
+      "Form rejected: is required -> Company name is required. | Title is required. | Start date month is required. | Start date year is required. | End date month is required. | End date year is required. | This field is required. | company-name-0: Company name is required. | title-0: Title is required. | start-date-month-0: Start date month is required. | start-date-year-0: Start date year is required. | end-date-month-0: End date month is required. | end-date-year-0: End date year is required. | question_69051645: This field is required. | question_68957483: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 793727,
+    "job_title": "Business Controller Intern",
+    "company": "coinbase"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8786355002",
+    "timestamp": "2026-09-09T00:43:42.648920",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 29,
+    "fields_skipped": 15,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | This field is required. | question_38216005002: This field is required. | question_38216006002: This field is required. | question_38216019002: This field is required. | question_38216021002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 793867,
+    "job_title": "Executive Business Partner",
+    "company": "twitch"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8786357002",
+    "timestamp": "2026-09-09T00:50:46.186227",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 30,
+    "fields_skipped": 14,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | This field is required. | question_38216043002: This field is required. | question_38216044002: This field is required. | question_38216057002: This field is required. | question_38216059002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 793868,
+    "job_title": "Executive Business Partner",
+    "company": "twitch"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8786356002",
+    "timestamp": "2026-09-09T00:57:53.705808",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 30,
+    "fields_skipped": 14,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | This field is required. | question_38216024002: This field is required. | question_38216025002: This field is required. | question_38216038002: This field is required. | question_38216040002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 793869,
+    "job_title": "Executive Business Partner",
+    "company": "twitch"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8786259002",
+    "timestamp": "2026-09-09T01:04:21.321054",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 30,
+    "fields_skipped": 14,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | This field is required. | question_38215186002: This field is required. | question_38215187002: This field is required. | question_38215200002: This field is required. | question_38215202002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
