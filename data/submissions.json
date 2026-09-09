@@ -4985,5 +4985,53 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/discord/jobs/8659978002",
+    "timestamp": "2026-09-09T17:07:27.900768",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 15,
+    "fields_skipped": 7,
+    "errors": [
+      "Form rejected: is required -> This field is required. | 4033064002: This field is required. | 4033065002: This field is required. | 4033066002: This field is required. | 4033067002: This field is required. | gender: This field is required. | hispanic_ethnicity: This field is required. | veteran_status: This field is required. | disability_status: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 810428,
+    "job_title": "Senior Full-Stack Software Engineer, Ads",
+    "company": "discord"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=stripe&token=8172510",
+    "timestamp": "2026-09-09T17:09:36.074854",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 14,
+    "fields_skipped": 39,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_68935507: This field is required. | question_68935508: This field is required. | question_68935509: This field is required. | question_68935510[]_749881967: This field is required. | question_68935510[]_749881968: This field is required. | question_68935510[]_749881969: This field is required. | question_68935510[]_749881970: This field is required. | question_68935510[]_749881971: This field is required. | question_68935510[]_749881972: This field is required. | question_68935510[]_749881973: This field is required. | question_68935510[]_749881974: This field is required. | question_68935510[]_749881975: This field is required. | question_68935510[]_749881976: This field is required. | question_68935510[]_749881977: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 810474,
+    "job_title": "Abuse Investigator",
+    "company": "stripe"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=stripe&token=8172503",
+    "timestamp": "2026-09-09T17:13:10.311481",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 14,
+    "fields_skipped": 39,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_68935446: This field is required. | question_68935447[]_749881470: This field is required. | question_68935447[]_749881471: This field is required. | question_68935447[]_749881472: This field is required. | question_68935447[]_749881473: This field is required. | question_68935447[]_749881474: This field is required. | question_68935447[]_749881475: This field is required. | question_68935447[]_749881476: This field is required. | question_68935447[]_749881477: This field is required. | question_68935447[]_749881478: This field is required. | question_68935447[]_749881479: This field is required. | question_68935447[]_749881480: This field is required. | question_68935447[]_749881481: This field is required. | question_68935447[]_749881482: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
