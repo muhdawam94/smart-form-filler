@@ -5146,5 +5146,70 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8792843002",
+    "timestamp": "2026-09-10T01:15:04.004392",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 30,
+    "fields_skipped": 16,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | This field is required. | question_38252718002: This field is required. | question_38252719002: This field is required. | question_38252732002: This field is required. | question_38252734002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 814866,
+    "job_title": "Director, Head of Creative",
+    "company": "twitch"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8792845002",
+    "timestamp": "2026-09-10T01:21:47.556216",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 30,
+    "fields_skipped": 16,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | This field is required. | question_38252756002: This field is required. | question_38252757002: This field is required. | question_38252770002: This field is required. | question_38252772002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 814867,
+    "job_title": "Director, Head of Creative",
+    "company": "twitch"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8792309002",
+    "timestamp": "2026-09-10T01:28:37.053467",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 30,
+    "fields_skipped": 16,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | This field is required. | question_38250734002: This field is required. | question_38250735002: This field is required. | question_38250748002: This field is required. | question_38250750002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 814868,
+    "job_title": "Director, Head of Creative",
+    "company": "twitch"
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/twitch/jobs/8792844002",
+    "timestamp": "2026-09-10T01:35:17.744833",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 29,
+    "fields_skipped": 17,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Twitch? Get future opportunities sent straight to your email. Create alert | This field is required. | question_38252737002: This field is required. | question_38252738002: This field is required. | question_38252751002: This field is required. | question_38252753002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
