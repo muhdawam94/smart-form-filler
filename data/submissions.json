@@ -5270,5 +5270,36 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.eu.greenhouse.io/bybit/jobs/4974752101",
+    "timestamp": "2026-09-11T19:36:52.785352",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 13,
+    "fields_skipped": 9,
+    "errors": [
+      "Form rejected: is required -> Start month is required. | Start year is required. | End month is required. | End year is required. | This field is required. | start-month--0: Start month is required. | start-year--0: Start year is required. | end-month--0: End month is required. | end-year--0: End year is required. | question_9640110101: This field is required. | question_9640112101: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 849789,
+    "job_title": "Animator Intern",
+    "company": "Bybit"
+  },
+  {
+    "url": "https://job-boards.eu.greenhouse.io/bybit/jobs/4974605101",
+    "timestamp": "2026-09-11T19:38:43.188405",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 14,
+    "fields_skipped": 9,
+    "errors": [
+      "Form rejected: is required -> Start month is required. | Start year is required. | End month is required. | End year is required. | This field is required. | start-month--0: Start month is required. | start-year--0: Start year is required. | end-month--0: End month is required. | end-year--0: End year is required. | question_9639104101: This field is required. | question_9639106101: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
