@@ -5343,5 +5343,19 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://job-boards.greenhouse.io/flowtraders/jobs/8173418",
+    "timestamp": "2026-09-14T13:10:19.223413",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 13,
+    "fields_skipped": 8,
+    "errors": [
+      "Form rejected: is required -> Create a Job Alert Interested in building your career at Flow Traders? Get future opportunities sent straight to your email. Create alert | Cover Letter is required. | This field is required. | question_68941417: This field is required. | question_68941418: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
