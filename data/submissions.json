@@ -5405,5 +5405,70 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://boards.greenhouse.io/robinhood/jobs/8202874?t=gh_src=&gh_jid=8202874",
+    "timestamp": "2026-09-14T23:04:05.356184",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 8,
+    "fields_skipped": 9,
+    "errors": [
+      "Form rejected: required field -> Create a Job Alert Interested in building your career at Robinhood? Get future opportunities sent straight to your email. Create alert | Please enter your location | candidate-location: Please enter your location"
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 886032,
+    "job_title": "Android Engineer, Social",
+    "company": "robinhood"
+  },
+  {
+    "url": "https://boards.greenhouse.io/cloudflare/jobs/7684830?gh_jid=7684830",
+    "timestamp": "2026-09-14T23:05:33.252588",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 8,
+    "fields_skipped": 12,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_64154666: This field is required. | question_64154668[]_643137698: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 885681,
+    "job_title": "Client Executive, SLED",
+    "company": "cloudflare"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8675320002",
+    "timestamp": "2026-09-14T23:06:58.875280",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 10,
+    "fields_skipped": 22,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_37606456002[]_250831046002: This field is required. | question_37606456002[]_250831047002: This field is required. | question_37606456002[]_250831048002: This field is required. | question_37606456002[]_250831049002: This field is required. | question_37606457002[]_250831050002: This field is required. | question_37606457002[]_250831051002: This field is required. | question_37606457002[]_250831052002: This field is required. | question_37606457002[]_250831053002: This field is required. | question_37606457002[]_250831054002: This field is required. | question_37606457002[]_250831055002: This field is required. | question_37606457002[]_250831056002: This field is required. | question_37606457002[]_250831057002: This field is required. | question_37606457002[]_250831058002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false,
+    "job_id": 885695,
+    "job_title": "AMER Energy Industry Go-To-Market (GTM) Leader",
+    "company": "databricks"
+  },
+  {
+    "url": "https://boards.greenhouse.io/embed/job_app?for=databricks&token=8495065002",
+    "timestamp": "2026-09-14T23:09:05.179495",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 10,
+    "fields_skipped": 22,
+    "errors": [
+      "Form rejected: is required -> This field is required. | question_36027936002[]_238904294002: This field is required. | question_36027936002[]_238904295002: This field is required. | question_36027936002[]_238904296002: This field is required. | question_36027936002[]_238904297002: This field is required. | question_36027937002[]_238904298002: This field is required. | question_36027937002[]_238904299002: This field is required. | question_36027937002[]_238904300002: This field is required. | question_36027937002[]_238904301002: This field is required. | question_36027937002[]_238904302002: This field is required. | question_36027937002[]_238904303002: This field is required. | question_36027937002[]_238904304002: This field is required. | question_36027937002[]_238904305002: This field is required. | question_36027937002[]_238904306002: This field is required."
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
