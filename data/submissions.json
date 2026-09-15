@@ -5470,5 +5470,19 @@
     "captcha_detected": false,
     "custom_questions": 0,
     "dry_run": false
+  },
+  {
+    "url": "https://boards.greenhouse.io/robinhood/jobs/8202874?t=gh_src=&gh_jid=8202874",
+    "timestamp": "2026-09-15T00:06:44.045199",
+    "platform": "greenhouse",
+    "status": "submit_failed",
+    "fields_filled": 8,
+    "fields_skipped": 9,
+    "errors": [
+      "Form rejected: required field -> Create a Job Alert Interested in building your career at Robinhood? Get future opportunities sent straight to your email. Create alert | Please enter your location | candidate-location: Please enter your location"
+    ],
+    "captcha_detected": false,
+    "custom_questions": 0,
+    "dry_run": false
   }
 ]
